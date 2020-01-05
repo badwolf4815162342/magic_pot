@@ -87,17 +87,18 @@ class _LevelScreenState extends State<LevelScreen> {
               builder: (context, constraints) => Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: DragTarget(
+                  Row(children: [
+                    SizedBox(width: 80),
+                    Column(children: [
+                      SizedBox(height: 320),
+                      DragTarget(
                         builder: (context, List<String> strings,
                             unacceptedObjectList) {
                           return Center(
                               child: Text("🍵",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 300,
+                                    fontSize: 250,
                                   )));
                         },
                         onWillAccept: (data) {
@@ -119,8 +120,8 @@ class _LevelScreenState extends State<LevelScreen> {
                           print("on except over");
                         },
                       ),
-                    ),
-                  ),
+                    ]),
+                  ]),
                   Row(children: [
                     SizedBox(height: 10, width: 580),
                     Column(

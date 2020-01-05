@@ -8,12 +8,9 @@ class AnimalSelectorButton extends StatelessWidget {
   AnimalSelectorButton({@required this.animal});
   final Animal animal;
 
-
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      fillColor: Colors.green,
-      splashColor: Colors.greenAccent,
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: Row(
@@ -21,7 +18,7 @@ class AnimalSelectorButton extends StatelessWidget {
           children: <Widget>[
             Text("${animal.picture}",
                 style: TextStyle(
-                  fontSize: 150,
+                  fontSize: 130,
                 )),
             /*Text(
               "${animal.name}",

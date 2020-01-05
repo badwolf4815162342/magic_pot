@@ -60,9 +60,7 @@ class AnimalSelectionScreen extends StatelessWidget {
           title: Text("Routing & Navigation"),
         ),
         body: BackgroundLayout(
-            scene: Container(
-                width: MediaQuery.of(context).size.height / 2,
-                child: ButtonsWithName()),
+            scene: ButtonsWithName(),
             picUrl: 'assets/pics/animal_selection.png'));
   }
 }
@@ -90,11 +88,6 @@ class _ButtonsWithNameState extends State<ButtonsWithName> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-        primary: false,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 0,
-        crossAxisCount: 2,
-        children: _buildButtonsWithNames());
+    return Row(children: _buildButtonsWithNames());
   }
 }
