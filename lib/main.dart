@@ -60,10 +60,10 @@ class AnimalSelectionScreen extends StatelessWidget {
           title: Text("Routing & Navigation"),
         ),
         body: BackgroundLayout(
-          scene: Container(
-              width: MediaQuery.of(context).size.height / 2,
-              child: ButtonsWithName()),
-        ));
+            scene: Container(
+                width: MediaQuery.of(context).size.height / 2,
+                child: ButtonsWithName()),
+            picUrl: 'assets/pics/animal_selection.png'));
   }
 }
 

@@ -22,26 +22,26 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
             ),
             body: BackgroundLayout(
               scene: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Wanna select first animal?',
-                    ),
-                    RaisedButton(
-                      child: Text("Select cat"),
-                      onPressed: () {
-                        Animal animal =
-                            Provider.of<UserModel>(context, listen: false)
-                                .animals
-                                .elementAt(0);
-                        Provider.of<UserModel>(context, listen: false)
-                            .changeAnimal(animal);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Wanna select first animal?',
+                  ),
+                  RaisedButton(
+                    child: Text("Select cat"),
+                    onPressed: () {
+                      Animal animal =
+                          Provider.of<UserModel>(context, listen: false)
+                              .animals
+                              .elementAt(0);
+                      Provider.of<UserModel>(context, listen: false)
+                          .changeAnimal(animal);
+                    },
+                  ),
+                ],
+              )),
+              picUrl: 'assets/pics/animal_selection.png',
             ));
       },
     );

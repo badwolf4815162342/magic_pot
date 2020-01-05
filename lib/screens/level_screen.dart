@@ -83,55 +83,54 @@ class _LevelScreenState extends State<LevelScreen> {
           title: Text("Routing & Navigation"),
         ),
         body: BackgroundLayout(
-          scene: LayoutBuilder(
-            builder: (context, constraints) => Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: DragTarget(
-                      builder: (context, List<String> strings,
-                          unacceptedObjectList) {
-                        return Center(
-                            child: Text("🍵",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 300,
-                                )));
-                      },
-                      onWillAccept: (data) {
-                        return true;
-                      },
-                      onAccept: (data) {
-                        print(data);
-                        print(acceptedObject);
-                        if (data == acceptedObject.name) {
-                          scaffoldKey.currentState.showSnackBar(
-                              SnackBar(content: Text("Correct!")));
-                          _success();
-                          _printLevelStateInfo();
-                        } else {
-                          scaffoldKey.currentState
-                              .showSnackBar(SnackBar(content: Text("Wrong!")));
-                          lastright = false;
-                        }
-                        print("on except over");
-                      },
+            scene: LayoutBuilder(
+              builder: (context, constraints) => Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: DragTarget(
+                        builder: (context, List<String> strings,
+                            unacceptedObjectList) {
+                          return Center(
+                              child: Text("🍵",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 300,
+                                  )));
+                        },
+                        onWillAccept: (data) {
+                          return true;
+                        },
+                        onAccept: (data) {
+                          print(data);
+                          print(acceptedObject);
+                          if (data == acceptedObject.name) {
+                            scaffoldKey.currentState.showSnackBar(
+                                SnackBar(content: Text("Correct!")));
+                            _success();
+                            _printLevelStateInfo();
+                          } else {
+                            scaffoldKey.currentState.showSnackBar(
+                                SnackBar(content: Text("Wrong!")));
+                            lastright = false;
+                          }
+                          print("on except over");
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Positioned.fill(
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: currentObjectDraggables,
-                      )),
-                ),
-              ],
+                  Row(children: [
+                    SizedBox(height: 10, width: 580),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: currentObjectDraggables,
+                    ),
+                  ])
+                ],
+              ),
             ),
-          ),
-        ));
+            picUrl: 'assets/pics/level_background.png'));
   }
 }

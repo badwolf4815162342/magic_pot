@@ -20,30 +20,31 @@ class _MenuScreenState extends State<MenuScreen> {
               title: Text("Routing & Navigation"),
             ),
             body: BackgroundLayout(
-              scene: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Hi, wanna start?',
-                    ),
-                    RaisedButton(
-                      child: Text("Start Game"),
-                      onPressed: () {
-                        Navigator.pushNamed(context, "explanationScreenRoute");
-                      },
-                    ),
-                    RaisedButton(
-                      child: Text("Select Animal"),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, "animalSelectionScreenRoute");
-                      },
-                    ),
-                  ],
+                scene: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Hi, wanna start?',
+                      ),
+                      RaisedButton(
+                        child: Text("Start Game"),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, "explanationScreenRoute");
+                        },
+                      ),
+                      RaisedButton(
+                        child: Text("Select Animal"),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, "animalSelectionScreenRoute");
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ));
+                picUrl: 'assets/pics/animal_selection.png'));
       },
     );
   }

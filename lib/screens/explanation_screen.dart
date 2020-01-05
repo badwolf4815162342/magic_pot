@@ -43,22 +43,23 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-            Text(
-              'Explanation .... ${levelnum}',
-              style: TextStyle(color: Colors.black),
-            ),
-            RaisedButton(
-              child: Text("Start Level"),
-              onPressed: () {
-                Navigator.pushNamed(context, "levelScreenRoute");
-              },
-            ),
-            // new Image(image: new AssetImage("gifs/2Mw3.gif")),
-            new Image.asset(
-              "gifs/2Mw3.gif",
-              height: 30.0,
-            ),
-          ]))),
+                Text(
+                  'Explanation .... ${levelnum}',
+                  style: TextStyle(color: Colors.black),
+                ),
+                RaisedButton(
+                  child: Text("Start Level"),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "levelScreenRoute");
+                  },
+                ),
+                // new Image(image: new AssetImage("gifs/2Mw3.gif")),
+                new Image.asset(
+                  "assets/gifs/2Mw3.gif",
+                  height: 30.0,
+                ),
+              ])),
+          picUrl: 'assets/pics/animal_selection.png'),
     );
   }
 }

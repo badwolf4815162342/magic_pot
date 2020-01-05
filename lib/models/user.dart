@@ -1,7 +1,10 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/models/object.dart';
+
+import 'package:audioplayers/audio_cache.dart';
 
 class UserModel extends ChangeNotifier {
   static var _animals = new List<Animal>();
@@ -79,6 +82,7 @@ class UserModel extends ChangeNotifier {
   }
 
   bool _firstAppStart;
+  bool _lockScreen = false;
 
   int _currentLevelCounter;
   Difficulty _currentDifficulty;
@@ -95,11 +99,17 @@ class UserModel extends ChangeNotifier {
 
   List<Object> get objects => _objects.toList();
 
+  bool get lockScreen => _lockScreen;
+
   Animal get currentAnimal => _currentAnimal;
   int get currentLevelCounter => _currentLevelCounter;
 
+  static AudioPlayer advancedPlayer = new AudioPlayer();
+  static AudioCache audioCache = new AudioCache(fixedPlayer: advancedPlayer);
+
   /// Change Animal
   void changeAnimal(Animal animal) {
+    print('locked' + (_lockScreen ? 'true' : 'false'));
     print(animal.name);
     print(_animals.length);
     if (!(_currentAnimal == null)) {
@@ -108,11 +118,28 @@ class UserModel extends ChangeNotifier {
     print(_animals.length);
     _currentAnimal = animal;
     _animals.remove(animal);
-    print(_animals.length);
+    print(animal.soundfile);
+
+    //verlockScreen();
+    audioCache.play(animal.soundfile);
+    //audioPlayer.stop();
+    //advancedPlayer.onPlayerCompletion.listen((event) {
+    //  unlockScreen();
+    //});
 
     // This line tells [Model] that it should rebuild the widgets that
     // depend on it.
     notifyListeners();
+  }
+
+  void verlockScreen() {
+    _lockScreen = true;
+    print('lock');
+  }
+
+  void unlockScreen() {
+    _lockScreen = false;
+    print('unlock');
   }
 
   void levelUp() {
