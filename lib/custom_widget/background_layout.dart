@@ -20,60 +20,62 @@ class BackgroundLayout extends StatelessWidget {
     }
     const double iconSize = 50;
     Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: <Widget>[
-        Center(
-          child: new Image.asset(
-            picUrl,
-            width: size.width,
-            height: size.height,
-            fit: BoxFit.fill,
-          ),
-        ),
-        Center(
-            child: Row(
+    return IgnorePointer(
+        ignoring: lockScreen,
+        child: Stack(
           children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    "🧙🏻‍♂️",
-                    style: TextStyle(
-                      fontSize: 300,
-                    ),
-                  ),
-                  Text(
-                    "${pic}",
-                    style: TextStyle(
-                      fontSize: 100,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      RaisedButton(
-                        child:
-                            Icon(Icons.switch_camera, semanticLabel: 'ADDED'),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                              context, "animalSelectionScreenRoute");
-                        },
+            Center(
+              child: new Image.asset(
+                picUrl,
+                width: size.width,
+                height: size.height,
+                fit: BoxFit.fill,
+              ),
+            ),
+            Center(
+                child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "🧙🏻‍♂️",
+                        style: TextStyle(
+                          fontSize: 300,
+                        ),
+                      ),
+                      Text(
+                        "${pic}",
+                        style: TextStyle(
+                          fontSize: 100,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Icon(Icons.switch_camera,
+                                semanticLabel: 'ADDED'),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, "animalSelectionScreenRoute");
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-              flex: 1,
-            ),
-            Expanded(
-              child: scene,
-              flex: 2,
-            ),
+                  flex: 1,
+                ),
+                Expanded(
+                  child: scene,
+                  flex: 2,
+                ),
+              ],
+            )),
           ],
-        )),
-      ],
-    );
+        ));
   }
 }

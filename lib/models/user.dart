@@ -120,26 +120,31 @@ class UserModel extends ChangeNotifier {
     _animals.remove(animal);
     print(animal.soundfile);
 
-    //verlockScreen();
-    audioCache.play(animal.soundfile);
-    //audioPlayer.stop();
-    //advancedPlayer.onPlayerCompletion.listen((event) {
-    //  unlockScreen();
-    //});
+    makeSound(animal.soundfile);
 
     // This line tells [Model] that it should rebuild the widgets that
     // depend on it.
     notifyListeners();
   }
 
+  void makeSound(String fileName) {
+    verlockScreen();
+    audioCache.play(fileName);
+    advancedPlayer.onPlayerCompletion.listen((event) {
+      unlockScreen();
+    });
+  }
+
   void verlockScreen() {
     _lockScreen = true;
     print('lock');
+    notifyListeners();
   }
 
   void unlockScreen() {
     _lockScreen = false;
     print('unlock');
+    notifyListeners();
   }
 
   void levelUp() {

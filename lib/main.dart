@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
           routes: {
             'explanationScreenRoute': (context) => ExplanationScreen(),
             'animalSelectionScreenRoute': (context) => AnimalSelectionScreen(),
-            'levelScreenRoute': (context) => LevelScreen()
+            'levelScreenRoute': (context) => LevelScreen(),
+            'menuScreenRoute': (context) => MenuPage(),
           },
           theme: ThemeData(
             primarySwatch: Colors.blue,

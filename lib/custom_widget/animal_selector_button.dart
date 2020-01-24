@@ -29,8 +29,13 @@ class AnimalSelectorButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
+        if (animal == null) {
+          Navigator.pushNamed(context, "menuScreenRoute");
+        } else {
+          Navigator.pop(context);
+        }
         Provider.of<UserModel>(context, listen: false).changeAnimal(animal);
-        Navigator.pop(context);
+
         print("Tapped Me");
       },
       shape: const StadiumBorder(),
