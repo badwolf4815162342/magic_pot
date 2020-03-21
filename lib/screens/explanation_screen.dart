@@ -1,4 +1,4 @@
-import 'package:audioplayers/audio_cache.dart';
+
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
 import 'package:magic_pot/models/level.dart';
@@ -15,16 +15,28 @@ class ExplanationScreen extends StatefulWidget {
 class _ExplanationScreenState extends State<ExplanationScreen> {
   Level currentLevel;
 
-  static AudioCache player = AudioCache();
+  bool _checkConfiguration() => true;
+
+  void initState() {
+    super.initState();
+    if (_checkConfiguration()) {
+      Future.delayed(Duration.zero,() { // SchedulerBinding.instance.addPostFrameCallback((_) {
+        Provider.of<UserModel>(context).explainCurrentLevel();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     currentLevel = Provider.of<UserModel>(context, listen: false)
         .getLevelFromNumberAndDiff();
+      if (currentLevel == null) {
+        Navigator.pushNamed(context, "levelFinishedRoute");
+      } 
     if (currentLevel == null) {
       print("nulllevel");
     } else {
-      print("currentlevel = ${currentLevel}");
+      print("currentlevel = ${LevelHelper.printLevelInfo(currentLevel)}");
     }
 
     var levelnum = 0;
@@ -35,31 +47,26 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Routing & Navigation"),
-      ),
       body: BackgroundLayout(
           scene: Center(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                Text(
+                /* Text(
                   'Explanation .... ${levelnum}',
                   style: TextStyle(color: Colors.black),
-                ),
-                RaisedButton(
-                  child: Text("Start Level"),
+                ),*/
+                RawMaterialButton(
+                      child: new Image.asset(
+                          'assets/pics/arm_wand.png',
+                          width: 400,
+                        ),
                   onPressed: () {
                     Navigator.pushNamed(context, "levelScreenRoute");
                   },
                 ),
-                // new Image(image: new AssetImage("gifs/2Mw3.gif")),
-                new Image.asset(
-                  "assets/gifs/2Mw3.gif",
-                  height: 30.0,
-                ),
               ])),
-          picUrl: 'assets/pics/animal_selection.png'),
+          picUrl: 'assets/pics/level_finished_screen.png'),
     );
   }
 }

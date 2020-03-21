@@ -12,6 +12,7 @@ class BackgroundLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     var animal = Provider.of<UserModel>(context).currentAnimal;
     var lockScreen = Provider.of<UserModel>(context).lockScreen;
+    var witchIcon = Provider.of<UserModel>(context).witchIcon;
     var pic;
     if (animal == null) {
       pic = "Nothing";
@@ -39,17 +40,19 @@ class BackgroundLayout extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        "🧙🏻‍♂️",
-                        style: TextStyle(
-                          fontSize: 300,
-                        ),
-                      ),
-                      Text(
-                        "${pic}",
-                        style: TextStyle(
-                          fontSize: 100,
-                        ),
+                      FlatButton(
+                            child: new Image.asset(
+                            witchIcon,
+                            fit: BoxFit.fill,
+                          ),
+                            onPressed: () {
+                              Provider.of<UserModel>(context).playWitchText();
+                            },
+                            ),
+                      new Image.asset(
+                        animal.picture,
+                        width: 200,
+                        height: 200,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -61,6 +64,16 @@ class BackgroundLayout extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushNamed(
                                   context, "animalSelectionScreenRoute");
+                            },
+                          ),
+                          RaisedButton(
+                            child: Icon(Icons.refresh,
+                                semanticLabel: 'ADDED'),
+                            onPressed: () {
+                              // reset all
+                              Provider.of<UserModel>(context).resetToMenu();
+                              Navigator.pushNamed(
+                                  context, "menuScreenRoute");
                             },
                           ),
                         ],

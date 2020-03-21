@@ -25,6 +25,17 @@ class _LevelScreenState extends State<LevelScreen> {
   Level currentLevel;
   bool lastright = false;
 
+  bool _checkConfiguration() => true;
+
+  void initState() {
+    super.initState();
+    if (_checkConfiguration()) {
+      Future.delayed(Duration.zero,() { // SchedulerBinding.instance.addPostFrameCallback((_) {
+        _resetLevelData();
+      });
+    }
+  }
+
   _success() {
     counter++;
     if (lastright) {
@@ -40,7 +51,7 @@ class _LevelScreenState extends State<LevelScreen> {
       scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text("Level won!")));
       Provider.of<UserModel>(context, listen: false).levelUp();
-      Navigator.pop(context);
+      Navigator.pushNamed(context, "explanationScreenRoute");
     } else {
       setState(() {
         _resetLevelData();
@@ -60,14 +71,22 @@ class _LevelScreenState extends State<LevelScreen> {
     var random = new Random();
     currentObjects = new List<Object>();
     currentObjectDraggables = new List<ObjectDraggable>();
+    var numbers = new List<int>();
     for (int i = 0; i < currentLevel.numberOfObjectsToChooseFrom; i++) {
       var randomInt = random.nextInt(objects.length);
+      // no duplicats
+      while(numbers.contains(randomInt)){
+        randomInt = random.nextInt(objects.length);
+      }
+      numbers.add(randomInt);
       currentObjects.add(objects[randomInt]);
       currentObjectDraggables
           .add(new ObjectDraggable(object: objects[randomInt]));
     }
     acceptedObject = currentObjects[random.nextInt(currentObjects.length)];
     print("Acc ${acceptedObject.name}");
+    Provider.of<UserModel>(context).setWitchText('audio/${acceptedObject.name}.wav');
+    Provider.of<UserModel>(context).makeSound('audio/${acceptedObject.name}.wav');
   }
 
   @override
@@ -75,13 +94,10 @@ class _LevelScreenState extends State<LevelScreen> {
     currentLevel = Provider.of<UserModel>(context, listen: false)
         .getLevelFromNumberAndDiff();
 
-    _resetLevelData();
+    //_resetLevelData();
 
     return Scaffold(
         key: scaffoldKey,
-        appBar: AppBar(
-          title: Text("Routing & Navigation"),
-        ),
         body: BackgroundLayout(
             scene: LayoutBuilder(
               builder: (context, constraints) => Stack(
@@ -110,11 +126,13 @@ class _LevelScreenState extends State<LevelScreen> {
                           if (data == acceptedObject.name) {
                             scaffoldKey.currentState.showSnackBar(
                                 SnackBar(content: Text("Correct!")));
+                            Provider.of<UserModel>(context).praise();
                             _success();
                             _printLevelStateInfo();
                           } else {
                             scaffoldKey.currentState.showSnackBar(
                                 SnackBar(content: Text("Wrong!")));
+                                Provider.of<UserModel>(context).motivation();
                             lastright = false;
                           }
                           print("on except over");

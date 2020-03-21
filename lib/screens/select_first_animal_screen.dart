@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/background_layout.dart';
-import 'package:magic_pot/main.dart';
-import 'package:magic_pot/models/animal.dart';
+import 'package:magic_pot/custom_widget/animal_buttons.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
 
@@ -13,17 +11,29 @@ class SelectFirstAnimalScreen extends StatefulWidget {
 }
 
 class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
+
+ bool _checkConfiguration() => true;
+
+  void initState() {
+    super.initState();
+    if (_checkConfiguration()) {
+      Future.delayed(Duration.zero,() { // SchedulerBinding.instance.addPostFrameCallback((_) {
+        Provider.of<UserModel>(context, listen: false).makeSound('audio/intro.wav');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var lockScreen = Provider.of<UserModel>(context).lockScreen;
+    var witchIcon = Provider.of<UserModel>(context).witchIcon;
+
     return Consumer<UserModel>(
       builder: (context, cart, child) {
         return Scaffold(
-            appBar: AppBar(
-              title: Text("Routing & Navigation"),
-            ),
             body: IgnorePointer(
-                ignoring: false,
+                ignoring:  lockScreen,
                 child: Stack(children: <Widget>[
                   Center(
                     child: new Image.asset(
@@ -33,8 +43,30 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  Center(child: ButtonsWithName())
-                ])));
+                  Row ( mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Column ( 
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      ButtonsWithName(animalsize: 150)
+                    ]
+                  ),
+                  FlatButton(
+                            child: new Image.asset(
+                            witchIcon,
+                            height: 300,
+                            width: 300,
+                          ),
+                            onPressed: () {
+                              Provider.of<UserModel>(context).playWitchText();
+                            },
+                      )
+                    ])
+                  
+                ]
+            )
+          )
+        );
       },
     );
   }

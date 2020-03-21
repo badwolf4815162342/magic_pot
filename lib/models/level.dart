@@ -30,4 +30,21 @@ class LevelHelper {
           "This Level needs ${level.numberOfRightObjectsInARow} right objects in a row to finish but min ${level.numberOfMinObjects} objects have to be tried. WORDLEVEL:${level.wordlevel},DIFFICULTY:${level.difficulty}");
     }
   }
+
+  static getDifficultyText(Difficulty difficulty){
+    switch (difficulty) {
+      case(Difficulty.HARD):
+        return "🧪🧪🧪";
+        break;
+      case(Difficulty.MIDDLE):
+        return "🧪🧪";
+        break;
+      case(Difficulty.EASY):
+        return "🧪";
+        break;
+      default: {
+        print('????');
+      }
+    }
+  }
 }

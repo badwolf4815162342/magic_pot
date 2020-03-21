@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/difficulty_button.dart';
+import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
 
@@ -11,40 +13,37 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  Difficulty difficulty = Difficulty.EASY;
+
   @override
   Widget build(BuildContext context) {
+    difficulty = Provider.of<UserModel>(context, listen: true).currentDifficulty;
     return Consumer<UserModel>(
       builder: (context, cart, child) {
         return Scaffold(
-            appBar: AppBar(
-              title: Text("Routing & Navigation"),
-            ),
             body: BackgroundLayout(
                 scene: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        'Hi, wanna start?',
-                      ),
-                      RaisedButton(
-                        child: Text("Start Game"),
+                      RawMaterialButton(
+                      child: new Image.asset(
+                          'assets/pics/arm_wand.png',
+                          width: 400,
+                        ),
                         onPressed: () {
                           Navigator.pushNamed(
                               context, "explanationScreenRoute");
                         },
                       ),
-                      RaisedButton(
-                        child: Text("Select Animal"),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                              context, "animalSelectionScreenRoute");
-                        },
-                      ),
+                      Text("Schwierigkeit?"),
+                      DifficultyButton(buttonDifficulty: Difficulty.EASY, currentDifficulty: difficulty),
+                      DifficultyButton(buttonDifficulty: Difficulty.MIDDLE, currentDifficulty: difficulty),
+                      DifficultyButton(buttonDifficulty: Difficulty.HARD, currentDifficulty: difficulty),
                     ],
                   ),
                 ),
-                picUrl: 'assets/pics/animal_selection.png'));
+                picUrl: 'assets/pics/menu_screen.png'));
       },
     );
   }
