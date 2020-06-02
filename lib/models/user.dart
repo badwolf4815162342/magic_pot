@@ -1,29 +1,39 @@
 import 'dart:collection';
 import 'dart:math';
+import 'dart:io' as io;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/models/object.dart';
 
 import 'package:audioplayers/audio_cache.dart';
 
+import '../logger.util.dart';
+
 class UserModel extends ChangeNotifier {
+  final log = getLogger();
   static var _animals = new List<Animal>();
   static var _objects = new List<Object>();
   static var _levels = new List<Level>();
-  static var _archievements = new List<Difficulty>();
+  static var _archievements = new List<Level>();
   static var _playerQueue = new List<String>();
   static var _unlockedWith = new List<String>();
 
   UserModel() {
     _currentAnimal = null;
-    _animals.add(new Animal(1, 'Katze', 'assets/pics/katze.png', 'audio/cat.mp3'));
-    _animals.add(new Animal(2, 'Eule', 'assets/pics/eule.png', 'audio/cat.mp3'));
-    _animals.add(new Animal(3, 'Frosch', 'assets/pics/frosch.png', 'audio/cat.mp3'));
-    _animals.add(new Animal(4, 'Einhorn', 'assets/pics/einhorn.png', 'audio/cat.mp3'));
-    _animals.add(new Animal(5, 'Fledermaus', 'assets/pics/fledermaus.png', 'audio/cat.mp3'));
+    _animals
+        .add(new Animal(1, 'Katze', 'assets/pics/katze.png', 'audio/cat.mp3'));
+    _animals
+        .add(new Animal(2, 'Eule', 'assets/pics/eule.png', 'audio/owl.wav'));
+    _animals.add(
+        new Animal(3, 'Frosch', 'assets/pics/frosch.png', 'audio/frog.mp3'));
+    _animals.add(new Animal(
+        4, 'Einhorn', 'assets/pics/einhorn.png', 'audio/unicorn.mp3'));
+    _animals.add(new Animal(
+        5, 'Fledermaus', 'assets/pics/fledermaus.png', 'audio/bat.mp3'));
 
     _objects.add(new Object(1, 'hut', WordLevel.ONE, '🎩'));
     //_objects.add(new Object(2, 'eis', WordLevel.ONE, '🍦'));
@@ -55,32 +65,36 @@ class UserModel extends ChangeNotifier {
     _objects.add(new Object(28, 'oma', WordLevel.ONE, '👵🏻'));
     _objects.add(new Object(29, 'klee', WordLevel.ONE, '🍀'));
     _objects.add(new Object(30, 'ball', WordLevel.ONE, '⚽️'));
+
     _objects.add(new Object(31, 'kuh', WordLevel.ONE, '🐮'));
 
-    // Levelnumber minObjects rightObjectsInARow d w ObjectsToChooseFrom
-    _levels.add(
-        new Level(1, 5, 2, Difficulty.EASY, WordLevel.ONE, 2, 'audio/level_1_explanation.wav'));
-    _levels.add(new Level(2, 5, 2, Difficulty.EASY, WordLevel.ONE, 3, 'audio/level_2_explanation.wav'));
-    _levels.add(new Level(3, 5, 2, Difficulty.EASY, WordLevel.ONE, 3, 'audio/level_3_explanation.wav'));
-    _levels.add(new Level(4, 5, 2, Difficulty.EASY, WordLevel.ONE, 3, 'audio/level_4_explanation.wav'));
+    // Levelnumber minObjects rightObjectsInARow d w ObjectsToChooseFrom pic
+    _levels.add(new Level(1, 5, 2, Difficulty.EASY, WordLevel.ONE, 2,
+        'audio/level_1_explanation.wav', 'assets/pics/mouse.png'));
+    _levels.add(new Level(2, 5, 2, Difficulty.EASY, WordLevel.ONE, 3,
+        'audio/level_2_explanation.wav', 'assets/pics/elephantouse-2.png'));
+    _levels.add(new Level(3, 5, 2, Difficulty.EASY, WordLevel.ONE, 3,
+        'audio/level_3_explanation.wav', 'assets/pics/elephantouse-3.png'));
+    _levels.add(new Level(4, 5, 2, Difficulty.EASY, WordLevel.ONE, 3,
+        'audio/level_4_explanation.wav', 'assets/pics/elephantouse-4.png'));
 
-    _levels.add(new Level(
-        1, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2, 'audio/level_1_explanation.mp3'));
-    _levels.add(new Level(
-        2, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2, 'audio/level_2_explanation.mp3'));
-    _levels.add(new Level(
-        3, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2, 'audio/level_3_explanation.mp3'));
-    _levels.add(new Level(
-        4, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2, 'audio/level_4_explanation.mp3'));
+    _levels.add(new Level(1, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2,
+        'audio/level_1_explanation.mp3', 'assets/pics/mouse.png'));
+    _levels.add(new Level(2, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2,
+        'audio/level_2_explanation.mp3', 'assets/pics/mouse.png'));
+    _levels.add(new Level(3, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2,
+        'audio/level_3_explanation.mp3', 'assets/pics/mouse.png'));
+    _levels.add(new Level(4, 5, 2, Difficulty.MIDDLE, WordLevel.ONE, 2,
+        'audio/level_4_explanation.mp3', 'assets/pics/mouse.png'));
 
-    _levels.add(
-        new Level(1, 5, 2, Difficulty.HARD, WordLevel.ONE, 2, 'audio/level_1_explanation.mp3'));
-    _levels.add(
-        new Level(2, 5, 2, Difficulty.HARD, WordLevel.ONE, 2, 'audio/level_2_explanation.mp3'));
-    _levels.add(
-        new Level(3, 5, 2, Difficulty.HARD, WordLevel.ONE, 2, 'audio/level_3_explanation.mp3'));
-    _levels.add(
-        new Level(4, 5, 2, Difficulty.HARD, WordLevel.ONE, 2, 'audio/level_4_explanation.mp3'));
+    _levels.add(new Level(1, 5, 2, Difficulty.HARD, WordLevel.ONE, 2,
+        'audio/level_1_explanation.mp3', 'assets/pics/mouse.png'));
+    _levels.add(new Level(2, 5, 2, Difficulty.HARD, WordLevel.ONE, 2,
+        'audio/level_2_explanation.mp3', 'assets/pics/mouse.png'));
+    _levels.add(new Level(3, 5, 2, Difficulty.HARD, WordLevel.ONE, 2,
+        'audio/level_3_explanation.mp3', 'assets/pics/mouse.png'));
+    _levels.add(new Level(4, 5, 2, Difficulty.HARD, WordLevel.ONE, 2,
+        'audio/level_4_explanation.mp3', 'assets/pics/mouse.png'));
 
     _currentLevelCounter = 1;
     _currentDifficulty = Difficulty.EASY;
@@ -90,18 +104,16 @@ class UserModel extends ChangeNotifier {
   bool _firstAppStart;
   bool _lockScreen = false;
 
+  bool blinkingPlayButton = false;
+
   int _currentLevelCounter;
   Difficulty _currentDifficulty;
 
   Animal _currentAnimal;
 
-  /// Construct a CartModel instance that is backed by a [CatalogModel] and
-  /// an optional previous state of the cart.
-  ///
-  /// If [previous] is not `null`, it's items are copied to the newly
-  /// constructed instance.
-
   List<Animal> get animals => _animals.toList();
+
+  List<Level> get archievements => _archievements.toList();
 
   List<Object> get objects => _objects.toList();
 
@@ -113,32 +125,22 @@ class UserModel extends ChangeNotifier {
   int get currentLevelCounter => _currentLevelCounter;
   String get witchIcon => _witchIcon;
 
-
-  String _witchText = 'audio/cat.mp3';
-  String _savedTexsts;
-
-  static AudioPlayer advancedPlayer = new AudioPlayer();
-  static AudioCache audioCache = new AudioCache(fixedPlayer: advancedPlayer);
-
-  String _witchIcon = 'assets/pics/witch_pink_smile.png';
-
-  void levelFinished(){
-    makeSound('audio/end1.wav');
-  }
+  String _witchIcon = GlobalConfiguration().getString("standart_witch_icon");
+  String _witchText = GlobalConfiguration().getString("standart_witch_text");
 
   /// Change Animal
   void changeAnimal(Animal animal) {
-    print('locked' + (_lockScreen ? 'true' : 'false'));
-    print(animal.name);
-    print(_animals.length);
+    log.d('UserModel:' + 'Screen locked' + (_lockScreen ? 'true' : 'false'));
+    log.d('UserModel:' + 'Animal ' + animal.name + 'Sound ' + animal.soundfile);
+    log.d('UserModel:' + 'Anima-length ' + _animals.length.toString());
     if (!(_currentAnimal == null)) {
       _animals.add(_currentAnimal);
     }
-    print(_animals.length);
+    log.d('UserModel:' +
+        'Anima-length (after add) ' +
+        _animals.length.toString());
     _currentAnimal = animal;
     _animals.remove(animal);
-    print(animal.soundfile);
-
     makeSound(animal.soundfile);
 
     // This line tells [Model] that it should rebuild the widgets that
@@ -149,71 +151,82 @@ class UserModel extends ChangeNotifier {
   resetToMenu() {
     _currentLevelCounter = 1;
     _currentDifficulty = Difficulty.EASY;
-    audioCache = new AudioCache(fixedPlayer: advancedPlayer);
-    advancedPlayer.stop();
+    stopAllSound();
     notifyListeners();
   }
 
-  setDifficulty(Difficulty difficulty){
+  setDifficulty(Difficulty difficulty) {
     _currentDifficulty = difficulty;
     notifyListeners();
   }
 
-  void makeSound(String fileName) {
-    print('ERROR-----------------------------------------------?');
-    print(_playerQueue);
-    print(_playerQueue.contains(fileName));
-    if (_playerQueue.contains('audio/intro.wav')) {
-        print("intro in queue");
+  void levelUp() {
+    _archievements.add(getLevelFromNumberAndDiff());
+    _currentLevelCounter += 1;
+    log.i('UserModel:' + 'New Level: ${_currentLevelCounter}.wav (levelUp)');
+    if (getLevelFromNumberAndDiff() == null) {
+      log.i('UserModel:' + 'Archievement: Difficulty up (levelUp)');
+      // save archievemnts for menu view
+      //_archievements.add(Difficulty.EASY);
     }
-    if (_lockScreen && !_playerQueue.contains(fileName)) {
-      _savedTexsts = fileName;
-      _playerQueue.add(fileName);
-      return;
-    }
-    verlockScreen(fileName);
-    audioCache.play(fileName);
-    advancedPlayer.onPlayerCompletion.listen((event) {
-      unlockScreen(fileName);
-    });
-  }
 
-  void verlockScreen(String fileName) {
-    _lockScreen = true;
-    _unlockedWith.add(fileName);
-    _witchIcon = 'assets/pics/witch_pink_oh.png';
-    print('lock');
+    // This line tells [Model] that it should rebuild the widgets that
+    // depend on it.
     notifyListeners();
   }
 
-  void unlockScreen(String fileName) {
-    if (!_unlockedWith.contains(fileName)) {
-      print("onluck twice");
-      return;
-    }
-    _unlockedWith.remove(fileName);
-    _lockScreen = false;
-    _witchIcon = 'assets/pics/witch_pink_smile.png';
-    print('unlock');
-    notifyListeners();
-    audioCache.clear(fileName);
-    if (_playerQueue.length>0) {
-      String sound = _playerQueue.removeLast();
-      // _savedTexsts = null;
-      makeSound(sound);
-    }
-    // wair for two secs
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      if (_unlockedWith.length>0){
-        _lockScreen = false;
-      }
-      print("-------------------------remove");
-      print([]);
-    }); 
+  void setLevel(Level level) {
+    _currentDifficulty = level.difficulty;
+    _currentLevelCounter = level.number;
+    _witchText = 'audio/cat.mp3';
+    log.i('UserModel:' +
+        'Change level to ${LevelHelper.printLevelInfo(level)} (setLevel)');
   }
 
-  void setWitchText(String fileName){
+  void resetAll() {}
+
+  Level getLevelFromNumberAndDiff() {
+    Level level = _levels.firstWhere(
+        (o) => (o.difficulty == _currentDifficulty &&
+            o.number == _currentLevelCounter),
+        orElse: () => null);
+    log.i('UserModel:' +
+        'Start Level with ${LevelHelper.printLevelInfo(level)} (levelUp)');
+    return level;
+  }
+  // AUDIO PLAYER STUFF
+
+  static AudioPlayer advancedPlayer = new AudioPlayer();
+  static AudioCache audioCache = new AudioCache(fixedPlayer: advancedPlayer);
+
+  void updateWitchText(String newWitchText) {
+    _witchText = newWitchText;
+  }
+
+  void explainCurrentLevel() {
+    Level level = getLevelFromNumberAndDiff();
+    makeSound(level.soundfile);
+  }
+
+  void explainAcceptedObject(String acceptedObjectText) {
+    makeSound(acceptedObjectText);
+  }
+
+  void tellLevelFinished() {
+    makeSound('audio/end1.wav');
+  }
+
+  void tellChooseAnimal() {
+    makeSound('audio/waehle_dein_tier.wav');
+  }
+
+  void setWitchText(String fileName) {
     _witchText = fileName;
+  }
+
+  void tellIntroduction() {
+    String intro = GlobalConfiguration().getString("witch_intro");
+    makeSound(intro);
   }
 
   void playWitchText() {
@@ -222,46 +235,101 @@ class UserModel extends ChangeNotifier {
 
   void praise() {
     var random = new Random();
-    var number = 1 + random.nextInt(5);
+    var number = 1 + random.nextInt(10);
+    makeSound('audio/effect_pring.wav');
     makeSound('audio/praise${number}.wav');
   }
 
   void motivation() {
     var random = new Random();
-    var number = 1 + random.nextInt(7);
+    var number = 1 + random.nextInt(4);
+    makeSound('audio/effect_error_2.wav');
     makeSound('audio/motivation${number}.wav');
   }
 
-  void explainCurrentLevel() {
-    Level level = getLevelFromNumberAndDiff();
-    makeSound(level.soundfile);
+  void makeSound(String fileName) {
+    log.d('UserModel:' +
+        'Player-Queue ' +
+        _playerQueue.toString() +
+        ' contains ' +
+        fileName +
+        ' ? ' +
+        _playerQueue.contains(fileName).toString());
+
+    /*if (_playerQueue.contains('audio/intro.wav')) {
+      log.e('UserModel:' + 'Player-Queue contains audio/intro.wav');
+    } */
+
+    if (_lockScreen && !_playerQueue.contains(fileName)) {
+      //_savedTexsts = fileName;
+      log.e('UserModel: Put ' +
+          fileName +
+          ' filename in playerqueeu (makesound)');
+      _playerQueue.add(fileName);
+      return;
+    }
+    verlockScreen(fileName);
+    log.e(audioCache.toString());
+
+// TEST create new audiocache
+    audioCache.play(fileName);
+    advancedPlayer.onPlayerCompletion.listen((event) {
+      log.d('UserModel: Oncompletion ' + fileName);
+      if (!_unlockedWith.contains(fileName)) {
+        log.e('UserModel:' +
+            'Already unlocked with ' +
+            fileName +
+            ' - not in unlockedWith(unlockScreen)');
+        audioCache.clear(fileName);
+      } else {
+        unlockScreen(fileName);
+      }
+    });
   }
 
-  void levelUp() {
-    _currentLevelCounter += 1;
-    print("New Level: ${_currentLevelCounter}.wav");
+  // LOCKING SCREEN
 
-    if (getLevelFromNumberAndDiff() == null) {
-      print("archievement");
-      // save archievemnts for menu view
-      _archievements.add(Difficulty.EASY);
-    }
-
-    // This line tells [Model] that it should rebuild the widgets that
-    // depend on it.
+  void verlockScreen(String fileName) {
+    _lockScreen = true;
+    // Filename to unlock later
+    _unlockedWith.add(fileName);
+    _witchIcon = 'assets/pics/witch_pink_talk2.png';
+    log.e('UserModel:' + 'lock screen (verlockScreen)');
     notifyListeners();
   }
 
-  void resetAll(){
-
+  void unlockScreen(String fileName) {
+    _unlockedWith.remove(fileName);
+    _lockScreen = false;
+    _witchIcon = 'assets/pics/witch_pink_smile.png';
+    log.i(
+        'UserModel:' + 'unlocking screen with ' + fileName + ' (unlockScreen)');
+    notifyListeners();
+    audioCache.clear(fileName);
+    if (_playerQueue.length > 0) {
+      log.i('UserModel:' +
+          'more in queue ' +
+          _playerQueue.toString() +
+          ' (unlockScreen)');
+      String sound = _playerQueue.removeLast();
+      // _savedTexsts = null;
+      makeSound(sound);
+    }
+    /* wait for two secs **
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      if (_unlockedWith.length > 0 && ) {
+        _lockScreen = false;
+      }
+      log.e('UserModel:' + '-------------------------remove???(unlockScreen)');
+    });*/
   }
 
-  Level getLevelFromNumberAndDiff() {
-    Level level = _levels.firstWhere(
-        (o) => (o.difficulty == _currentDifficulty &&
-            o.number == _currentLevelCounter),
-        orElse: () => null);
-    print("Start Level with ${LevelHelper.printLevelInfo(level)}");
-    return level;
+  // RESET ALL SOUND ACTION
+  void stopAllSound() {
+    audioCache.clearCache();
+    _playerQueue = new List<String>();
+    advancedPlayer.stop();
+    advancedPlayer = new AudioPlayer();
+    audioCache = new AudioCache(fixedPlayer: advancedPlayer);
   }
 }

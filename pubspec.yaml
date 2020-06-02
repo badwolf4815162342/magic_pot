@@ -14,31 +14,33 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+    # Logger
+  logger: ^0.7.0+2
   # Adds functionality to play sound files
-  audioplayers: ^0.13.6
-
+  audioplayers: ^0.15.1
+  # Config
+  global_configuration: ^1.5.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   # Import the provider package.
   provider: ^3.0.0
+  animated_widgets: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -46,19 +48,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/
-  - assets/pics/
-  - assets/pics/level_background.png
-  - assets/pics/animal_selection.png
-  - assets/audio/
-  - assets/gifs/2Mw3.gif
-
+    - assets/
+    - assets/pics/
+    - assets/pics/level_background.png
+    - assets/pics/animal_selection.png
+    - assets/audio/
+    - assets/gifs/2Mw3.gif
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

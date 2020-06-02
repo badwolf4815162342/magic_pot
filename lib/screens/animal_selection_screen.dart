@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/custom_widget/animal_buttons.dart';
@@ -14,14 +13,14 @@ class AnimalSelectionScreen extends StatefulWidget {
 }
 
 class _AnimalSelectionScreen extends State<AnimalSelectionScreen> {
-
   bool _checkConfiguration() => true;
 
   void initState() {
     super.initState();
     if (_checkConfiguration()) {
-      Future.delayed(Duration.zero,() { // SchedulerBinding.instance.addPostFrameCallback((_) {
-        Provider.of<UserModel>(context, listen: false).makeSound('audio/waehle_dein_tier.wav');
+      Future.delayed(Duration.zero, () {
+        // SchedulerBinding.instance.addPostFrameCallback((_) {
+        Provider.of<UserModel>(context, listen: false).tellChooseAnimal();
       });
     }
   }
@@ -30,7 +29,12 @@ class _AnimalSelectionScreen extends State<AnimalSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: BackgroundLayout(
-            scene: ButtonsWithName(animalsize: 100),
-            picUrl: 'assets/pics/animal_selection.png'));
+            scene: Stack(children: <Widget>[
+              Positioned(
+                  bottom: 10,
+                  right: 120,
+                  child: ButtonsWithName(animalsize: 150))
+            ]),
+            picUrl: 'assets/pics/animal_change.png'));
   }
 }

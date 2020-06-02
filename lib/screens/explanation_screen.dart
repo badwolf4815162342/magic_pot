@@ -1,9 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/play_button.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:global_configuration/global_configuration.dart';
+
+import '../logger.util.dart';
 
 class ExplanationScreen extends StatefulWidget {
   @override
@@ -20,7 +23,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
   void initState() {
     super.initState();
     if (_checkConfiguration()) {
-      Future.delayed(Duration.zero,() { // SchedulerBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration.zero, () {
+        // SchedulerBinding.instance.addPostFrameCallback((_) {
         Provider.of<UserModel>(context).explainCurrentLevel();
       });
     }
@@ -28,17 +32,20 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final log = getLogger();
+    Size size = MediaQuery.of(context).size;
     currentLevel = Provider.of<UserModel>(context, listen: false)
         .getLevelFromNumberAndDiff();
-      if (currentLevel == null) {
-        Navigator.pushNamed(context, "levelFinishedRoute");
-      } 
-    if (currentLevel == null) {
-      print("nulllevel");
-    } else {
-      print("currentlevel = ${LevelHelper.printLevelInfo(currentLevel)}");
-    }
 
+    if (currentLevel == null) {
+      Navigator.pushNamed(context, "levelFinishedRoute");
+    }
+    if (currentLevel == null) {
+      log.e('ExplanationScreen:' + 'CurrentLevel= null');
+    } else {
+      log.i('ExplanationScreen:' +
+          'CurrentLevel=  ${LevelHelper.printLevelInfo(currentLevel)}');
+    }
     var levelnum = 0;
     if (currentLevel == null) {
       levelnum = 1000;
@@ -47,26 +54,33 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
     }
 
     return Scaffold(
-      body: BackgroundLayout(
-          scene: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                /* Text(
-                  'Explanation .... ${levelnum}',
-                  style: TextStyle(color: Colors.black),
-                ),*/
-                RawMaterialButton(
-                      child: new Image.asset(
-                          'assets/pics/arm_wand.png',
-                          width: 400,
-                        ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "levelScreenRoute");
-                  },
-                ),
-              ])),
-          picUrl: 'assets/pics/level_finished_screen.png'),
-    );
+        body: BackgroundLayout(
+            scene: LayoutBuilder(
+              builder: (context, constraints) => Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Positioned(
+                      bottom: double.parse(GlobalConfiguration()
+                          .getString("play_button_distancd_bottom")),
+                      right: double.parse(GlobalConfiguration()
+                          .getString("play_button_distancd_right")),
+                      child: PlayButton(
+                        pushedName: "levelScreenRoute",
+                        opacity: 0.7,
+                        active: true,
+                      )),
+                  Positioned(
+                    top: 180,
+                    left: 60,
+                    child: new Image.asset(
+                      currentLevel.picurl,
+                      width: 600,
+                      height: 600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            picUrl: 'assets/pics/level_finished_screen.png'));
   }
 }

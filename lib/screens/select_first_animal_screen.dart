@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/animal_buttons.dart';
+import 'package:magic_pot/models/audio.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
 
@@ -11,14 +12,15 @@ class SelectFirstAnimalScreen extends StatefulWidget {
 }
 
 class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
-
- bool _checkConfiguration() => true;
+  bool _checkConfiguration() => true;
 
   void initState() {
     super.initState();
     if (_checkConfiguration()) {
-      Future.delayed(Duration.zero,() { // SchedulerBinding.instance.addPostFrameCallback((_) {
-        Provider.of<UserModel>(context, listen: false).makeSound('audio/intro.wav');
+      Future.delayed(Duration.zero, () {
+        // SchedulerBinding.instance.addPostFrameCallback((_) {
+        Provider.of<UserModel>(context, listen: false).tellIntroduction();
+        // .makeSound('audio/intro.wav');
       });
     }
   }
@@ -33,7 +35,7 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
       builder: (context, cart, child) {
         return Scaffold(
             body: IgnorePointer(
-                ignoring:  lockScreen,
+                ignoring: lockScreen,
                 child: Stack(children: <Widget>[
                   Center(
                     child: new Image.asset(
@@ -43,30 +45,29 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  Row ( mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Column ( 
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      ButtonsWithName(animalsize: 150)
-                    ]
-                  ),
-                  FlatButton(
-                            child: new Image.asset(
+                  Stack(children: <Widget>[
+                    Positioned(
+                      bottom: 20,
+                      left: 0,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[ButtonsWithName(animalsize: 150)]),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: FlatButton(
+                          child: new Image.asset(
                             witchIcon,
-                            height: 300,
-                            width: 300,
+                            height: 500,
+                            width: 500,
                           ),
-                            onPressed: () {
-                              Provider.of<UserModel>(context).playWitchText();
-                            },
-                      )
-                    ])
-                  
-                ]
-            )
-          )
-        );
+                          onPressed: () {
+                            Provider.of<UserModel>(context).playWitchText();
+                          },
+                        )),
+                  ])
+                ])));
       },
     );
   }

@@ -1,9 +1,17 @@
+import 'dart:async';
+
+import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:magic_pot/custom_widget/archievement_buttons.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/blink_widget.dart';
 import 'package:magic_pot/custom_widget/difficulty_button.dart';
+import 'package:magic_pot/custom_widget/play_button.dart';
+import 'package:magic_pot/logger.util.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:global_configuration/global_configuration.dart';
 
 class MenuScreen extends StatefulWidget {
   @override
@@ -17,29 +25,54 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    difficulty = Provider.of<UserModel>(context, listen: true).currentDifficulty;
+    difficulty =
+        Provider.of<UserModel>(context, listen: true).currentDifficulty;
+
     return Consumer<UserModel>(
       builder: (context, cart, child) {
         return Scaffold(
             body: BackgroundLayout(
-                scene: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                scene: LayoutBuilder(
+                  builder: (context, constraints) => Stack(
+                    fit: StackFit.expand,
                     children: <Widget>[
-                      RawMaterialButton(
-                      child: new Image.asset(
-                          'assets/pics/arm_wand.png',
-                          width: 400,
+                      Positioned(
+                          bottom: double.parse(GlobalConfiguration()
+                              .getString("play_button_distancd_bottom")),
+                          right: double.parse(GlobalConfiguration()
+                              .getString("play_button_distancd_right")),
+                          child: PlayButton(
+                            pushedName: "explanationScreenRoute",
+                            opacity: 0.9,
+                            active: true,
+                          )),
+                      Positioned(
+                        top: 0,
+                        left: 300,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text("Schwierigkeit?"),
+                              DifficultyButton(
+                                  buttonDifficulty: Difficulty.EASY,
+                                  currentDifficulty: difficulty),
+                              DifficultyButton(
+                                  buttonDifficulty: Difficulty.MIDDLE,
+                                  currentDifficulty: difficulty),
+                              DifficultyButton(
+                                  buttonDifficulty: Difficulty.HARD,
+                                  currentDifficulty: difficulty),
+                            ],
+                          ),
                         ),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                              context, "explanationScreenRoute");
-                        },
                       ),
-                      Text("Schwierigkeit?"),
-                      DifficultyButton(buttonDifficulty: Difficulty.EASY, currentDifficulty: difficulty),
-                      DifficultyButton(buttonDifficulty: Difficulty.MIDDLE, currentDifficulty: difficulty),
-                      DifficultyButton(buttonDifficulty: Difficulty.HARD, currentDifficulty: difficulty),
+                      Positioned(
+                        top: 300,
+                        left: 300,
+                        child:
+                            Center(child: ArchievementButtons(animalsize: 100)),
+                      ),
                     ],
                   ),
                 ),
