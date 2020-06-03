@@ -10,7 +10,8 @@ class Level {
   WordLevel wordlevel;
   int numberOfObjectsToChooseFrom;
   String soundfile;
-  String picurl;
+  String picBeforeUrl;
+  String picAftereUrl;
 
   Level(
       this.number,
@@ -20,7 +21,8 @@ class Level {
       this.wordlevel,
       this.numberOfObjectsToChooseFrom,
       this.soundfile,
-      this.picurl);
+      this.picBeforeUrl,
+      this.picAftereUrl);
 }
 
 enum Difficulty { EASY, MIDDLE, HARD }

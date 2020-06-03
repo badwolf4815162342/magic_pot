@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/animal_buttons.dart';
-import 'package:magic_pot/models/audio.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +17,7 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
     super.initState();
     if (_checkConfiguration()) {
       Future.delayed(Duration.zero, () {
-        // SchedulerBinding.instance.addPostFrameCallback((_) {
         Provider.of<UserModel>(context, listen: false).tellIntroduction();
-        // .makeSound('audio/intro.wav');
       });
     }
   }

@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,6 +31,7 @@ dependencies:
   # Import the provider package.
   provider: ^3.0.0
   animated_widgets: ^1.0.6
+  flutter_page_transition: ^0.1.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,7 @@ flutter:
     - assets/pics/animal_selection.png
     - assets/audio/
     - assets/gifs/2Mw3.gif
+    - assets/gifs/witch_talking.gif
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

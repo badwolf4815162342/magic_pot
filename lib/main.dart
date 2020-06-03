@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:magic_pot/custom_widget/animal_selector_button.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
 import 'package:magic_pot/models/animal.dart';
@@ -55,6 +56,33 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: IntroPage(),
+          onGenerateRoute: (RouteSettings routeSettings) {
+            return new PageRouteBuilder<dynamic>(
+                settings: routeSettings,
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  switch (routeSettings.name) {
+                    case '/menu':
+                      return MenuPage();
+                    case ExplanationScreen.tag:
+                      return ExplanationScreen();
+                    case LevelScreen.tag:
+                      return LevelScreen();
+                    case '/levelfinished':
+                      return LevelFinishedScreen();
+                    default:
+                      return null;
+                  }
+                },
+                transitionDuration: const Duration(milliseconds: 2000),
+                transitionsBuilder: (BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secondaryAnimation,
+                    Widget child) {
+                  return effectMap[PageTransitionType.slideParallaxUp](
+                      Curves.linear, animation, secondaryAnimation, child);
+                });
+          },
         ));
   }
 }
@@ -113,10 +141,7 @@ class IntroPage extends StatelessWidget {
                           GlobalConfiguration().getString("play_button_size")),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        SlideRightRoute(page: MenuPage()),
-                      );
+                      Navigator.pushNamed(context, 'menuScreenRoute');
                     },
                   ),
                 ),
@@ -129,28 +154,63 @@ class IntroPage extends StatelessWidget {
   }
 }
 
-class SlideRightRoute extends PageRouteBuilder {
-  final Widget page;
-  SlideRightRoute({this.page})
+class EnterExitRoute extends PageRouteBuilder {
+  final Widget enterPage;
+  final Widget exitPage;
+  EnterExitRoute({this.exitPage, this.enterPage})
       : super(
           pageBuilder: (
             BuildContext context,
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) =>
-              page,
+              enterPage,
+          transitionDuration: Duration(seconds: 5),
           transitionsBuilder: (
             BuildContext context,
             Animation<double> animation,
             Animation<double> secondaryAnimation,
             Widget child,
           ) =>
+              Stack(
+            children: <Widget>[
               SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(-1, 0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
+                position: new Tween<Offset>(
+                  begin: const Offset(0.0, 0.0),
+                  end: const Offset(-1.0, 0.0),
+                ).animate(animation),
+                child: exitPage,
+              ),
+              SlideTransition(
+                position: new Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: enterPage,
+              )
+            ],
           ),
         );
 }
+
+/*
+switch (settings.name) {
+              case '/menu':
+                return PageTransition(
+                  child: MenuPage(),
+                  type: PageTransitionType.rightToLeftWithFade,
+                  settings: settings,
+                  duration: Duration(seconds: 3),
+                );
+                break;
+              case '/leveldown':
+                return PageTransition(
+                  child: LevelScreen(),
+                  type: PageTransitionType.downToUp,
+                  settings: settings,
+                  duration: Duration(seconds: 3),
+                );
+                break;
+              default:
+                return null;
+            }*/

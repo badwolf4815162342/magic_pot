@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_page_transition/flutter_page_transition.dart';
+import 'package:magic_pot/main.dart';
 import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/screens/animal_selection_screen.dart';
+import 'package:magic_pot/screens/select_first_animal_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../logger.util.dart';
@@ -31,7 +35,7 @@ class AnimalSelectorButton extends StatelessWidget {
       ),
       onPressed: () {
         if (currentAnimal == null) {
-          Navigator.pushNamed(context, "menuScreenRoute");
+          Navigator.pushNamed(context, "/menu");
         } else {
           Navigator.pop(context);
         }

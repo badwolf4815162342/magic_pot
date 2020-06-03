@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:magic_pot/models/audio.dart';
 import 'package:magic_pot/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';

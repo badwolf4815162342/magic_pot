@@ -21,7 +21,7 @@ class ArchievementButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             new Image.asset(
-              level.picurl,
+              level.picAftereUrl,
               width: size,
               height: size,
             ),
@@ -33,7 +33,7 @@ class ArchievementButton extends StatelessWidget {
         log.d('ArchievementButton: Tapped');
         // Go to that expanation screen with level
         Provider.of<UserModel>(context, listen: false).setLevel(level);
-        Navigator.pushNamed(context, "explanationScreenRoute");
+        Navigator.pushNamed(context, "/explanation");
       },
       shape: const StadiumBorder(),
     );

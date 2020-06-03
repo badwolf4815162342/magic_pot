@@ -13,6 +13,8 @@ import 'package:magic_pot/models/object.dart';
 import '../logger.util.dart';
 
 class LevelScreen extends StatefulWidget {
+  static const String tag = '/levelscreen';
+
   @override
   State<StatefulWidget> createState() {
     return _LevelScreenState();
@@ -60,7 +62,11 @@ class _LevelScreenState extends State<LevelScreen> {
       scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text("Level won!")));
       Provider.of<UserModel>(context, listen: false).levelUp();
-      Navigator.pushNamed(context, "explanationScreenRoute");
+      Future.delayed(const Duration(milliseconds: 4000), () {
+        setState(() {
+          Navigator.pushNamed(context, "/explanation");
+        });
+      });
     } else {
       setState(() {
         _resetLevelData();
@@ -97,8 +103,13 @@ class _LevelScreenState extends State<LevelScreen> {
     log.i('LevelScreen:' + "Acc ${acceptedObject.name}");
     Provider.of<UserModel>(context)
         .updateWitchText('audio/${acceptedObject.name}.wav');
-    Provider.of<UserModel>(context)
-        .explainAcceptedObject('audio/${acceptedObject.name}.wav');
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      setState(() {
+        Provider.of<UserModel>(context)
+            .explainAcceptedObject('audio/${acceptedObject.name}.wav');
+      });
+    });
+    log.d('LevelScreen: on except over');
   }
 
   @override
@@ -186,7 +197,11 @@ class _LevelScreenState extends State<LevelScreen> {
                     SizedBox(height: 10, width: 580),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: currentObjectDraggables,
+                      children: [
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: currentObjectDraggables)
+                      ],
                     ),
                   ])
                 ],

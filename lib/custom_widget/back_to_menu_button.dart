@@ -43,7 +43,7 @@ class _BackToMenuButtonState extends State<BackToMenuButton> {
                 Navigator.of(context).pop();
                 // reset all
                 Provider.of<UserModel>(context).resetToMenu();
-                Navigator.pushNamed(context, "menuScreenRoute");
+                Navigator.pushNamed(context, '/menu');
               },
             ),
             RawMaterialButton(
@@ -75,10 +75,9 @@ class _BackToMenuButtonState extends State<BackToMenuButton> {
         height: 100,
       ),
       onPressed: () {
-                        Provider.of<UserModel>(context).stopAllSound();
+        Provider.of<UserModel>(context).stopAllSound();
 
         _showAlertDialog();
-
       },
     );
   }

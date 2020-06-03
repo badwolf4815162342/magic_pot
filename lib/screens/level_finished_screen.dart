@@ -41,7 +41,7 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                       RaisedButton(
                         child: Text("To Menu"),
                         onPressed: () {
-                          Navigator.pushNamed(context, "menuScreenRoute");
+                          Navigator.pushNamed(context, '/menu');
                         },
                       ),
                     ],

@@ -10,6 +10,7 @@ import 'package:magic_pot/custom_widget/play_button.dart';
 import 'package:magic_pot/logger.util.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:global_configuration/global_configuration.dart';
 
@@ -22,6 +23,20 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Difficulty difficulty = Difficulty.EASY;
+
+  Image myImage;
+
+  @override
+  void initState() {
+    super.initState();
+    myImage = Image.asset(GlobalConfiguration().getString("menuscreen_path"));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(myImage.image, context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +57,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           right: double.parse(GlobalConfiguration()
                               .getString("play_button_distancd_right")),
                           child: PlayButton(
-                            pushedName: "explanationScreenRoute",
+                            pushedName: ExplanationScreen.tag,
                             opacity: 0.9,
                             active: true,
                           )),
@@ -76,7 +91,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     ],
                   ),
                 ),
-                picUrl: 'assets/pics/menu_screen.png'));
+                picUrl: GlobalConfiguration().getString("menuscreen_path")));
       },
     );
   }
