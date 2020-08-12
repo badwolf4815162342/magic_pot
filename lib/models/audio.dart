@@ -38,7 +38,7 @@ class AudioModel extends ChangeNotifier {
   }
 
   void makeSound(String fileName) {
-    log.d('UserModel:' +
+    log.d('ControllingProvider:' +
         'Player-Queue ' +
         _playerQueue.toString() +
         ' contains ' +
@@ -47,7 +47,7 @@ class AudioModel extends ChangeNotifier {
         _playerQueue.contains(fileName).toString());
 
     if (_playerQueue.contains('audio/intro.wav')) {
-      log.e('UserModel:' + 'Player-Queue contains audio/intro.wav');
+      log.e('ControllingProvider:' + 'Player-Queue contains audio/intro.wav');
     }
     if (_lockScreen && !_playerQueue.contains(fileName)) {
       _playerQueue.add(fileName);
@@ -64,19 +64,19 @@ class AudioModel extends ChangeNotifier {
     _lockScreen = true;
     _unlockedWith.add(fileName);
     _witchIcon = 'assets/pics/witch_pink_oh.png';
-    log.e('UserModel:' + 'lock screen (verlockScreen)');
+    log.e('ControllingProvider:' + 'lock screen (verlockScreen)');
     notifyListeners();
   }
 
   void unlockScreen(String fileName) {
     if (!_unlockedWith.contains(fileName)) {
-      log.e('UserModel:' + 'unlock unlocked screen (unlockScreen)');
+      log.e('ControllingProvider:' + 'unlock unlocked screen (unlockScreen)');
       return;
     }
     _unlockedWith.remove(fileName);
     _lockScreen = false;
     _witchIcon = 'assets/pics/witch_pink_smile.png';
-    log.i('UserModel:' + 'unlock screen (unlockScreen)');
+    log.i('ControllingProvider:' + 'unlock screen (unlockScreen)');
     notifyListeners();
     audioCache.clear(fileName);
     if (_playerQueue.length > 0) {
@@ -89,7 +89,7 @@ class AudioModel extends ChangeNotifier {
       if (_unlockedWith.length > 0) {
         _lockScreen = false;
       }
-      log.e('UserModel:' + '-------------------------remove???(unlockScreen)');
+      log.e('ControllingProvider:' + '-------------------------remove???(unlockScreen)');
     });
   }
 

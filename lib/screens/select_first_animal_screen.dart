@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/animal_buttons.dart';
-import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/provider/controlling_provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class SelectFirstAnimalScreen extends StatefulWidget {
+  static const String routeTag = 'selectFirstAnimalScreenRoute';
+
   @override
   State<StatefulWidget> createState() {
     return _SelectFirstAnimalScreenState();
@@ -17,7 +20,8 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
     super.initState();
     if (_checkConfiguration()) {
       Future.delayed(Duration.zero, () {
-        Provider.of<UserModel>(context, listen: false).tellIntroduction();
+        Provider.of<ControllingProvider>(context, listen: false)
+            .tellIntroduction();
       });
     }
   }
@@ -25,10 +29,10 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var lockScreen = Provider.of<UserModel>(context).lockScreen;
-    var witchIcon = Provider.of<UserModel>(context).witchIcon;
+    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
+    var witchIcon = Provider.of<ControllingProvider>(context).witchIcon;
 
-    return Consumer<UserModel>(
+    return Consumer<ControllingProvider>(
       builder: (context, cart, child) {
         return Scaffold(
             body: IgnorePointer(
@@ -52,15 +56,20 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
                     ),
                     Positioned(
                         bottom: 0,
-                        right: 0,
+                        left: 800,
                         child: FlatButton(
-                          child: new Image.asset(
-                            witchIcon,
-                            height: 500,
-                            width: 500,
+                          child: Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.rotationY(math.pi),
+                            child: new Image.asset(
+                              witchIcon,
+                              height: 500,
+                              width: 500,
+                            ),
                           ),
                           onPressed: () {
-                            Provider.of<UserModel>(context).playWitchText();
+                            Provider.of<ControllingProvider>(context)
+                                .playWitchText();
                           },
                         )),
                   ])

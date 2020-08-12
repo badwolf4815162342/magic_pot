@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/custom_widget/empty_placeholder.dart';
+import 'package:magic_pot/custom_widget/quit_button.dart';
+import 'package:magic_pot/provider/controlling_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
-import 'back_to_menu_button.dart';
-
 class BackgroundLayout extends StatelessWidget {
-  BackgroundLayout({@required this.scene, @required this.picUrl});
+  BackgroundLayout(
+      {@required this.scene,
+      @required this.picUrl,
+      this.closeApp = false,
+      this.animalSelectionBack = false});
   final Widget scene;
   final String picUrl;
+  final bool closeApp;
+  final bool animalSelectionBack;
 
   @override
   Widget build(BuildContext context) {
-    var animal = Provider.of<UserModel>(context).currentAnimal;
-    var lockScreen = Provider.of<UserModel>(context).lockScreen;
-    var witchIcon = Provider.of<UserModel>(context).witchIcon;
+    var animal = Provider.of<ControllingProvider>(context).currentAnimal;
+    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
+    var witchIcon = Provider.of<ControllingProvider>(context).witchIcon;
     var pic;
     if (animal == null) {
       pic = "Nothing";
     } else {
       pic = animal.picture;
     }
-    const double iconSize = 50;
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
@@ -44,13 +49,17 @@ class BackgroundLayout extends StatelessWidget {
                   children: <Widget>[
                     // X BUTTON
                     Positioned(
-                        left: 270,
-                        bottom: 570,
-                        child: Container(
-                          width: 200,
-                          height: 200,
-                          child: BackToMenuButton(),
-                        )),
+                        right: 270,
+                        bottom: 580,
+                        child: IgnorePointer(
+                            ignoring: lockScreen,
+                            child: Container(
+                              width: 200,
+                              height: 200,
+                              child: ExitButton(
+                                closeApp: closeApp,
+                              ),
+                            ))),
                     // WITCH
                     Positioned(
                         right: 10,
@@ -65,7 +74,7 @@ class BackgroundLayout extends StatelessWidget {
                                     witchIcon,
                                   ),
                                   onPressed: () {
-                                    Provider.of<UserModel>(context)
+                                    Provider.of<ControllingProvider>(context)
                                         .playWitchText();
                                   },
                                 )))),
@@ -78,8 +87,17 @@ class BackgroundLayout extends StatelessWidget {
                             child: Container(
                               width: 180,
                               height: 180,
-                              child: new Image.asset(
-                                animal.picture,
+                              child: RawMaterialButton(
+                                child: (animal == null)
+                                    ? EmptyPlaceholder()
+                                    : new Image.asset(
+                                        animal.picture,
+                                      ),
+                                onPressed: () {
+                                  Provider.of<ControllingProvider>(context,
+                                          listen: false)
+                                      .makeAnimalSound(animal.soundfile);
+                                },
                               ),
                             ))),
                     // CHANGE ANIMAL BUTTON
@@ -98,8 +116,12 @@ class BackgroundLayout extends StatelessWidget {
                                   height: 100,
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, "animalSelectionScreenRoute");
+                                  if (animalSelectionBack) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    Navigator.pushNamed(
+                                        context, "animalSelectionScreenRoute");
+                                  }
                                 },
                               ),
                             ))),

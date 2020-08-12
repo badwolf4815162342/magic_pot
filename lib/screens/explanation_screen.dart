@@ -1,9 +1,11 @@
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/custom_widget/play_button.dart';
 import 'package:magic_pot/models/level.dart';
-import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/screens/level_finished_screen.dart';
 import 'package:magic_pot/screens/level_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -11,7 +13,7 @@ import 'package:global_configuration/global_configuration.dart';
 import '../logger.util.dart';
 
 class ExplanationScreen extends StatefulWidget {
-  static const String tag = '/explanation';
+  static const String routeTag = '/explanation';
 
   @override
   State<StatefulWidget> createState() {
@@ -21,42 +23,54 @@ class ExplanationScreen extends StatefulWidget {
 
 class _ExplanationScreenState extends State<ExplanationScreen> {
   Level currentLevel;
-  bool trans;
+  bool transformation;
   bool _checkConfiguration() => true;
+  String playLink;
+  bool locked = true;
 
   void initState() {
     super.initState();
     if (_checkConfiguration()) {
-      Future.delayed(const Duration(milliseconds: 4000), () {
+      currentLevel =
+          Provider.of<ControllingProvider>(context, listen: false).currentLevel;
+      Future.delayed(const Duration(milliseconds: 2000), () {
         // SchedulerBinding.instance.addPostFrameCallback((_) {
-        Provider.of<UserModel>(context, listen: false).transitionSound();
-        trans = true;
-        Provider.of<UserModel>(context).explainCurrentLevel();
+
+        if (currentLevel.number != 1) {
+          Provider.of<ControllingProvider>(context, listen: false)
+              .transitionSound();
+          transformation = true;
+        }
+
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          Provider.of<ControllingProvider>(context).explainCurrentLevel();
+        });
+
+        Future.delayed(const Duration(milliseconds: 5000), () {
+          if (currentLevel.finalLevel) {
+            Provider.of<ControllingProvider>(context, listen: false).levelUp();
+          }
+        });
+
+        locked = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
     final log = getLogger();
-    Size size = MediaQuery.of(context).size;
-    currentLevel = Provider.of<UserModel>(context, listen: false)
-        .getLevelFromNumberAndDiff();
+    playLink = LevelScreen.routeTag;
 
-    if (currentLevel == null) {
-      Navigator.pushNamed(context, "/levelfinished");
-    }
     if (currentLevel == null) {
       log.e('ExplanationScreen:' + 'CurrentLevel= null');
     } else {
       log.i('ExplanationScreen:' +
           'CurrentLevel=  ${LevelHelper.printLevelInfo(currentLevel)}');
-    }
-    var levelnum = 0;
-    if (currentLevel == null) {
-      levelnum = 1000;
-    } else {
-      levelnum = currentLevel.number;
+      if (currentLevel.finalLevel) {
+        playLink = LevelFinishedScreen.routeTag;
+      }
     }
 
     return Scaffold(
@@ -71,9 +85,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                       right: double.parse(GlobalConfiguration()
                           .getString("play_button_distancd_right")),
                       child: PlayButton(
-                        pushedName: LevelScreen.tag,
-                        opacity: 0.7,
-                        active: true,
+                        pushedName: playLink,
+                        active: !(lockScreen || locked),
                       )),
                   Positioned(
                       top: 180,
@@ -84,23 +97,27 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             duration: Duration(milliseconds: 5000),
                             opacityEnabled: 1, //define start value
                             opacityDisabled: 0, //and end value
-                            enabled: trans, //bind with the boolean
-                            child: new Image.asset(
-                              currentLevel.picAftereUrl,
-                              width: 600,
-                              height: 600,
-                            ),
+                            enabled: transformation, //bind with the boolean
+                            child: (currentLevel != null)
+                                ? new Image.asset(
+                                    currentLevel.picAftereUrl,
+                                    width: 600,
+                                    height: 600,
+                                  )
+                                : EmptyPlaceholder(),
                           ),
                           OpacityAnimatedWidget.tween(
                             duration: Duration(milliseconds: 5000),
                             opacityEnabled: 0, //define start value
                             opacityDisabled: 1, //and end value
-                            enabled: trans, //bind with the boolean
-                            child: new Image.asset(
-                              currentLevel.picBeforeUrl,
-                              width: 600,
-                              height: 600,
-                            ),
+                            enabled: transformation, //bind with the boolean
+                            child: (currentLevel != null)
+                                ? new Image.asset(
+                                    currentLevel.picBeforeUrl,
+                                    width: 600,
+                                    height: 600,
+                                  )
+                                : EmptyPlaceholder(),
                           ),
                         ],
                       )),

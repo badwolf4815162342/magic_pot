@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/custom_widget/animal_selector_button.dart';
-import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/models/animal.dart';
+import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/db_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../logger.util.dart';
@@ -18,9 +20,20 @@ class ButtonsWithName extends StatefulWidget {
 
 class _ButtonsWithNameState extends State<ButtonsWithName> {
   List<AnimalSelectorButton> buttonsList = new List<AnimalSelectorButton>();
+  List<Animal> animals = new List<Animal>();
+
+  @override
+  void initState() {
+    _setAnimals();
+    super.initState();
+  }
+
+  _setAnimals() async {
+    animals = await DBProvider.db.getUnselectedAnimals();
+    setState(() {});
+  }
 
   List<Widget> _buildButtonsWithNames() {
-    var animals = Provider.of<UserModel>(context).animals;
     final log = getLogger();
     log.d('ButtonsWithName: Animals ' + animals.toString());
     buttonsList = new List<AnimalSelectorButton>();

@@ -4,16 +4,19 @@ import 'package:animated_widgets/widgets/rotation_animated.dart';
 import 'package:animated_widgets/widgets/shake_animated_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
-import 'package:magic_pot/custom_widget/object_draggable.dart';
+import 'package:magic_pot/custom_widget/ingredient_draggable.dart';
+import 'package:magic_pot/custom_widget/ingredient_draggables.dart';
 import 'package:magic_pot/models/level.dart';
-import 'package:magic_pot/models/user.dart';
+import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/db_provider.dart';
+import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:magic_pot/models/object.dart';
+import 'package:magic_pot/models/ingredient.dart';
 
 import '../logger.util.dart';
 
 class LevelScreen extends StatefulWidget {
-  static const String tag = '/levelscreen';
+  static const String routeTag = '/levelscreen';
 
   @override
   State<StatefulWidget> createState() {
@@ -23,11 +26,13 @@ class LevelScreen extends StatefulWidget {
 
 class _LevelScreenState extends State<LevelScreen> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
-  List<Object> currentObjects = new List<Object>();
-  List<ObjectDraggable> currentObjectDraggables = new List<ObjectDraggable>();
-  Object acceptedObject;
+  List<Ingredient> currentObjects = new List<Ingredient>();
+  List<IngredientDraggable> currentIngredientDraggables =
+      new List<IngredientDraggable>();
+  Ingredient acceptedObject;
   int counter = 0;
   int rightcounter = 0;
+  int wrongcounter = 0;
   Level currentLevel;
   bool lastright = false;
   bool shaking = false;
@@ -39,8 +44,10 @@ class _LevelScreenState extends State<LevelScreen> {
 
   void initState() {
     super.initState();
+    currentLevel =
+        Provider.of<ControllingProvider>(context, listen: false).currentLevel;
     if (_checkConfiguration()) {
-      Future.delayed(Duration.zero, () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         // SchedulerBinding.instance.addPostFrameCallback((_) {
         _resetLevelData();
       });
@@ -59,12 +66,10 @@ class _LevelScreenState extends State<LevelScreen> {
     log.i('LevelScreen:' + 'Levelcounter=  New counter ${counter}');
     if (counter >= currentLevel.numberOfMinObjects &&
         rightcounter >= currentLevel.numberOfRightObjectsInARow) {
-      scaffoldKey.currentState
-          .showSnackBar(SnackBar(content: Text("Level won!")));
-      Provider.of<UserModel>(context, listen: false).levelUp();
-      Future.delayed(const Duration(milliseconds: 4000), () {
+      Provider.of<ControllingProvider>(context, listen: false).levelUp();
+      Future.delayed(const Duration(milliseconds: 2000), () {
         setState(() {
-          Navigator.pushNamed(context, "/explanation");
+          Navigator.pushNamed(context, ExplanationScreen.routeTag);
         });
       });
     } else {
@@ -74,39 +79,48 @@ class _LevelScreenState extends State<LevelScreen> {
     }
   }
 
+  _failure() {
+    final log = getLogger();
+    wrongcounter++;
+    if (wrongcounter == currentLevel.getMaxFaults()) {
+      Provider.of<ControllingProvider>(context).reset_ingr();
+      setState(() {
+        _resetLevelData();
+      });
+      _printLevelStateInfo();
+    } else {
+      Provider.of<ControllingProvider>(context).motivation();
+      lastright = false;
+    }
+  }
+
   _printLevelStateInfo() {
     final log = getLogger();
     log.i('LevelScreen:' +
-        '_printLevelStateInfo Object number ${counter}/${currentLevel.numberOfMinObjects} done ${rightcounter}/${currentLevel.numberOfRightObjectsInARow} right objects in a row.');
+        '_printLevelStateInfo Ingredient number ${counter}/${currentLevel.numberOfMinObjects} done ${rightcounter}/${currentLevel.numberOfRightObjectsInARow} right objects in a row.');
   }
 
-  _resetLevelData() {
+  _resetLevelData() async {
     final log = getLogger();
     log.i('LevelScreen:' + "reset level (_resetLevelData)");
-    var objects = Provider.of<UserModel>(context).objects;
+    //var objects = Provider.of<ControllingProvider>(context).objects;
+    currentObjects = await DBProvider.db
+        .getXRandomObjects(currentLevel.numberOfObjectsToChooseFrom);
+    currentIngredientDraggables = new List<IngredientDraggable>();
+    currentObjects.forEach((element) {
+      currentIngredientDraggables
+          .add(new IngredientDraggable(ingredient: element));
+    });
+
     var random = new Random();
-    currentObjects = new List<Object>();
-    currentObjectDraggables = new List<ObjectDraggable>();
-    var numbers = new List<int>();
-    for (int i = 0; i < currentLevel.numberOfObjectsToChooseFrom; i++) {
-      var randomInt = random.nextInt(objects.length);
-      // no duplicats
-      while (numbers.contains(randomInt)) {
-        randomInt = random.nextInt(objects.length);
-      }
-      numbers.add(randomInt);
-      currentObjects.add(objects[randomInt]);
-      currentObjectDraggables
-          .add(new ObjectDraggable(object: objects[randomInt]));
-    }
     acceptedObject = currentObjects[random.nextInt(currentObjects.length)];
     log.i('LevelScreen:' + "Acc ${acceptedObject.name}");
-    Provider.of<UserModel>(context)
-        .updateWitchText('audio/${acceptedObject.name}.wav');
+    Provider.of<ControllingProvider>(context)
+        .updateWitchText('audio/witch_${acceptedObject.name}.wav');
     Future.delayed(const Duration(milliseconds: 3000), () {
       setState(() {
-        Provider.of<UserModel>(context)
-            .explainAcceptedObject('audio/${acceptedObject.name}.wav');
+        Provider.of<ControllingProvider>(context)
+            .explainAcceptedObject('audio/witch_${acceptedObject.name}.wav');
       });
     });
     log.d('LevelScreen: on except over');
@@ -114,8 +128,7 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    currentLevel = Provider.of<UserModel>(context, listen: false)
-        .getLevelFromNumberAndDiff();
+    // _getCurrentLevel();
 
     //_resetLevelData();
 
@@ -130,10 +143,12 @@ class _LevelScreenState extends State<LevelScreen> {
         millismovement = 1000;
         angleMovement = 180;
         this.shaking = true;
-
-        ///scaffoldKey.currentState
-        //     .showSnackBar(SnackBar(content: Text("Correct!")));
-        Provider.of<UserModel>(context).praise();
+        if (counter >= (currentLevel.numberOfMinObjects - 1) &&
+            rightcounter >= (currentLevel.numberOfRightObjectsInARow - 1)) {
+          Provider.of<ControllingProvider>(context).praise(false);
+        } else {
+          Provider.of<ControllingProvider>(context).praise(true);
+        }
         _success();
         _printLevelStateInfo();
       } else {
@@ -141,10 +156,7 @@ class _LevelScreenState extends State<LevelScreen> {
         millismovement = 500;
         angleMovement = 5;
         this.shaking = true;
-        //scaffoldKey.currentState
-        //    .showSnackBar(SnackBar(content: Text("Wrong!")));
-        Provider.of<UserModel>(context).motivation();
-        lastright = false;
+        _failure();
       }
       Future.delayed(const Duration(milliseconds: 3000), () {
         setState(() {
@@ -160,52 +172,49 @@ class _LevelScreenState extends State<LevelScreen> {
         key: scaffoldKey,
         body: BackgroundLayout(
             scene: LayoutBuilder(
-              builder: (context, constraints) => Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Row(children: [
-                    SizedBox(width: 80),
-                    Column(children: [
-                      SizedBox(height: 450),
-                      ShakeAnimatedWidget(
-                        enabled: this.shaking,
-                        duration: Duration(milliseconds: millismovement),
-                        shakeAngle: Rotation.deg(z: angleMovement),
-                        curve: Curves.linear,
-                        child: DragTarget(
-                          builder: (context, List<String> strings,
-                              unacceptedObjectList) {
-                            return Center(
-                              child: new Image.asset(
-                                this.potImage,
-                                width: 300,
-                                height: 300,
-                              ),
-                            );
-                          },
-                          onWillAccept: (data) {
-                            return true;
-                          },
-                          onAccept: (data) {
-                            _onAccept(data);
-                          },
+              builder: (context, constraints) {
+                //var ingredientDraggables = IngredientDraggables;
+                return Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Row(children: [
+                      SizedBox(width: 80),
+                      Column(children: [
+                        SizedBox(height: 450),
+                        ShakeAnimatedWidget(
+                          enabled: this.shaking,
+                          duration: Duration(milliseconds: millismovement),
+                          shakeAngle: Rotation.deg(z: angleMovement),
+                          curve: Curves.linear,
+                          child: DragTarget(
+                            builder: (context, List<String> strings,
+                                unacceptedObjectList) {
+                              return Center(
+                                child: new Image.asset(
+                                  this.potImage,
+                                  width: 300,
+                                  height: 300,
+                                ),
+                              );
+                            },
+                            onWillAccept: (data) {
+                              return true;
+                            },
+                            onAccept: (data) {
+                              _onAccept(data);
+                            },
+                          ),
                         ),
-                      ),
+                      ]),
                     ]),
-                  ]),
-                  Row(children: [
-                    SizedBox(height: 10, width: 580),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: currentObjectDraggables)
-                      ],
-                    ),
-                  ])
-                ],
-              ),
+                    Row(children: [
+                      SizedBox(height: 10, width: 580),
+                      IngredientDraggables(
+                          currentDraggables: currentIngredientDraggables)
+                    ])
+                  ],
+                );
+              },
             ),
             picUrl: 'assets/pics/level_background.png'));
   }

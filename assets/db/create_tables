@@ -1,0 +1,3 @@
+CREATE TABLE Ingredients(id INTEGER PRIMARY KEY, name TEXT,level TEXT, picture TEXT)
+CREATE TABLE Levels(id INTEGER PRIMARY KEY, number INTEGER, number_of_min_objects INTEGER, number_of_right_objects_in_a_row INTEGER, difficulty TEXT, wordlevel TEXT, number_of_objects_to_choose_from INTEGER, soundfile TEXT, pic_before_url TEXT, pic_after_url TEXT, final_level BOOLEAN default 0, achievement BOOLEAN default 0, animated BOOLEAN default 0)
+CREATE TABLE Animals(id INTEGER PRIMARY KEY, name TEXT,picture TEXT, soundfile TEXT, is_current Bool default 0)

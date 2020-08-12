@@ -32,10 +32,19 @@ dependencies:
   provider: ^3.0.0
   animated_widgets: ^1.0.6
   flutter_page_transition: ^0.1.0
+  sqflite:
+  flare_flutter: ^2.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons:
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon.png"
+  image_path_android: "assets/launcher/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -51,11 +60,11 @@ flutter:
   assets:
     - assets/
     - assets/pics/
-    - assets/pics/level_background.png
-    - assets/pics/animal_selection.png
     - assets/audio/
-    - assets/gifs/2Mw3.gif
-    - assets/gifs/witch_talking.gif
+    - assets/animation/
+    - assets/gifs/witch_talking_movement.gif
+    - assets/db/insert_objects
+    - assets/db/create_tables
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
