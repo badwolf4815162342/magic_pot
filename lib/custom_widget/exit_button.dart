@@ -28,8 +28,8 @@ class _ExitButtonState extends State<ExitButton> {
     userStateService = Provider.of<UserStateService>(context);
 
     return RawMaterialButton(
-      child: new Image.asset(
-        'assets/pics/x_pink.png',
+      child: DarkableImage(
+        url: 'assets/pics/x_pink.png',
         width: 70,
         height: 70,
       ),
@@ -45,7 +45,6 @@ class _ExitButtonState extends State<ExitButton> {
       UserStateService userStateService) {
     var lockScreen = audioPlayerService.lockScreen;
     showDialog(
-      //barrierDismissible: false,
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {

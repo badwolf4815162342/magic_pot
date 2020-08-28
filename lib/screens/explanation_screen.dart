@@ -1,6 +1,7 @@
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/custom_widget/play_button.dart';
 import 'package:magic_pot/models/level.dart';
@@ -87,7 +88,7 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                         active: !(lockScreen || locked),
                       )),
                   Positioned(
-                      top: 180,
+                      top: 230,
                       left: 60,
                       child: Stack(
                         children: <Widget>[
@@ -97,10 +98,10 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             opacityDisabled: 0, //and end value
                             enabled: transformation, //bind with the boolean
                             child: (currentLevel != null)
-                                ? new Image.asset(
-                                    currentLevel.picAftereUrl,
+                                ? DarkableImage(
+                                    url: currentLevel.picAftereUrl,
                                     width: 600,
-                                    height: 600,
+                                    height: 500,
                                   )
                                 : EmptyPlaceholder(),
                           ),
@@ -110,10 +111,10 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             opacityDisabled: 1, //and end value
                             enabled: transformation, //bind with the boolean
                             child: (currentLevel != null)
-                                ? new Image.asset(
-                                    currentLevel.picBeforeUrl,
+                                ? DarkableImage(
+                                    url: currentLevel.picBeforeUrl,
                                     width: 600,
-                                    height: 600,
+                                    height: 500,
                                   )
                                 : EmptyPlaceholder(),
                           ),

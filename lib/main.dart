@@ -12,7 +12,7 @@ import 'package:magic_pot/screens/level_screen.dart';
 import 'package:magic_pot/screens/menu_screen.dart';
 import 'package:magic_pot/screens/select_first_animal_screen.dart';
 import 'package:provider/provider.dart';
-
+import 'package:logger/logger.dart';
 import 'util/logger.util.dart';
 
 void main() async {

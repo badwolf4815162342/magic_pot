@@ -1,4 +1,4 @@
-/* import 'dart:math';
+/* /* import 'dart:math';
 
 import 'package:animated_widgets/widgets/rotation_animated.dart';
 import 'package:animated_widgets/widgets/shake_animated_widget.dart';
@@ -272,7 +272,7 @@ class _LevelScreenState extends State<LevelScreen> {
   Level currentLevel;
 
   void initState() {
-    super.initState();
+    super.initState();/*  */
     currentLevel =
         Provider.of<UserStateService>(context, listen: false).currentLevel;
   }
@@ -346,3 +346,4 @@ class _LevelScreenState extends State<LevelScreen> {
                     picUrl: 'assets/pics/level_background.png'))));
   }
 }
+ */

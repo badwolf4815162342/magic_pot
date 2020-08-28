@@ -1,16 +1,16 @@
 import 'package:animated_widgets/widgets/translation_animated.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
+import 'package:magic_pot/util/logger.util.dart';
 import 'package:provider/provider.dart';
 
-import '../util/logger.util.dart';
-
 class ArchievementButton extends StatelessWidget {
+  final log = getLogger();
+
   ArchievementButton(
       {@required this.level, @required this.size, @required this.animate});
   final Level level;
@@ -20,15 +20,15 @@ class ArchievementButton extends StatelessWidget {
   UserStateService userStateService;
 
   void _showAlertDialog(BuildContext context) {
-    var lockScreen = Provider.of<AudioPlayerService>(context).lockScreen;
-
+    var lockScreen = audioPlayerService.lockScreen;
+    // TODO(viviane): Solved locked bug
+    log.e('Screenlocked? $lockScreen');
     showDialog(
-      //barrierDismissible: false,
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return IgnorePointer(
-            ignoring: lockScreen,
+            ignoring: false,
             child: AlertDialog(
               backgroundColor: Color(0x472d4a),
               actions: <Widget>[
@@ -89,12 +89,11 @@ class ArchievementButton extends StatelessWidget {
               DarkableImage(
                 url: level.picAftereUrl,
                 width: size,
-                height: size,
+                height: size - 6,
               ),
             ],
           ),
           onPressed: () {
-            final log = getLogger();
             log.d('ArchievementButton: Tapped');
             audioPlayerService.archievementButtonText(level.finalLevel);
             if (!level.finalLevel) {

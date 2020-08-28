@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:animated_widgets/widgets/rotation_animated.dart';
 import 'package:animated_widgets/widgets/shake_animated_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_pot/api/db.api.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
 import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/custom_widget/ingredient_draggable.dart';
@@ -14,12 +13,14 @@ import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/level_helper.util.dart';
 import 'package:provider/provider.dart';
 
 import '../util/logger.util.dart';
 
 class LevelScreen extends StatefulWidget {
   static const String routeTag = '/levelscreen';
+  final log = getLogger();
 
   @override
   State<StatefulWidget> createState() {
@@ -103,20 +104,15 @@ class _LevelScreenState extends State<LevelScreen> {
   _resetLevelData() async {
     final log = getLogger();
     log.i('LevelScreen:' + "reset level (_resetLevelData)");
-    //var objects = Provider.of<ControllingProvider>(context).objects;
-    currentObjects = await DBApi.db
-        .getXRandomObjects(currentLevel.numberOfObjectsToChooseFrom);
-    currentIngredientDraggables = new List<IngredientDraggable>();
-    currentObjects.forEach((element) {
-      currentIngredientDraggables
-          .add(new IngredientDraggable(ingredient: element));
-    });
+    currentObjects = await LevelHelperUtil.getIngredients(null, currentLevel);
+    currentIngredientDraggables =
+        LevelHelperUtil.getIngredientDraggables(currentObjects);
 
     var random = new Random();
     acceptedObject = currentObjects[random.nextInt(currentObjects.length)];
+
     log.i('LevelScreen:' + "Acc ${acceptedObject.name}");
-    audioPlayerService
-        .updateWitchText('audio/witch_${acceptedObject.name}.wav');
+
     Future.delayed(const Duration(milliseconds: 3000), () {
       setState(() {
         audioPlayerService.explainAcceptedObject(
@@ -128,18 +124,15 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   _onAccept(data) {
-    final log = getLogger();
     log.d('LevelScreen: Data: ' +
         data +
         ' Accepted obj ' +
         acceptedObject.toString());
     if (data == acceptedObject.name) {
-      potImage = 'assets/pics/pot_pink2.png';
-      millismovement = 1000;
-      angleMovement = 180;
-      this.shaking = true;
+      _setPotAnimationSuccess();
       if (counter >= (currentLevel.numberOfMinObjects - 1) &&
           rightcounter >= (currentLevel.numberOfRightObjectsInARow - 1)) {
+        // if enaugh right objects found praise and don't say normal text (next level text will be told)
         audioPlayerService.praise(false);
       } else {
         audioPlayerService.praise(true);
@@ -147,19 +140,10 @@ class _LevelScreenState extends State<LevelScreen> {
       _success();
       _printLevelStateInfo();
     } else {
-      potImage = 'assets/pics/pot_black2.png';
-      millismovement = 500;
-      angleMovement = 5;
-      this.shaking = true;
+      _setPotAnimationFailure();
       _failure();
     }
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      setState(() {
-        // Here you can write your code for open new view
-        this.shaking = false;
-        potImage = 'assets/pics/pot_green2.png';
-      });
-    });
+    _stopPotAnimation();
     log.d('LevelScreen: on except over');
   }
 
@@ -223,5 +207,29 @@ class _LevelScreenState extends State<LevelScreen> {
               },
             ),
             picUrl: 'assets/pics/level_background.png'));
+  }
+
+  void _setPotAnimationFailure() {
+    potImage = 'assets/pics/pot_black2.png';
+    millismovement = 500;
+    angleMovement = 5;
+    this.shaking = true;
+  }
+
+  void _setPotAnimationSuccess() {
+    potImage = 'assets/pics/pot_pink2.png';
+    millismovement = 1000;
+    angleMovement = 180;
+    this.shaking = true;
+  }
+
+  void _stopPotAnimation() {
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      setState(() {
+        // Here you can write your code for open new view
+        this.shaking = false;
+        potImage = 'assets/pics/pot_green2.png';
+      });
+    });
   }
 }

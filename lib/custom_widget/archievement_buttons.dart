@@ -124,6 +124,5 @@ class _ArchievementButtonsState extends State<ArchievementButtons> {
         ),
       ),
     ]);
-    //return Row(children: _buildButtonsWithNames());
   }
 }

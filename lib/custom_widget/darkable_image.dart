@@ -14,9 +14,10 @@ class DarkableImage extends StatelessWidget {
   Widget build(BuildContext context) {
     audioPlayerService = Provider.of<AudioPlayerService>(context);
     var witchTalking = audioPlayerService.witchTalking;
+    var stayBright = audioPlayerService.stayBright;
 
     return ColorFiltered(
-        colorFilter: witchTalking
+        colorFilter: witchTalking && !stayBright
             ? ColorFilter.matrix(
                 <double>[
                   0.45,

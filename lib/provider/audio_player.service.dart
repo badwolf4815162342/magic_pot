@@ -38,9 +38,11 @@ class AudioPlayerService extends ChangeNotifier {
 
   bool _witchTalking = false;
   bool _lockScreen = false;
+  bool _stayBright = false;
 
   bool get witchTalking => _witchTalking;
   bool get lockScreen => _lockScreen;
+  bool get stayBright => _stayBright;
 
   Future init() async {
     _isInitializing = false;
@@ -93,7 +95,7 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   void transitionSound() {
-    makeSound('audio/effect_transition.wav');
+    makeSound('audio/long_effect_transition.wav');
   }
 
   void quitButtonText(bool close) {
@@ -197,6 +199,13 @@ class AudioPlayerService extends ChangeNotifier {
   // LOCKING SCREEN
 
   void verlockScreen(String fileName, bool witch) {
+    if (fileName.contains('long')) {
+      log.d('transformation');
+    }
+    // TODO: Dark only with witchtalking ... feuerwerk?????
+    if (!fileName.contains('witch') && !fileName.contains('long')) {
+      _stayBright = true;
+    }
     _lockScreen = true;
     // Filename to unlock later
     _unlockedWith.add(fileName);
@@ -210,6 +219,9 @@ class AudioPlayerService extends ChangeNotifier {
   void unlockScreen(String fileName, bool witch) {
     _unlockedWith.remove(fileName);
     _lockScreen = false;
+    if (!fileName.contains('witch') && !fileName.contains('long')) {
+      _stayBright = false;
+    }
     if (witch) {
       _witchTalking = false;
     }
