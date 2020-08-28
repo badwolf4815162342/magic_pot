@@ -1,13 +1,14 @@
 import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_pot/models/animal.dart';
+import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/models/level.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../logger.util.dart';
+import '../util/logger.util.dart';
 
 class ArchievementButton extends StatelessWidget {
   ArchievementButton(
@@ -15,57 +16,65 @@ class ArchievementButton extends StatelessWidget {
   final Level level;
   final double size;
   final bool animate;
+  AudioPlayerService audioPlayerService;
+  UserStateService userStateService;
 
   void _showAlertDialog(BuildContext context) {
-    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
+    var lockScreen = Provider.of<AudioPlayerService>(context).lockScreen;
 
     showDialog(
       //barrierDismissible: false,
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Color(0x472d4a),
-          actions: <Widget>[
-            RawMaterialButton(
-              child: new Image.asset(
-                level.picAftereUrl,
-                width: 200,
-                height: 200,
-              ),
-              onPressed: () {
-                // Go to that expanation screen with level
-                Provider.of<ControllingProvider>(context).stopAllSound();
-                Provider.of<ControllingProvider>(context, listen: false)
-                    .setLevel(level);
-                Navigator.pushNamed(context, ExplanationScreen.routeTag);
-                Provider.of<ControllingProvider>(context, listen: false)
-                    .setLevelAnimatedFalse();
-              },
-            ),
-            RawMaterialButton(
-              child: new Image.asset(
-                'assets/pics/x_pink.png',
-                width: 100,
-                height: 100,
-              ),
-              onPressed: () {
-                Provider.of<ControllingProvider>(context).stopAllSound();
+        return IgnorePointer(
+            ignoring: lockScreen,
+            child: AlertDialog(
+              backgroundColor: Color(0x472d4a),
+              actions: <Widget>[
+                RawMaterialButton(
+                  child: DarkableImage(
+                    url: level.picAftereUrl,
+                    width: 200,
+                    height: 200,
+                  ),
+                  onPressed: () {
+                    // Go to that expanation screen with level
+                    audioPlayerService.stopAllSound();
+                    Provider.of<UserStateService>(context, listen: false)
+                        .setLevel(level);
+                    Navigator.pushNamed(context, ExplanationScreen.routeTag);
+                    Provider.of<UserStateService>(context, listen: false)
+                        .setLevelAnimatedFalse();
+                  },
+                ),
+                RawMaterialButton(
+                  child: DarkableImage(
+                    url: 'assets/pics/x_pink.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  onPressed: () {
+                    audioPlayerService.stopAllSound();
 
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-          elevation: 0.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        );
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+              elevation: 0.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ));
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    userStateService = Provider.of<UserStateService>(context);
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
+
     return TranslationAnimatedWidget(
         enabled: animate, //update this boolean to forward/reverse the animation
         values: [
@@ -77,8 +86,8 @@ class ArchievementButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              new Image.asset(
-                level.picAftereUrl,
+              DarkableImage(
+                url: level.picAftereUrl,
                 width: size,
                 height: size,
               ),
@@ -87,8 +96,7 @@ class ArchievementButton extends StatelessWidget {
           onPressed: () {
             final log = getLogger();
             log.d('ArchievementButton: Tapped');
-            Provider.of<ControllingProvider>(context, listen: false)
-                .archievementButtonText(level.finalLevel);
+            audioPlayerService.archievementButtonText(level.finalLevel);
             if (!level.finalLevel) {
               _showAlertDialog(context);
             }

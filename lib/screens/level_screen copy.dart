@@ -1,4 +1,4 @@
-import 'dart:math';
+/* import 'dart:math';
 
 import 'package:animated_widgets/widgets/rotation_animated.dart';
 import 'package:animated_widgets/widgets/shake_animated_widget.dart';
@@ -173,6 +173,9 @@ class _LevelScreenState extends State<LevelScreen> {
         _resetLevelData();
       });
     }
+    // _getCurrentLevel();
+
+    //_resetLevelData();
 
     return Scaffold(
         key: scaffoldKey,
@@ -223,5 +226,123 @@ class _LevelScreenState extends State<LevelScreen> {
               },
             ),
             picUrl: 'assets/pics/level_background.png'));
+  }
+}
+ */
+
+import 'dart:math';
+
+import 'package:animated_widgets/widgets/rotation_animated.dart';
+import 'package:animated_widgets/widgets/shake_animated_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:magic_pot/api/db.api.dart';
+import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/darkable_image.dart';
+import 'package:magic_pot/custom_widget/ingredient_draggable.dart';
+import 'package:magic_pot/custom_widget/ingredient_draggables.dart';
+import 'package:magic_pot/models/ingredient.dart';
+import 'package:magic_pot/models/level.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/level_state.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
+import 'package:magic_pot/screens/explanation_screen.dart';
+import 'package:magic_pot/util/constant.util.dart';
+import 'package:provider/provider.dart';
+
+import '../util/logger.util.dart';
+
+class LevelScreen extends StatefulWidget {
+  static const String routeTag = '/levelscreen';
+
+  @override
+  State<StatefulWidget> createState() {
+    return _LevelScreenState();
+  }
+}
+
+class _LevelScreenState extends State<LevelScreen> {
+  final log = getLogger();
+  LevelStateService _levelStateService;
+
+  AudioPlayerService audioPlayerService;
+  bool madeInitSound = false;
+
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
+
+  Level currentLevel;
+
+  void initState() {
+    super.initState();
+    currentLevel =
+        Provider.of<UserStateService>(context, listen: false).currentLevel;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
+
+    if (madeInitSound == false) {
+      madeInitSound = true;
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _levelStateService = LevelStateService(currentLevel);
+        _levelStateService.resetLevelData(audioPlayerService);
+      });
+    }
+
+    return ChangeNotifierProvider.value(
+        value: _levelStateService,
+        child: Consumer<LevelStateService>(
+            builder: (context, levelStateService, child) => Scaffold(
+                key: scaffoldKey,
+                body: BackgroundLayout(
+                    scene: LayoutBuilder(
+                      builder: (context, constraints) {
+                        //var ingredientDraggables = IngredientDraggables;
+                        return Stack(
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            Row(children: [
+                              SizedBox(width: 80),
+                              Column(children: [
+                                SizedBox(height: 450),
+                                ShakeAnimatedWidget(
+                                  enabled: _levelStateServiceis.shaking,
+                                  duration:
+                                      Duration(milliseconds: millismovement),
+                                  shakeAngle: Rotation.deg(z: angleMovement),
+                                  curve: Curves.linear,
+                                  child: DragTarget(
+                                    builder: (context, List<String> strings,
+                                        unacceptedObjectList) {
+                                      return Center(
+                                        child: DarkableImage(
+                                          url: _levelStateService.potImage,
+                                          width: 300,
+                                          height: 300,
+                                        ),
+                                      );
+                                    },
+                                    onWillAccept: (data) {
+                                      return true;
+                                    },
+                                    onAccept: (data) {
+                                      _levelStateService.onAccept(
+                                          data, audioPlayerService);
+                                    },
+                                  ),
+                                ),
+                              ]),
+                            ]),
+                            Row(children: [
+                              SizedBox(height: 10, width: 580),
+                              IngredientDraggables(
+                                  currentDraggables: levelStateService
+                                      .currentIngredientDraggables)
+                            ])
+                          ],
+                        );
+                      },
+                    ),
+                    picUrl: 'assets/pics/level_background.png'))));
   }
 }

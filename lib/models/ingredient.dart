@@ -1,5 +1,3 @@
-@immutable
-import 'package:flutter/material.dart';
 import 'dart:convert';
 
 List<Ingredient> employeeFromJson(String str) =>

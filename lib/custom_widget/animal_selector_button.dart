@@ -1,32 +1,36 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/models/animal.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/menu_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../logger.util.dart';
+import '../util/logger.util.dart';
 
 class AnimalSelectorButton extends StatelessWidget {
   AnimalSelectorButton({@required this.animal, @required this.size});
   final Animal animal;
   final double size;
   var _firstPress = true;
+  AudioPlayerService audioPlayerService;
 
   @override
   Widget build(BuildContext context) {
+    audioPlayerService =
+        Provider.of<AudioPlayerService>(context, listen: false);
     var currentAnimal =
-        Provider.of<ControllingProvider>(context, listen: false).currentAnimal;
+        Provider.of<UserStateService>(context, listen: false).currentAnimal;
     return RawMaterialButton(
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            new Image.asset(
-              animal.picture,
+            DarkableImage(
+              url: animal.picture,
               width: size,
-              height: size,
             ),
           ],
         ),
@@ -34,8 +38,7 @@ class AnimalSelectorButton extends StatelessWidget {
       onPressed: () {
         if (_firstPress) {
           _firstPress = false;
-          Provider.of<ControllingProvider>(context, listen: false)
-              .makeAnimalSound(animal.soundfile);
+          audioPlayerService.makeAnimalSound(animal.soundfile);
           Future.delayed(const Duration(milliseconds: 1000), () {
             if (currentAnimal == null) {
               Navigator.pushNamed(context, MenuScreen.routeTag);
@@ -43,7 +46,7 @@ class AnimalSelectorButton extends StatelessWidget {
               Navigator.pop(context);
             }
           });
-          Provider.of<ControllingProvider>(context, listen: false)
+          Provider.of<UserStateService>(context, listen: false)
               .changeAnimal(animal);
           final log = getLogger();
           log.d('AnimalSelectorButton: Tapped');

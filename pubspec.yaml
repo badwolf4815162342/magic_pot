@@ -29,7 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   # Import the provider package.
-  provider: ^3.0.0
+  provider: ^4.3.0
   animated_widgets: ^1.0.6
   flutter_page_transition: ^0.1.0
   sqflite:

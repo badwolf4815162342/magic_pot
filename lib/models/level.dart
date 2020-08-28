@@ -1,6 +1,6 @@
 import 'package:magic_pot/models/ingredient.dart';
 
-import '../logger.util.dart';
+import '../util/logger.util.dart';
 
 class Level {
   int id;

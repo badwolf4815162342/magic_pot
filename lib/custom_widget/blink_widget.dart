@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:magic_pot/logger.util.dart';
 
+// ignore: must_be_immutable
 class BlinkWidget extends StatefulWidget {
   final int interval;
   List<Widget> children;
@@ -18,8 +18,6 @@ class _BlinkWidgetState extends State<BlinkWidget>
   int _currentWidget = 0;
 
   initState() {
-    final log = getLogger();
-
     super.initState();
     _controller = new AnimationController(
         duration: Duration(milliseconds: widget.interval), vsync: this);
@@ -35,7 +33,6 @@ class _BlinkWidgetState extends State<BlinkWidget>
         _controller.forward(from: 0.0);
       }
     });
-
     _controller.forward();
   }
 

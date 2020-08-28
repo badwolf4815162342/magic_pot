@@ -9,11 +9,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:magic_pot/models/ingredient.dart';
 import 'dart:math';
 
-class DBProvider {
+class DBApi {
   static Database _database;
-  static final DBProvider db = DBProvider._();
+  static final DBApi db = DBApi._();
 
-  DBProvider._();
+  DBApi._();
 
   Future<Database> get database async {
     // If database exists, return database
@@ -214,15 +214,16 @@ class DBProvider {
     );
   }
 
-  Future<int> updateLevelNotAnimated() async {
+  Future<void> updateLevelNotAnimated() async {
     final db = await database;
     final res = await db.rawQuery(
         "UPDATE Levels SET animated = '1' WHERE animated IS '0' AND achievement IS '1'");
 
-    final res2 = await db.rawQuery("SELECT * FROM LEVELS");
+    //TODO neccesary List<Level> list =
 
-    List<Level> list =
-        res2.isNotEmpty ? res2.map((c) => Level.fromJson(c)).toList() : [];
+    //final res2 = await db.rawQuery("SELECT * FROM LEVELS");
+
+    //     res2.isNotEmpty ? res2.map((c) => Level.fromJson(c)).toList() : [];
     print('i' + res.toString());
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/custom_widget/animal_buttons.dart';
 import 'package:magic_pot/custom_widget/background_layout.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:provider/provider.dart';
 
 class AnimalSelectionScreen extends StatefulWidget {
@@ -14,21 +14,16 @@ class AnimalSelectionScreen extends StatefulWidget {
 }
 
 class _AnimalSelectionScreen extends State<AnimalSelectionScreen> {
-  bool _checkConfiguration() => true;
-
-  void initState() {
-    super.initState();
-    if (_checkConfiguration()) {
-      Future.delayed(Duration.zero, () {
-        // SchedulerBinding.instance.addPostFrameCallback((_) {
-        Provider.of<ControllingProvider>(context, listen: false)
-            .tellChooseAnimal();
-      });
-    }
-  }
+  AudioPlayerService audioPlayerService;
+  bool madeInitSound = false;
 
   @override
   Widget build(BuildContext context) {
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
+    if (madeInitSound == false) {
+      madeInitSound = true;
+      audioPlayerService.tellChooseAnimal();
+    }
     return Scaffold(
         body: BackgroundLayout(
       scene: Stack(children: <Widget>[

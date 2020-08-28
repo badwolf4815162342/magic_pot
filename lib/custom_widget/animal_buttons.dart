@@ -1,11 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:magic_pot/api/db.api.dart';
 import 'package:magic_pot/custom_widget/animal_selector_button.dart';
 import 'package:magic_pot/models/animal.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
-import 'package:magic_pot/provider/db_provider.dart';
-import 'package:provider/provider.dart';
 
-import '../logger.util.dart';
+import '../util/logger.util.dart';
 
 class ButtonsWithName extends StatefulWidget {
   final double animalsize;
@@ -29,7 +27,7 @@ class _ButtonsWithNameState extends State<ButtonsWithName> {
   }
 
   _setAnimals() async {
-    animals = await DBProvider.db.getUnselectedAnimals();
+    animals = await DBApi.db.getUnselectedAnimals();
     setState(() {});
   }
 

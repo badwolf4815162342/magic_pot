@@ -1,26 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:magic_pot/logger.util.dart';
+import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/logger.util.dart';
 import 'package:magic_pot/models/animal.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/menu_screen.dart';
 import 'package:magic_pot/screens/select_first_animal_screen.dart';
 import 'package:provider/provider.dart';
 
-class IntroPage extends StatelessWidget {
+class IntroScreen extends StatelessWidget {
+  final log = getLogger();
+
+  bool areProvidersReady(UserStateService _userStateService,
+      AudioPlayerService _audioPlayerService) {
+    return _userStateService != null &&
+        _userStateService.isIntializing == false &&
+        _audioPlayerService != null &&
+        _audioPlayerService.isIntializing == false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AudioPlayerService audioPlayerService =
+        Provider.of<AudioPlayerService>(context);
+    final UserStateService userStateService =
+        Provider.of<UserStateService>(context);
     Size size = MediaQuery.of(context).size;
-    final log = getLogger();
-    Animal animal = Provider.of<ControllingProvider>(context).currentAnimal;
-    log.i('MenuPage:' + 'Animal=' + animal.toString());
-    return Consumer<ControllingProvider>(builder: (context, cart, child) {
+
+    if (areProvidersReady(userStateService, audioPlayerService)) {
+      Animal animal = userStateService.currentAnimal;
+      log.i('MenuPage:' + 'Animal=' + animal.toString());
       return Scaffold(
           body: Stack(
         children: <Widget>[
           Center(
             child: new Image.asset(
-              'assets/pics/intro_screen.png',
+              'assets/pics/intro_screen.jpg',
               width: size.width,
               height: size.height,
               fit: BoxFit.fill,
@@ -37,25 +53,20 @@ class IntroPage extends StatelessWidget {
               fit: StackFit.expand,
               children: <Widget>[
                 Positioned(
-                  bottom: double.parse(GlobalConfiguration()
-                      .getString("play_button_distancd_bottom")),
-                  right: double.parse(GlobalConfiguration()
-                      .getString("play_button_distancd_right")),
+                  bottom: Constant.playButtonDistanceBottom,
+                  right: Constant.playButtonDistanceRight,
                   child: RawMaterialButton(
                     child: new Image.asset(
                       'assets/pics/play_blue.png',
-                      width: double.parse(
-                          GlobalConfiguration().getString("play_button_size")),
-                      height: double.parse(
-                          GlobalConfiguration().getString("play_button_size")),
+                      width: Constant.playButtonSize,
+                      height: Constant.playButtonSize,
                     ),
                     onPressed: () {
                       if (animal == null) {
                         Navigator.pushNamed(
                             context, SelectFirstAnimalScreen.routeTag);
                       } else {
-                        Provider.of<ControllingProvider>(context)
-                            .setPlayAtNewestPosition();
+                        userStateService.setPlayAtNewestPosition();
                         Navigator.pushNamed(context, MenuScreen.routeTag);
                       }
                     },
@@ -66,6 +77,15 @@ class IntroPage extends StatelessWidget {
           )
         ],
       ));
-    });
+    } else {
+      return Center(
+        child: new Image.asset(
+          'assets/pics/intro_screen.jpg',
+          width: size.width,
+          height: size.height,
+          fit: BoxFit.fill,
+        ),
+      );
+    }
   }
 }

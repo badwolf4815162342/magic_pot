@@ -1,16 +1,17 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:magic_pot/api/db.api.dart';
 import 'package:magic_pot/custom_widget/archievement_buttons.dart';
-import 'package:magic_pot/custom_widget/background_layout.dart';
+import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/custom_widget/play_button.dart';
-import 'package:magic_pot/custom_widget/quit_button.dart';
-import 'package:magic_pot/models/level.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
-import 'package:magic_pot/provider/db_provider.dart';
+import 'package:magic_pot/custom_widget/exit_button.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
+import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
-import 'package:global_configuration/global_configuration.dart';
 
 class MenuScreen extends StatefulWidget {
   static const String routeTag = 'menuScreenRoute';
@@ -22,20 +23,14 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  _checkConfiguration() async {
-    bool newArchievements = await DBProvider.db.newArchievements();
-    Future.delayed(Duration.zero, () {
-      Provider.of<ControllingProvider>(context, listen: false)
-          .menuSound(newArchievements);
-    });
-  }
-
   Image myImage;
+  AudioPlayerService audioPlayerService;
+
+  bool madeInitSound = false;
 
   void initState() {
     super.initState();
-    myImage = Image.asset(GlobalConfiguration().getString("menuscreen_path"));
-    _checkConfiguration();
+    myImage = Image.asset(Constant.menuScreenPath);
   }
 
   @override
@@ -46,131 +41,144 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
-    var allArchieved = Provider.of<ControllingProvider>(context).allArchieved;
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
+
+    myImage = Image.asset(Constant.menuScreenPath);
+    if (madeInitSound == false) {
+      Future.delayed(Duration.zero, () async {
+        madeInitSound = true;
+        bool newArchievements = await DBApi.db.newArchievements();
+        audioPlayerService.menuSound(newArchievements);
+      });
+    }
+    var lockScreen = audioPlayerService.lockScreen;
+    var allArchieved = Provider.of<UserStateService>(context).allArchieved;
     Size size = MediaQuery.of(context).size;
-    var witchIcon = Provider.of<ControllingProvider>(context).witchIcon;
-    var animal = Provider.of<ControllingProvider>(context).currentAnimal;
+    var witchTalking = audioPlayerService.witchTalking;
+    var animal = Provider.of<UserStateService>(context).currentAnimal;
 
-    return Consumer<ControllingProvider>(
-      builder: (context, cart, child) {
-        return Scaffold(
-            body: IgnorePointer(
-                ignoring: lockScreen,
-                child: Stack(children: <Widget>[
-                  Center(
-                    child: new Image.asset(
-                      GlobalConfiguration().getString("menuscreen_path"),
-                      width: size.width,
-                      height: size.height,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  Stack(children: <Widget>[
-                    // X BUTTON
-                    Positioned(
-                        left: -40,
-                        bottom: 580,
-                        child: IgnorePointer(
-                            ignoring: lockScreen,
-                            child: Container(
-                              width: 200,
-                              height: 200,
-                              child: ExitButton(
-                                closeApp: true,
-                              ),
-                            ))),
-                    // PLAY
-                    Positioned(
-                        bottom: double.parse(GlobalConfiguration()
-                            .getString("play_button_distancd_bottom")),
-                        right: double.parse(GlobalConfiguration()
-                            .getString("play_button_distancd_right")),
-                        child: PlayButton(
-                          pushedName: ExplanationScreen.routeTag,
-                          active: (!lockScreen && !allArchieved),
-                          animationDone: true,
-                        )),
-                    // Archievements
-                    Positioned(
-                      top: 230,
-                      left: 740,
-                      child:
-                          Center(child: ArchievementButtons(animalsize: 100)),
-                    ),
-                    // Stars
-                    Positioned(
-                        top: 240,
-                        left: 555,
-                        height: 350,
-                        width: 350,
+    return Scaffold(
+        body: IgnorePointer(
+            ignoring: lockScreen,
+            child: Stack(children: <Widget>[
+              Center(
+                child: DarkableImage(
+                  url: Constant.menuScreenPath,
+                  width: size.width,
+                  height: size.height,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Stack(children: <Widget>[
+                // X BUTTON
+                Positioned(
+                    left: -40,
+                    bottom: 580,
+                    child: IgnorePointer(
+                        ignoring: lockScreen,
                         child: Container(
-                            child: FlareActor(
-                          "assets/animation/stars.flr",
-                          animation: "move",
+                          width: 200,
+                          height: 200,
+                          child: ExitButton(
+                            closeApp: true,
+                          ),
                         ))),
-
-                    // WITCH
-                    Positioned(
+                // PLAY
+                Positioned(
+                    bottom: Constant.playButtonDistanceBottom,
+                    right: Constant.playButtonDistanceRight,
+                    child: PlayButton(
+                      pushedName: ExplanationScreen.routeTag,
+                      active: (!lockScreen && !allArchieved),
+                      animationDone: true,
+                    )),
+                // Archievements
+                Positioned(
+                  top: 230,
+                  left: 740,
+                  child: Center(child: ArchievementButtons(animalsize: 100)),
+                ),
+                // Stars
+                Positioned(
+                    top: 240,
+                    left: 555,
+                    height: 350,
+                    width: 350,
+                    child: Container(
+                        child: FlareActor(
+                      "assets/animation/stars.flr",
+                      animation: "move",
+                    ))),
+                // BASIC WITCH
+                Positioned(
+                    bottom: 95,
+                    right: 875,
+                    child: FlatButton(
+                      child: new Image.asset(
+                        Constant.standartWitchIconPath,
+                        height: 500,
+                        width: 500,
+                      ),
+                      onPressed: () {
+                        audioPlayerService.tellStandartWitchText();
+                      },
+                    )),
+                // WITCH
+                witchTalking
+                    ? Positioned(
                         bottom: 95,
                         right: 875,
                         child: FlatButton(
                           child: new Image.asset(
-                            witchIcon,
+                            Constant.talkingWitchIconPath,
                             height: 500,
                             width: 500,
                           ),
                           onPressed: () {
-                            Provider.of<ControllingProvider>(context)
-                                .tellStandartWitchText();
+                            audioPlayerService.tellStandartWitchText();
                           },
-                        )),
-                    // ANIMAL
-                    Positioned(
-                        left: 500,
-                        top: 475,
-                        child: IgnorePointer(
-                            ignoring: lockScreen,
-                            child: Container(
-                              width: 180,
-                              height: 180,
-                              child: RawMaterialButton(
-                                child: (animal == null)
-                                    ? EmptyPlaceholder()
-                                    : new Image.asset(
-                                        animal.picture,
-                                      ),
-                                onPressed: () {
-                                  Provider.of<ControllingProvider>(context,
-                                          listen: false)
-                                      .makeAnimalSound(animal.soundfile);
-                                },
-                              ),
-                            ))),
-                    // CHANGE ANIMAL BUTTON
-                    Positioned(
-                        left: 400,
-                        top: 560,
-                        child: IgnorePointer(
-                            ignoring: lockScreen,
-                            child: Container(
-                              width: 180,
-                              height: 180,
-                              child: RawMaterialButton(
-                                child: new Image.asset(
-                                  'assets/pics/reverse_blue.png',
-                                  width: 100,
-                                  height: 100,
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, "animalSelectionScreenRoute");
-                                },
-                              ),
-                            ))),
-                  ])
-                ])));
-      },
-    );
+                        ))
+                    : Container(),
+                // ANIMAL
+                Positioned(
+                    left: 500,
+                    top: 475,
+                    child: IgnorePointer(
+                        ignoring: lockScreen,
+                        child: Container(
+                          child: RawMaterialButton(
+                            child: (animal == null)
+                                ? EmptyPlaceholder()
+                                : DarkableImage(
+                                    url: animal.picture, height: 170),
+                            onPressed: () {
+                              audioPlayerService
+                                  .makeAnimalSound(animal.soundfile);
+                            },
+                          ),
+                        ))),
+                // CHANGE ANIMAL BUTTON
+                Positioned(
+                    left: 400,
+                    top: 560,
+                    child: IgnorePointer(
+                        ignoring: lockScreen,
+                        child: Container(
+                          //width: 180,
+                          //height: 180,
+                          child: RawMaterialButton(
+                            child: DarkableImage(
+                                url: 'assets/pics/reverse_blue.png',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.fitWidth),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, "animalSelectionScreenRoute");
+                            },
+                          ),
+                        ))),
+              ])
+            ])));
   }
 }

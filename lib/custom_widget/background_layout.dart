@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/empty_placeholder.dart';
-import 'package:magic_pot/custom_widget/quit_button.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:magic_pot/custom_widget/darkable_image.dart';
+import 'package:magic_pot/custom_widget/empty_placeholder.dart';
+import 'package:magic_pot/custom_widget/exit_button.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
+import 'package:magic_pot/util/constant.util.dart';
+import 'package:provider/provider.dart';
 
 class BackgroundLayout extends StatelessWidget {
   BackgroundLayout(
@@ -15,26 +18,23 @@ class BackgroundLayout extends StatelessWidget {
   final String picUrl;
   final bool closeApp;
   final bool animalSelectionBack;
+  AudioPlayerService audioPlayerService;
 
   @override
   Widget build(BuildContext context) {
-    var animal = Provider.of<ControllingProvider>(context).currentAnimal;
-    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
-    var witchIcon = Provider.of<ControllingProvider>(context).witchIcon;
-    var pic;
-    if (animal == null) {
-      pic = "Nothing";
-    } else {
-      pic = animal.picture;
-    }
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
+
+    var animal = Provider.of<UserStateService>(context).currentAnimal;
+    var lockScreen = audioPlayerService.lockScreen;
+    var witchTalking = audioPlayerService.witchTalking;
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         IgnorePointer(
             ignoring: lockScreen,
             child: Center(
-              child: new Image.asset(
-                picUrl,
+              child: DarkableImage(
+                url: picUrl,
                 width: size.width,
                 height: size.height,
                 fit: BoxFit.fill,
@@ -51,51 +51,57 @@ class BackgroundLayout extends StatelessWidget {
                     Positioned(
                         right: 270,
                         bottom: 580,
-                        child: IgnorePointer(
-                            ignoring: lockScreen,
-                            child: Container(
-                              width: 200,
-                              height: 200,
-                              child: ExitButton(
-                                closeApp: closeApp,
-                              ),
-                            ))),
-                    // WITCH
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          child: ExitButton(
+                            closeApp: closeApp,
+                          ),
+                        )),
+                    // BASIC WITCH
                     Positioned(
-                        right: 10,
+                        right: -10,
                         top: 100,
                         child: IgnorePointer(
                             ignoring: lockScreen,
-                            child: Container(
-                                width: 450,
+                            child: FlatButton(
+                              child: new Image.asset(
+                                Constant.standartWitchIconPath,
                                 height: 450,
-                                child: FlatButton(
-                                  child: new Image.asset(
-                                    witchIcon,
-                                  ),
-                                  onPressed: () {
-                                    Provider.of<ControllingProvider>(context)
-                                        .playWitchText();
-                                  },
-                                )))),
+                                width: 450,
+                              ),
+                              onPressed: () {
+                                audioPlayerService.playWitchText();
+                              },
+                            ))),
+                    // WITCH
+                    witchTalking
+                        ? Positioned(
+                            right: -10,
+                            top: 100,
+                            child: FlatButton(
+                              child: new Image.asset(
+                                Constant.talkingWitchIconPath,
+                                height: 450,
+                                width: 450,
+                              ),
+                              onPressed: () {},
+                            ))
+                        : Container(),
                     // ANIMAL
                     Positioned(
                         left: 140,
-                        top: 550,
+                        top: 560,
                         child: IgnorePointer(
                             ignoring: lockScreen,
                             child: Container(
-                              width: 180,
-                              height: 180,
                               child: RawMaterialButton(
                                 child: (animal == null)
                                     ? EmptyPlaceholder()
-                                    : new Image.asset(
-                                        animal.picture,
-                                      ),
+                                    : DarkableImage(
+                                        url: animal.picture, height: 150),
                                 onPressed: () {
-                                  Provider.of<ControllingProvider>(context,
-                                          listen: false)
+                                  audioPlayerService
                                       .makeAnimalSound(animal.soundfile);
                                 },
                               ),
@@ -110,8 +116,8 @@ class BackgroundLayout extends StatelessWidget {
                               width: 180,
                               height: 180,
                               child: RawMaterialButton(
-                                child: new Image.asset(
-                                  'assets/pics/reverse_blue.png',
+                                child: DarkableImage(
+                                  url: 'assets/pics/reverse_blue.png',
                                   width: 100,
                                   height: 100,
                                 ),

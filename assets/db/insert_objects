@@ -65,7 +65,7 @@ INSERT INTO Ingredients (name ,level ,picture) VALUES ('kirche','THREE','⛪️'
 INSERT INTO Ingredients (name ,level ,picture) VALUES ('geige', 'THREE', '🎻')
 INSERT INTO Ingredients (name ,level ,picture) VALUES ('wolke', 'THREE', '☁️')
 INSERT INTO Ingredients (name ,level ,picture) VALUES ('stern', 'THREE', '⭐️')
-INSERT INTO Ingredients (name ,level ,picture) VALUES ('lippen', 'THREE', '💋')
+INSERT INTO Ingredients (name ,level ,picture) VALUES ('lippe', 'THREE', '💋')
 INSERT INTO Ingredients (name ,level ,picture) VALUES ('schuh', 'THREE', '👞')
 INSERT INTO Ingredients (name ,level ,picture) VALUES ('hexe', 'THREE', '🧙🏼‍♀️')
 INSERT INTO Ingredients (name ,level ,picture) VALUES ('stiefel','THREE','👢')

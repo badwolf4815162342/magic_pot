@@ -1,6 +1,3 @@
-@immutable
-import 'package:flutter/material.dart';
-
 class Animal {
   int id;
   String name;

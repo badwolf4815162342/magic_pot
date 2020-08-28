@@ -4,13 +4,14 @@ import 'package:magic_pot/custom_widget/background_layout.dart';
 import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/custom_widget/play_button.dart';
 import 'package:magic_pot/models/level.dart';
-import 'package:magic_pot/provider/controlling_provider.dart';
+import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/level_finished_screen.dart';
 import 'package:magic_pot/screens/level_screen.dart';
+import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
-import 'package:global_configuration/global_configuration.dart';
 
-import '../logger.util.dart';
+import '../util/logger.util.dart';
 
 class ExplanationScreen extends StatefulWidget {
   static const String routeTag = '/explanation';
@@ -24,42 +25,41 @@ class ExplanationScreen extends StatefulWidget {
 class _ExplanationScreenState extends State<ExplanationScreen> {
   Level currentLevel;
   bool transformation;
-  bool _checkConfiguration() => true;
   String playLink;
   bool locked = true;
+  AudioPlayerService audioPlayerService;
+  bool madeInitSound = false;
 
-  void initState() {
-    super.initState();
-    if (_checkConfiguration()) {
+  @override
+  Widget build(BuildContext context) {
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
+
+    if (madeInitSound == false) {
+      madeInitSound = true;
       currentLevel =
-          Provider.of<ControllingProvider>(context, listen: false).currentLevel;
+          Provider.of<UserStateService>(context, listen: false).currentLevel;
       Future.delayed(const Duration(milliseconds: 2000), () {
         // SchedulerBinding.instance.addPostFrameCallback((_) {
 
         if (currentLevel.number != 1) {
-          Provider.of<ControllingProvider>(context, listen: false)
-              .transitionSound();
+          audioPlayerService.transitionSound();
           transformation = true;
         }
 
         Future.delayed(const Duration(milliseconds: 1000), () {
-          Provider.of<ControllingProvider>(context).explainCurrentLevel();
+          audioPlayerService.explainCurrentLevel(currentLevel);
         });
 
         Future.delayed(const Duration(milliseconds: 5000), () {
           if (currentLevel.finalLevel) {
-            Provider.of<ControllingProvider>(context, listen: false).levelUp();
+            Provider.of<UserStateService>(context, listen: false).levelUp();
           }
         });
 
         locked = false;
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var lockScreen = Provider.of<ControllingProvider>(context).lockScreen;
+    var lockScreen = Provider.of<AudioPlayerService>(context).lockScreen;
     final log = getLogger();
     playLink = LevelScreen.routeTag;
 
@@ -80,10 +80,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                 fit: StackFit.expand,
                 children: <Widget>[
                   Positioned(
-                      bottom: double.parse(GlobalConfiguration()
-                          .getString("play_button_distancd_bottom")),
-                      right: double.parse(GlobalConfiguration()
-                          .getString("play_button_distancd_right")),
+                      bottom: Constant.playButtonDistanceBottom,
+                      right: Constant.playButtonDistanceRight,
                       child: PlayButton(
                         pushedName: playLink,
                         active: !(lockScreen || locked),
