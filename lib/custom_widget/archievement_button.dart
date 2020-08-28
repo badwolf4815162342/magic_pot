@@ -33,6 +33,9 @@ class ArchievementButton extends StatelessWidget {
               backgroundColor: Color(0x472d4a),
               actions: <Widget>[
                 RawMaterialButton(
+                  fillColor: Colors.black,
+                  focusColor: Colors.pink,
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
                   child: DarkableImage(
                     url: level.picAftereUrl,
                     width: 200,

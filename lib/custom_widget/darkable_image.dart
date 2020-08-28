@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:provider/provider.dart';
 
+// This class shows that buttons are uncklickable when the witch is talking
 class DarkableImage extends StatelessWidget {
   DarkableImage({@required this.url, this.height, this.width, this.fit});
   final String url;
@@ -20,19 +21,19 @@ class DarkableImage extends StatelessWidget {
         colorFilter: witchTalking && !stayBright
             ? ColorFilter.matrix(
                 <double>[
-                  0.45,
+                  0.65,
                   0,
                   0,
                   0,
                   0,
                   0,
-                  0.4,
+                  0.6,
                   0,
                   0,
                   0,
                   0,
                   0,
-                  0.4,
+                  0.6,
                   0,
                   0,
                   0,
