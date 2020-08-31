@@ -1,17 +1,17 @@
 import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/logger.util.dart';
 import 'package:provider/provider.dart';
 
-class ArchievementButton extends StatelessWidget {
+class AchievementButton extends StatelessWidget {
   final log = getLogger();
 
-  ArchievementButton(
+  AchievementButton(
       {@required this.level, @required this.size, @required this.animate});
   final Level level;
   final double size;
@@ -21,7 +21,7 @@ class ArchievementButton extends StatelessWidget {
 
   void _showAlertDialog(BuildContext context) {
     var lockScreen = audioPlayerService.lockScreen;
-    // TODO(viviane): Solved locked bug
+    // TODO(viviane): Solve locked bug
     log.e('Screenlocked? $lockScreen');
     showDialog(
       context: context,
@@ -33,9 +33,9 @@ class ArchievementButton extends StatelessWidget {
               backgroundColor: Color(0x472d4a),
               actions: <Widget>[
                 RawMaterialButton(
-                  fillColor: Colors.black,
-                  focusColor: Colors.pink,
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  constraints: BoxConstraints(minHeight: 200, minWidth: 200),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: EdgeInsets.only(top: 100),
                   child: DarkableImage(
                     url: level.picAftereUrl,
                     width: 200,
@@ -103,7 +103,6 @@ class ArchievementButton extends StatelessWidget {
               _showAlertDialog(context);
             }
           },
-          shape: const StadiumBorder(),
         ));
   }
 }

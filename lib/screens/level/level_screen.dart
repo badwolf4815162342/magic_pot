@@ -3,20 +3,20 @@ import 'dart:math';
 import 'package:animated_widgets/widgets/rotation_animated.dart';
 import 'package:animated_widgets/widgets/shake_animated_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/background_layout.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
-import 'package:magic_pot/custom_widget/ingredient_draggable.dart';
-import 'package:magic_pot/custom_widget/ingredient_draggables.dart';
 import 'package:magic_pot/models/ingredient.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
+import 'package:magic_pot/screens/level/ingredient_draggable.dart';
+import 'package:magic_pot/screens/level/ingredient_draggable_list.dart';
+import 'package:magic_pot/shared_widgets/background_layout.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/level_helper.util.dart';
 import 'package:provider/provider.dart';
 
-import '../util/logger.util.dart';
+import '../../util/logger.util.dart';
 
 class LevelScreen extends StatefulWidget {
   static const String routeTag = '/levelscreen';
@@ -199,7 +199,7 @@ class _LevelScreenState extends State<LevelScreen> {
                     ]),
                     Row(children: [
                       SizedBox(height: 10, width: 580),
-                      IngredientDraggables(
+                      IngredientDraggableList(
                           currentDraggables: currentIngredientDraggables)
                     ])
                   ],

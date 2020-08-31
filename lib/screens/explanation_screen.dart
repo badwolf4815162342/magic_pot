@@ -1,14 +1,14 @@
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/background_layout.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
-import 'package:magic_pot/custom_widget/empty_placeholder.dart';
-import 'package:magic_pot/custom_widget/play_button.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/level_finished_screen.dart';
-import 'package:magic_pot/screens/level_screen.dart';
+import 'package:magic_pot/screens/level/level_screen.dart';
+import 'package:magic_pot/shared_widgets/background_layout.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
+import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
+import 'package:magic_pot/shared_widgets/play_button.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
 

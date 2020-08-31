@@ -1,10 +1,8 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/animal_buttons.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
-import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/screens/animal_selection/animal_button_list.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +52,7 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
                   left: 0,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[ButtonsWithName(animalsize: 150)]),
+                      children: <Widget>[AnimalButtonList(animalsize: 150)]),
                 ),
                 // BASIC WITCH
                 Positioned(

@@ -202,7 +202,7 @@ class AudioPlayerService extends ChangeNotifier {
     if (fileName.contains('long')) {
       log.d('transformation');
     }
-    // TODO: Dark only with witchtalking ... feuerwerk?????
+    // TODO:  feuerwerk?????
     if (!fileName.contains('witch') && !fileName.contains('long')) {
       _stayBright = true;
     }

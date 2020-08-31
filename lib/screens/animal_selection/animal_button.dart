@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
 import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
-import 'package:magic_pot/screens/menu_screen.dart';
+import 'package:magic_pot/screens/menu/menu_screen.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:provider/provider.dart';
 
-import '../util/logger.util.dart';
+import '../../util/logger.util.dart';
 
-class AnimalSelectorButton extends StatelessWidget {
-  AnimalSelectorButton({@required this.animal, @required this.size});
+class AnimalButton extends StatelessWidget {
+  AnimalButton({@required this.animal, @required this.size});
   final Animal animal;
   final double size;
   var _firstPress = true;

@@ -200,10 +200,6 @@ class DBApi {
   Future<int> updateLevel(Level level) async {
     final db = await database;
 
-    if (level.id > 6 && level.difficulty == Difficulty.EASY) {
-      print('CHANGED!!!');
-    }
-
     return await db.update(
       'levels',
       level.toJson(),
@@ -216,15 +212,8 @@ class DBApi {
 
   Future<void> updateLevelNotAnimated() async {
     final db = await database;
-    final res = await db.rawQuery(
+    await db.rawQuery(
         "UPDATE Levels SET animated = '1' WHERE animated IS '0' AND achievement IS '1'");
-
-    //TODO neccesary List<Level> list =
-
-    //final res2 = await db.rawQuery("SELECT * FROM LEVELS");
-
-    //     res2.isNotEmpty ? res2.map((c) => Level.fromJson(c)).toList() : [];
-    print('i' + res.toString());
   }
 
   Future<bool> newArchievements() async {

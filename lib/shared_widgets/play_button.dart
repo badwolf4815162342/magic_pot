@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
-import 'package:magic_pot/custom_widget/blink_widget.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
-import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
+import 'package:magic_pot/shared_widgets/blink_widget.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
+import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
 

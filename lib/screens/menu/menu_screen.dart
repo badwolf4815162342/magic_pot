@@ -1,15 +1,14 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:magic_pot/api/db.api.dart';
-import 'package:magic_pot/custom_widget/archievement_buttons.dart';
-import 'package:magic_pot/custom_widget/darkable_image.dart';
-import 'package:magic_pot/custom_widget/empty_placeholder.dart';
-import 'package:magic_pot/custom_widget/play_button.dart';
-import 'package:magic_pot/custom_widget/exit_button.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
+import 'package:magic_pot/screens/menu/achievement_button_list.dart';
+import 'package:magic_pot/shared_widgets/darkable_image.dart';
+import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
+import 'package:magic_pot/shared_widgets/exit_button.dart';
+import 'package:magic_pot/shared_widgets/play_button.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
 
@@ -96,7 +95,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 Positioned(
                   top: 230,
                   left: 740,
-                  child: Center(child: ArchievementButtons(animalsize: 100)),
+                  child: Center(child: AchievementButtonList(animalsize: 100)),
                 ),
                 // Stars
                 Positioned(

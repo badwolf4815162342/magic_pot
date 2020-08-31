@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:magic_pot/custom_widget/animal_buttons.dart';
-import 'package:magic_pot/custom_widget/background_layout.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
+import 'package:magic_pot/screens/animal_selection/animal_button_list.dart';
+import 'package:magic_pot/shared_widgets/background_layout.dart';
 import 'package:provider/provider.dart';
 
 class AnimalSelectionScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _AnimalSelectionScreen extends State<AnimalSelectionScreen> {
         body: BackgroundLayout(
       scene: Stack(children: <Widget>[
         Positioned(
-            bottom: 10, right: 120, child: ButtonsWithName(animalsize: 150))
+            bottom: 10, right: 120, child: AnimalButtonList(animalsize: 150))
       ]),
       picUrl: 'assets/pics/animal_change.png',
       animalSelectionBack: true,

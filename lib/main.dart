@@ -4,15 +4,14 @@ import 'package:magic_pot/util/logger.util.dart';
 import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
-import 'package:magic_pot/screens/animal_selection_screen.dart';
+import 'package:magic_pot/screens/animal_selection/animal_selection_screen.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:magic_pot/screens/intro_screen.dart';
 import 'package:magic_pot/screens/level_finished_screen.dart';
-import 'package:magic_pot/screens/level_screen.dart';
-import 'package:magic_pot/screens/menu_screen.dart';
-import 'package:magic_pot/screens/select_first_animal_screen.dart';
+import 'package:magic_pot/screens/level/level_screen.dart';
+import 'package:magic_pot/screens/menu/menu_screen.dart';
+import 'package:magic_pot/screens/animal_selection/select_first_animal_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:logger/logger.dart';
 import 'util/logger.util.dart';
 
 void main() async {

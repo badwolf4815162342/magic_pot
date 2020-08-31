@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/logger.util.dart';
 import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
-import 'package:magic_pot/screens/menu_screen.dart';
-import 'package:magic_pot/screens/select_first_animal_screen.dart';
+import 'package:magic_pot/screens/menu/menu_screen.dart';
+import 'package:magic_pot/screens/animal_selection/select_first_animal_screen.dart';
 import 'package:provider/provider.dart';
 
 class IntroScreen extends StatelessWidget {

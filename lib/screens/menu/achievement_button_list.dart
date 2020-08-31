@@ -1,25 +1,25 @@
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/api/db.api.dart';
-import 'package:magic_pot/custom_widget/empty_placeholder.dart';
 import 'package:magic_pot/models/level.dart';
+import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 
-import 'archievement_button.dart';
+import 'achievement_button.dart';
 
-class ArchievementButtons extends StatefulWidget {
+class AchievementButtonList extends StatefulWidget {
   final double animalsize;
 
-  const ArchievementButtons({Key key, this.animalsize}) : super(key: key);
+  const AchievementButtonList({Key key, this.animalsize}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ArchievementButtonsState();
+    return _AchievementButtonListState();
   }
 }
 
-class _ArchievementButtonsState extends State<ArchievementButtons> {
-  List<ArchievementButton> buttonsListEasy = new List<ArchievementButton>();
-  List<ArchievementButton> buttonsListMiddle = new List<ArchievementButton>();
-  List<ArchievementButton> buttonsListHard = new List<ArchievementButton>();
+class _AchievementButtonListState extends State<AchievementButtonList> {
+  List<AchievementButton> buttonsListEasy = new List<AchievementButton>();
+  List<AchievementButton> buttonsListMiddle = new List<AchievementButton>();
+  List<AchievementButton> buttonsListHard = new List<AchievementButton>();
 
   List<Level> listEasy = new List<Level>();
   List<Level> listMiddle = new List<Level>();
@@ -36,15 +36,14 @@ class _ArchievementButtonsState extends State<ArchievementButtons> {
     listMiddle =
         await DBApi.db.getLevelByDifficultyAndArchieved(Difficulty.MIDDLE);
     listHard = await DBApi.db.getLevelByDifficultyAndArchieved(Difficulty.HARD);
-    print('');
     setState(() {});
   }
 
   List<Widget> _buildButtonsWithNamesEasy() {
-    buttonsListEasy = new List<ArchievementButton>();
+    buttonsListEasy = new List<AchievementButton>();
 
     for (int i = 0; i < listEasy.length; i++) {
-      buttonsListEasy.add(new ArchievementButton(
+      buttonsListEasy.add(new AchievementButton(
         level: listEasy[i],
         size: widget.animalsize,
         animate: !listEasy[i].animated,
@@ -55,9 +54,9 @@ class _ArchievementButtonsState extends State<ArchievementButtons> {
   }
 
   List<Widget> _buildButtonsWithNamesMiddle() {
-    buttonsListMiddle = new List<ArchievementButton>();
+    buttonsListMiddle = new List<AchievementButton>();
     for (int i = 0; i < listMiddle.length; i++) {
-      buttonsListMiddle.add(new ArchievementButton(
+      buttonsListMiddle.add(new AchievementButton(
         level: listMiddle[i],
         size: widget.animalsize,
         animate: !listMiddle[i].animated,
@@ -67,10 +66,10 @@ class _ArchievementButtonsState extends State<ArchievementButtons> {
   }
 
   List<Widget> _buildButtonsWithNamesHard() {
-    buttonsListHard = new List<ArchievementButton>();
+    buttonsListHard = new List<AchievementButton>();
 
     for (int i = 0; i < listHard.length; i++) {
-      buttonsListHard.add(new ArchievementButton(
+      buttonsListHard.add(new AchievementButton(
         level: listHard[i],
         size: widget.animalsize,
         animate: !listHard[i].animated,
