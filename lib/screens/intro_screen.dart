@@ -6,6 +6,7 @@ import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/menu/menu_screen.dart';
 import 'package:magic_pot/screens/animal_selection/select_first_animal_screen.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 class IntroScreen extends StatelessWidget {
@@ -57,8 +58,10 @@ class IntroScreen extends StatelessWidget {
                   child: RawMaterialButton(
                     child: new Image.asset(
                       'assets/pics/play_blue.png',
-                      width: Constant.playButtonSize,
-                      height: Constant.playButtonSize,
+                      width: SizeUtil.getDoubleByDeviceVertical(
+                          size.height, Constant.playButtonSize),
+                      height: SizeUtil.getDoubleByDeviceHorizontal(
+                          size.width, Constant.playButtonSize),
                     ),
                     onPressed: () {
                       if (animal == null) {

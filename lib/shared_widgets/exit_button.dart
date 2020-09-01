@@ -5,6 +5,8 @@ import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/menu/menu_screen.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
+import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 class ExitButton extends StatefulWidget {
@@ -24,14 +26,18 @@ class _ExitButtonState extends State<ExitButton> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     audioPlayerService = Provider.of<AudioPlayerService>(context);
     userStateService = Provider.of<UserStateService>(context);
 
     return RawMaterialButton(
       child: DarkableImage(
         url: 'assets/pics/x_pink.png',
-        width: 70,
-        height: 70,
+        width: SizeUtil.getDoubleByDeviceHorizontal(
+            size.width, Constant.xButtonSize),
+        height: SizeUtil.getDoubleByDeviceHorizontal(
+            size.width, Constant.xButtonSize),
       ),
       onPressed: () {
         audioPlayerService.stopAllSound();

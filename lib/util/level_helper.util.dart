@@ -16,12 +16,12 @@ class LevelHelperUtil {
   }
 
   static List<IngredientDraggable> getIngredientDraggables(
-      List<Ingredient> objects) {
+      List<Ingredient> objects, double fontSize) {
     List<IngredientDraggable> currentIngredientDraggables =
         new List<IngredientDraggable>();
     objects.forEach((element) {
-      currentIngredientDraggables
-          .add(new IngredientDraggable(ingredient: element));
+      currentIngredientDraggables.add(
+          new IngredientDraggable(fontSize: fontSize, ingredient: element));
     });
     return currentIngredientDraggables;
   }

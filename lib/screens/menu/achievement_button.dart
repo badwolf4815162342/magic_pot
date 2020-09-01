@@ -12,9 +12,14 @@ class AchievementButton extends StatelessWidget {
   final log = getLogger();
 
   AchievementButton(
-      {@required this.level, @required this.size, @required this.animate});
+      {@required this.level,
+      @required this.animalwidth,
+      @required this.animalheight,
+      @required this.animate});
   final Level level;
-  final double size;
+  final double animalwidth;
+  final double animalheight;
+
   final bool animate;
   AudioPlayerService audioPlayerService;
   UserStateService userStateService;
@@ -91,8 +96,8 @@ class AchievementButton extends StatelessWidget {
             children: <Widget>[
               DarkableImage(
                 url: level.picAftereUrl,
-                width: size,
-                height: size - 6,
+                width: animalwidth,
+                height: animalheight,
               ),
             ],
           ),

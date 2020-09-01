@@ -9,6 +9,7 @@ import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:magic_pot/screens/level/ingredient_draggable_list.dart';
 import 'package:magic_pot/shared_widgets/background_layout.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 import '../../util/logger.util.dart';
@@ -31,6 +32,11 @@ class _LevelScreenState extends State<LevelScreen> {
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
   Level currentLevel;
+
+  void initState() {
+    super.initState();
+    madeInitSound = false;
+  }
 
   _tellAccetedObject() {
     audioPlayerService.updateWitchText(
@@ -117,11 +123,13 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     currentLevel =
         Provider.of<UserStateService>(context, listen: false).currentLevel;
     audioPlayerService = Provider.of<AudioPlayerService>(context);
-    _levelStateService = LevelStateService(currentLevel);
-
+    _levelStateService = LevelStateService(
+        currentLevel, SizeUtil.getDoubleByDeviceHorizontal(size.width, 100));
     if (madeInitSound == false) {
       madeInitSound = true;
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -145,10 +153,19 @@ class _LevelScreenState extends State<LevelScreen> {
                               fit: StackFit.expand,
                               children: <Widget>[
                                 Row(children: [
-                                  SizedBox(width: 80),
+                                  SizedBox(
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(
+                                        size.width, 80),
+                                  ),
                                   Column(children: [
-                                    SizedBox(height: 450),
+                                    SizedBox(
+                                      height:
+                                          SizeUtil.getDoubleByDeviceVertical(
+                                              size.height, 450),
+                                    ),
                                     MagicPot(
+                                      size: SizeUtil.getDoubleByDeviceVertical(
+                                          size.height, 300),
                                       levelStateService: levelStateService,
                                       callback: (data) {
                                         _onAccept(data);
@@ -157,8 +174,17 @@ class _LevelScreenState extends State<LevelScreen> {
                                   ]),
                                 ]),
                                 Row(children: [
-                                  SizedBox(height: 10, width: 580),
+                                  SizedBox(
+                                      height:
+                                          SizeUtil.getDoubleByDeviceVertical(
+                                              size.height, 10),
+                                      width:
+                                          SizeUtil.getDoubleByDeviceHorizontal(
+                                              size.width, 580)),
                                   IngredientDraggableList(
+                                      height:
+                                          SizeUtil.getDoubleByDeviceVertical(
+                                              size.height, 570),
                                       currentDraggables: levelStateService
                                           .currentIngredientDraggables)
                                 ])
@@ -175,10 +201,12 @@ class MagicPot extends StatelessWidget {
     Key key,
     @required this.levelStateService,
     @required this.callback,
+    @required this.size,
   }) : super(key: key);
 
   final Function callback;
   final LevelStateService levelStateService;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -192,8 +220,8 @@ class MagicPot extends StatelessWidget {
           return Center(
             child: DarkableImage(
               url: levelStateService.potImage,
-              width: 300,
-              height: 300,
+              width: size,
+              height: size,
             ),
           );
         },

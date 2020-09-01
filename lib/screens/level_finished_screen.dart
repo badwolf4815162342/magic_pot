@@ -11,6 +11,7 @@ import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/play_button.dart';
 import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 class LevelFinishedScreen extends StatefulWidget {
@@ -80,6 +81,8 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                         top: Constant.playButtonDistanceBottom,
                         right: Constant.playButtonDistanceRight,
                         child: PlayButton(
+                          size: SizeUtil.getDoubleByDeviceVertical(
+                              size.height, Constant.playButtonSize),
                           pushedName: playLink,
                           active: !(lockScreen || locked),
                         )),

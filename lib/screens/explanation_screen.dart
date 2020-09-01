@@ -10,6 +10,7 @@ import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/play_button.dart';
 import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 import '../util/logger.util.dart';
@@ -33,6 +34,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     audioPlayerService = Provider.of<AudioPlayerService>(context);
 
     if (madeInitSound == false) {
@@ -84,12 +87,15 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                       bottom: Constant.playButtonDistanceBottom,
                       right: Constant.playButtonDistanceRight,
                       child: PlayButton(
+                        size: SizeUtil.getDoubleByDeviceVertical(
+                            size.height, Constant.playButtonSize),
                         pushedName: playLink,
                         active: !(lockScreen || locked),
                       )),
                   Positioned(
-                      top: 230,
-                      left: 60,
+                      top: SizeUtil.getDoubleByDeviceVertical(size.height, 230),
+                      left:
+                          SizeUtil.getDoubleByDeviceHorizontal(size.width, 60),
                       child: Stack(
                         children: <Widget>[
                           OpacityAnimatedWidget.tween(
@@ -100,8 +106,12 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             child: (currentLevel != null)
                                 ? DarkableImage(
                                     url: currentLevel.picAftereUrl,
-                                    width: 600,
-                                    height: 500,
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(
+                                        size.width,
+                                        Constant.transformationAnimalWidth),
+                                    height: SizeUtil.getDoubleByDeviceVertical(
+                                        size.height,
+                                        Constant.transformationAnimalHeight),
                                   )
                                 : EmptyPlaceholder(),
                           ),
@@ -113,8 +123,12 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             child: (currentLevel != null)
                                 ? DarkableImage(
                                     url: currentLevel.picBeforeUrl,
-                                    width: 600,
-                                    height: 500,
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(
+                                        size.width,
+                                        Constant.transformationAnimalWidth),
+                                    height: SizeUtil.getDoubleByDeviceVertical(
+                                        size.height,
+                                        Constant.transformationAnimalHeight),
                                   )
                                 : EmptyPlaceholder(),
                           ),

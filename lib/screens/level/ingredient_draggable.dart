@@ -5,8 +5,9 @@ import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:provider/provider.dart';
 
 class IngredientDraggable extends StatelessWidget {
-  IngredientDraggable({@required this.ingredient});
+  IngredientDraggable({@required this.ingredient, @required this.fontSize});
   final Ingredient ingredient;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -51,21 +52,21 @@ class IngredientDraggable extends StatelessWidget {
               "${ingredient.picture}",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 100,
+                fontSize: fontSize,
               ),
             )),
         feedback: Text(
           "${ingredient.picture}",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 120,
+            fontSize: fontSize * 1.2,
           ),
         ),
         childWhenDragging: Text(
           "${ingredient.picture}",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 100,
+            fontSize: fontSize,
           ),
         ),
       ),

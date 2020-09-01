@@ -6,9 +6,11 @@ import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'achievement_button.dart';
 
 class AchievementButtonList extends StatefulWidget {
-  final double animalsize;
+  final double animalwidth;
+  final double animalheight;
 
-  const AchievementButtonList({Key key, this.animalsize}) : super(key: key);
+  const AchievementButtonList({Key key, this.animalwidth, this.animalheight})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -45,7 +47,8 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
     for (int i = 0; i < listEasy.length; i++) {
       buttonsListEasy.add(new AchievementButton(
         level: listEasy[i],
-        size: widget.animalsize,
+        animalwidth: widget.animalwidth,
+        animalheight: widget.animalheight,
         animate: !listEasy[i].animated,
       ));
     }
@@ -58,7 +61,8 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
     for (int i = 0; i < listMiddle.length; i++) {
       buttonsListMiddle.add(new AchievementButton(
         level: listMiddle[i],
-        size: widget.animalsize,
+        animalwidth: widget.animalwidth,
+        animalheight: widget.animalheight,
         animate: !listMiddle[i].animated,
       ));
     }
@@ -71,7 +75,8 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
     for (int i = 0; i < listHard.length; i++) {
       buttonsListHard.add(new AchievementButton(
         level: listHard[i],
-        size: widget.animalsize,
+        animalwidth: widget.animalwidth,
+        animalheight: widget.animalheight,
         animate: !listHard[i].animated,
       ));
     }
@@ -82,8 +87,8 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-        width: (widget.animalsize * 5),
-        height: widget.animalsize,
+        width: (widget.animalwidth * 5),
+        height: widget.animalwidth,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,8 +102,8 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
         width: 0,
       ),
       Container(
-        width: (widget.animalsize * 5),
-        height: widget.animalsize,
+        width: (widget.animalwidth * 5),
+        height: widget.animalwidth,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,8 +117,8 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
         width: 0,
       ),
       Container(
-        width: (widget.animalsize * 5),
-        height: widget.animalsize,
+        width: (widget.animalwidth * 5),
+        height: widget.animalwidth,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

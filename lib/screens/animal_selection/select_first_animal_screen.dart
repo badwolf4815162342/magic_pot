@@ -4,6 +4,7 @@ import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/screens/animal_selection/animal_button_list.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 class SelectFirstAnimalScreen extends StatefulWidget {
@@ -48,24 +49,30 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
               ),
               Stack(children: <Widget>[
                 Positioned(
-                  bottom: 20,
+                  bottom: SizeUtil.getDoubleByDeviceVertical(size.height, 20),
                   left: 0,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[AnimalButtonList(animalsize: 150)]),
+                      children: <Widget>[
+                        AnimalButtonList(
+                            animalsize: SizeUtil.getDoubleByDeviceHorizontal(
+                                size.width, Constant.animalSize))
+                      ]),
                 ),
                 // BASIC WITCH
                 Positioned(
                     bottom: 0,
-                    left: 800,
+                    left: SizeUtil.getDoubleByDeviceHorizontal(size.width, 800),
                     child: FlatButton(
                       child: Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(math.pi),
                           child: new Image.asset(
                             Constant.standartWitchIconPath,
-                            height: 500,
-                            width: 500,
+                            height: SizeUtil.getDoubleByDeviceVertical(
+                                size.height, Constant.witchSize),
+                            width: SizeUtil.getDoubleByDeviceHorizontal(
+                                size.width, Constant.witchSize),
                           )),
                       onPressed: () {
                         audioPlayerService.playWitchText();
@@ -82,8 +89,10 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
                             transform: Matrix4.rotationY(math.pi),
                             child: new Image.asset(
                               Constant.talkingWitchIconPath,
-                              height: 500,
-                              width: 500,
+                              height: SizeUtil.getDoubleByDeviceVertical(
+                                  size.height, Constant.witchSize),
+                              width: SizeUtil.getDoubleByDeviceHorizontal(
+                                  size.width, Constant.witchSize),
                             ),
                           ),
                           onPressed: () {},

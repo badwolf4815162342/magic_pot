@@ -9,11 +9,13 @@ import 'package:provider/provider.dart';
 class PlayButton extends StatelessWidget {
   PlayButton(
       {@required this.pushedName,
+      @required this.size,
       @required this.active,
       this.animationDone = false});
   final String pushedName;
   final bool active;
   final bool animationDone;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class PlayButton extends StatelessWidget {
           RawMaterialButton(
             child: DarkableImage(
               url: 'assets/pics/play_blue.png',
-              width: Constant.playButtonSize,
-              height: Constant.playButtonSize,
+              width: size,
+              height: size,
             ),
             onPressed: () {
               if (animationDone) {
@@ -37,8 +39,8 @@ class PlayButton extends StatelessWidget {
           RawMaterialButton(
             child: DarkableImage(
               url: 'assets/pics/play_blue_light.png',
-              width: Constant.playButtonSize,
-              height: Constant.playButtonSize,
+              width: size,
+              height: size,
             ),
             onPressed: () {
               if (animationDone) {

@@ -6,6 +6,7 @@ import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/exit_button.dart';
 import 'package:magic_pot/util/constant.util.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 class BackgroundLayout extends StatelessWidget {
@@ -49,26 +50,32 @@ class BackgroundLayout extends StatelessWidget {
                   children: <Widget>[
                     // X BUTTON
                     Positioned(
-                        right: 270,
-                        bottom: 580,
+                        right: SizeUtil.getDoubleByDeviceHorizontal(
+                            size.width, 270),
+                        bottom: SizeUtil.getDoubleByDeviceVertical(
+                            size.height, 580),
                         child: Container(
-                          width: 200,
-                          height: 200,
                           child: ExitButton(
                             closeApp: closeApp,
                           ),
                         )),
                     // BASIC WITCH
                     Positioned(
-                        right: -10,
-                        top: 100,
+                        right: SizeUtil.getDoubleByDeviceHorizontal(
+                            size.width, -10),
+                        top: SizeUtil.getDoubleByDeviceVertical(
+                            size.height, 100),
                         child: IgnorePointer(
                             ignoring: lockScreen,
                             child: FlatButton(
                               child: new Image.asset(
                                 Constant.standartWitchIconPath,
-                                height: 450,
-                                width: 450,
+                                height: SizeUtil.getDoubleByDeviceVertical(
+                                    size.height,
+                                    Constant.backgroundLayoutWitchSize),
+                                width: SizeUtil.getDoubleByDeviceHorizontal(
+                                    size.width,
+                                    Constant.backgroundLayoutWitchSize),
                               ),
                               onPressed: () {
                                 audioPlayerService.playWitchText();
@@ -77,21 +84,29 @@ class BackgroundLayout extends StatelessWidget {
                     // WITCH
                     witchTalking
                         ? Positioned(
-                            right: -10,
-                            top: 100,
+                            right: SizeUtil.getDoubleByDeviceHorizontal(
+                                size.width, -10),
+                            top: SizeUtil.getDoubleByDeviceVertical(
+                                size.height, 100),
                             child: FlatButton(
                               child: new Image.asset(
                                 Constant.talkingWitchIconPath,
-                                height: 450,
-                                width: 450,
+                                height: SizeUtil.getDoubleByDeviceVertical(
+                                    size.height,
+                                    Constant.backgroundLayoutWitchSize),
+                                width: SizeUtil.getDoubleByDeviceHorizontal(
+                                    size.width,
+                                    Constant.backgroundLayoutWitchSize),
                               ),
                               onPressed: () {},
                             ))
                         : Container(),
                     // ANIMAL
                     Positioned(
-                        left: 140,
-                        top: 560,
+                        left: SizeUtil.getDoubleByDeviceHorizontal(
+                            size.width, 140),
+                        top: SizeUtil.getDoubleByDeviceVertical(
+                            size.height, 560),
                         child: IgnorePointer(
                             ignoring: lockScreen,
                             child: Container(
@@ -99,7 +114,13 @@ class BackgroundLayout extends StatelessWidget {
                                 child: (animal == null)
                                     ? EmptyPlaceholder()
                                     : DarkableImage(
-                                        url: animal.picture, height: 150),
+                                        url: animal.picture,
+                                        height:
+                                            SizeUtil.getDoubleByDeviceVertical(
+                                                size.height,
+                                                Constant
+                                                    .backgroundLayoutAnimalSize),
+                                      ),
                                 onPressed: () {
                                   audioPlayerService
                                       .makeAnimalSound(animal.soundfile);
@@ -108,8 +129,10 @@ class BackgroundLayout extends StatelessWidget {
                             ))),
                     // CHANGE ANIMAL BUTTON
                     Positioned(
-                        right: 270,
-                        top: 580,
+                        right: SizeUtil.getDoubleByDeviceHorizontal(
+                            size.width, 270),
+                        top: SizeUtil.getDoubleByDeviceVertical(
+                            size.height, 580),
                         child: IgnorePointer(
                             ignoring: lockScreen,
                             child: Container(
@@ -118,8 +141,9 @@ class BackgroundLayout extends StatelessWidget {
                               child: RawMaterialButton(
                                 child: DarkableImage(
                                   url: 'assets/pics/reverse_blue.png',
-                                  width: 100,
-                                  height: 100,
+                                  width: SizeUtil.getDoubleByDeviceHorizontal(
+                                      size.width,
+                                      Constant.changeAnimalButtonSize),
                                 ),
                                 onPressed: () {
                                   if (animalSelectionBack) {

@@ -29,10 +29,12 @@ class LevelStateService extends ChangeNotifier {
   double angleMovement = 180;
 
   Level currentLevel;
+  double fontSize;
   bool readyForNextLevel;
 
-  LevelStateService(Level currentLevel) {
+  LevelStateService(Level currentLevel, double fontsize) {
     this.currentLevel = currentLevel;
+    this.fontSize = fontsize;
     initLevelStateService();
   }
 
@@ -50,7 +52,7 @@ class LevelStateService extends ChangeNotifier {
   resetLevelData() async {
     currentObjects = await LevelHelperUtil.getIngredients(null, currentLevel);
     currentIngredientDraggables =
-        LevelHelperUtil.getIngredientDraggables(currentObjects);
+        LevelHelperUtil.getIngredientDraggables(currentObjects, this.fontSize);
 
     var random = new Random();
     acceptedObject = currentObjects[random.nextInt(currentObjects.length)];

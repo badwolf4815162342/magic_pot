@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Size {
+class SizeUtil {
   // TODO(viviane): use
-  double getDoubleByDevice(Size size, double num) {
-    /*  if (size.width == 100 && size.height == 200) {
-      return num;
-    } */
-    return num;
+  static double getDoubleByDeviceVertical(double height, double num) {
+    return num * (height / 752.0);
+  }
+
+  static double getDoubleByDeviceHorizontal(double width, double num) {
+    return num * (width / 1280.0);
   }
 }
