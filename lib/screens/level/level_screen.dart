@@ -39,10 +39,10 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   _tellAccetedObject() {
-    audioPlayerService.updateWitchText(
-        'audio/witch_${_levelStateService.acceptedObject.name}.wav');
     // In main class
     Future.delayed(const Duration(milliseconds: 3000), () {
+      audioPlayerService.updateWitchText(
+          'audio/witch_${_levelStateService.acceptedObject.name}.wav');
       audioPlayerService.explainAcceptedObject(
         'audio/witch_${_levelStateService.acceptedObject.name}.wav',
       );
@@ -123,14 +123,13 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     currentLevel =
         Provider.of<UserStateService>(context, listen: false).currentLevel;
     audioPlayerService = Provider.of<AudioPlayerService>(context);
-    _levelStateService = LevelStateService(
-        currentLevel, SizeUtil.getDoubleByDeviceHorizontal(size.width, 100));
+
     if (madeInitSound == false) {
+      _levelStateService = LevelStateService(
+          currentLevel, SizeUtil.getDoubleByDeviceHorizontal(100));
       madeInitSound = true;
       Future.delayed(const Duration(milliseconds: 500), () {
         // TODO(viviane): check if audioplayer works there
@@ -155,17 +154,17 @@ class _LevelScreenState extends State<LevelScreen> {
                                 Row(children: [
                                   SizedBox(
                                     width: SizeUtil.getDoubleByDeviceHorizontal(
-                                        size.width, 80),
+                                        80),
                                   ),
                                   Column(children: [
                                     SizedBox(
                                       height:
                                           SizeUtil.getDoubleByDeviceVertical(
-                                              size.height, 450),
+                                              450),
                                     ),
                                     MagicPot(
                                       size: SizeUtil.getDoubleByDeviceVertical(
-                                          size.height, 300),
+                                          300),
                                       levelStateService: levelStateService,
                                       callback: (data) {
                                         _onAccept(data);
@@ -177,14 +176,14 @@ class _LevelScreenState extends State<LevelScreen> {
                                   SizedBox(
                                       height:
                                           SizeUtil.getDoubleByDeviceVertical(
-                                              size.height, 10),
+                                              10),
                                       width:
                                           SizeUtil.getDoubleByDeviceHorizontal(
-                                              size.width, 580)),
+                                              580)),
                                   IngredientDraggableList(
                                       height:
                                           SizeUtil.getDoubleByDeviceVertical(
-                                              size.height, 570),
+                                              570),
                                       currentDraggables: levelStateService
                                           .currentIngredientDraggables)
                                 ])
@@ -193,6 +192,12 @@ class _LevelScreenState extends State<LevelScreen> {
               },
             ),
             picUrl: 'assets/pics/level_background.png'));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _levelStateService.dispose();
   }
 }
 

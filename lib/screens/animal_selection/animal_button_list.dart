@@ -36,8 +36,7 @@ class _AnimalButtonListState extends State<AnimalButtonList> {
     log.d('ButtonsWithName: Animals ' + animals.toString());
     buttonsList = new List<AnimalButton>();
     for (int i = 0; i < animals.length; i++) {
-      buttonsList
-          .add(new AnimalButton(animal: animals[i], size: widget.animalsize));
+      buttonsList.add(new AnimalButton(animal: animals[i], size: widget.animalsize));
     }
     return buttonsList;
   }

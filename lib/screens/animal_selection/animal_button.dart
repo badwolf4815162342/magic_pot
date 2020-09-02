@@ -18,10 +18,8 @@ class AnimalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    audioPlayerService =
-        Provider.of<AudioPlayerService>(context, listen: false);
-    var currentAnimal =
-        Provider.of<UserStateService>(context, listen: false).currentAnimal;
+    audioPlayerService = Provider.of<AudioPlayerService>(context, listen: false);
+    var currentAnimal = Provider.of<UserStateService>(context, listen: false).currentAnimal;
     return RawMaterialButton(
       child: Padding(
         padding: EdgeInsets.all(10.0),
@@ -46,8 +44,7 @@ class AnimalButton extends StatelessWidget {
               Navigator.pop(context);
             }
           });
-          Provider.of<UserStateService>(context, listen: false)
-              .changeAnimal(animal);
+          Provider.of<UserStateService>(context, listen: false).changeAnimal(animal);
           final log = getLogger();
           log.d('AnimalSelectorButton: Tapped');
         }

@@ -12,10 +12,7 @@ class AchievementButton extends StatelessWidget {
   final log = getLogger();
 
   AchievementButton(
-      {@required this.level,
-      @required this.animalwidth,
-      @required this.animalheight,
-      @required this.animate});
+      {@required this.level, @required this.animalwidth, @required this.animalheight, @required this.animate});
   final Level level;
   final double animalwidth;
   final double animalheight;
@@ -49,11 +46,9 @@ class AchievementButton extends StatelessWidget {
                   onPressed: () {
                     // Go to that expanation screen with level
                     audioPlayerService.stopAllSound();
-                    Provider.of<UserStateService>(context, listen: false)
-                        .setLevel(level);
+                    Provider.of<UserStateService>(context, listen: false).setLevel(level);
                     Navigator.pushNamed(context, ExplanationScreen.routeTag);
-                    Provider.of<UserStateService>(context, listen: false)
-                        .setLevelAnimatedFalse();
+                    Provider.of<UserStateService>(context, listen: false).setLevelAnimatedFalse();
                   },
                 ),
                 RawMaterialButton(

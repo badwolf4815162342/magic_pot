@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/api/db.api.dart';
+import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
@@ -9,6 +10,8 @@ import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/exit_button.dart';
 import 'package:magic_pot/shared_widgets/play_button.dart';
+import 'package:magic_pot/shared_widgets/selected_animal.dart';
+import 'package:magic_pot/shared_widgets/witch.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
@@ -53,9 +56,6 @@ class _MenuScreenState extends State<MenuScreen> {
     }
     var lockScreen = audioPlayerService.lockScreen;
     var allArchieved = Provider.of<UserStateService>(context).allArchieved;
-    Size size = MediaQuery.of(context).size;
-    print(
-        'Size: ${size.width} bottom ${SizeUtil.getDoubleByDeviceVertical(size.height, 580)}');
 
     var witchTalking = audioPlayerService.witchTalking;
     var animal = Provider.of<UserStateService>(context).currentAnimal;
@@ -67,22 +67,21 @@ class _MenuScreenState extends State<MenuScreen> {
               Center(
                 child: DarkableImage(
                   url: Constant.menuScreenPath,
-                  width: size.width,
-                  height: size.height,
+                  width: SizeUtil.width,
+                  height: SizeUtil.height,
                   fit: BoxFit.fill,
                 ),
               ),
               Stack(children: <Widget>[
                 // X BUTTON
                 Positioned(
-                    left: SizeUtil.getDoubleByDeviceHorizontal(size.width, -40),
-                    bottom:
-                        SizeUtil.getDoubleByDeviceVertical(size.height, 580),
+                    left: SizeUtil.getDoubleByDeviceHorizontal(40),
+                    bottom: SizeUtil.getDoubleByDeviceVertical(580),
                     child: IgnorePointer(
                         ignoring: lockScreen,
                         child: Container(
                           width: SizeUtil.getDoubleByDeviceHorizontal(
-                              size.width, Constant.xButtonSize),
+                              Constant.xButtonSize),
                           child: ExitButton(
                             closeApp: true,
                           ),
@@ -93,30 +92,29 @@ class _MenuScreenState extends State<MenuScreen> {
                     right: Constant.playButtonDistanceRight,
                     child: PlayButton(
                       size: SizeUtil.getDoubleByDeviceVertical(
-                          size.height, Constant.playButtonSize),
+                          Constant.playButtonSize),
                       pushedName: ExplanationScreen.routeTag,
                       active: (!lockScreen && !allArchieved),
                       animationDone: true,
                     )),
                 // Archievements
                 Positioned(
-                  top: SizeUtil.getDoubleByDeviceVertical(size.height, 230),
-                  left: SizeUtil.getDoubleByDeviceHorizontal(size.width, 740),
+                  top: SizeUtil.getDoubleByDeviceVertical(230),
+                  left: SizeUtil.getDoubleByDeviceHorizontal(740),
                   child: Center(
                       child: AchievementButtonList(
                           animalwidth: SizeUtil.getDoubleByDeviceHorizontal(
-                              size.width, Constant.achievementButtonSize),
+                              Constant.achievementButtonSize),
                           animalheight: SizeUtil.getDoubleByDeviceHorizontal(
-                              size.width,
                               (Constant.achievementButtonSize - 6)))),
                 ),
                 // Stars
                 Positioned(
-                    top: SizeUtil.getDoubleByDeviceVertical(size.height, 240),
-                    left: SizeUtil.getDoubleByDeviceHorizontal(size.width, 555),
+                    top: SizeUtil.getDoubleByDeviceVertical(240),
+                    left: SizeUtil.getDoubleByDeviceHorizontal(555),
                     height: 350,
                     width: SizeUtil.getDoubleByDeviceHorizontal(
-                        size.width, Constant.starGifSize),
+                        Constant.starGifSize),
                     child: Container(
                         child: FlareActor(
                       "assets/animation/stars.flr",
@@ -124,46 +122,34 @@ class _MenuScreenState extends State<MenuScreen> {
                     ))),
                 // BASIC WITCH
                 Positioned(
-                    bottom: SizeUtil.getDoubleByDeviceVertical(size.height, 95),
-                    right:
-                        SizeUtil.getDoubleByDeviceHorizontal(size.width, 875),
+                    bottom: SizeUtil.getDoubleByDeviceVertical(95),
+                    right: SizeUtil.getDoubleByDeviceHorizontal(875),
                     child: Witch(
-                        image: Constant.standartWitchIconPath, size: size)),
+                        standartWitchText: true,
+                        rotate: false,
+                        talking: false,
+                        size: Constant.witchSize)),
                 // WITCH
                 witchTalking
                     ? Positioned(
-                        bottom:
-                            SizeUtil.getDoubleByDeviceVertical(size.height, 95),
-                        right: SizeUtil.getDoubleByDeviceHorizontal(
-                            size.width, 875),
+                        bottom: SizeUtil.getDoubleByDeviceVertical(95),
+                        right: SizeUtil.getDoubleByDeviceHorizontal(875),
                         child: Witch(
-                            image: Constant.talkingWitchIconPath, size: size))
+                            rotate: false,
+                            talking: true,
+                            size: Constant.witchSize))
                     : Container(),
-
                 // ANIMAL
                 Positioned(
-                    left: SizeUtil.getDoubleByDeviceHorizontal(size.width, 500),
-                    top: SizeUtil.getDoubleByDeviceVertical(size.height, 475),
+                    left: SizeUtil.getDoubleByDeviceHorizontal(500),
+                    top: SizeUtil.getDoubleByDeviceVertical(475),
                     child: IgnorePointer(
                         ignoring: lockScreen,
-                        child: Container(
-                          child: RawMaterialButton(
-                            child: (animal == null)
-                                ? EmptyPlaceholder()
-                                : DarkableImage(
-                                    url: animal.picture,
-                                    height: SizeUtil.getDoubleByDeviceVertical(
-                                        size.height, Constant.menuAnimalSize)),
-                            onPressed: () {
-                              audioPlayerService
-                                  .makeAnimalSound(animal.soundfile);
-                            },
-                          ),
-                        ))),
+                        child: SelectedAnimal(size: Constant.menuAnimalSize))),
                 // CHANGE ANIMAL BUTTON
                 Positioned(
-                    left: SizeUtil.getDoubleByDeviceHorizontal(size.width, 400),
-                    top: SizeUtil.getDoubleByDeviceVertical(size.height, 560),
+                    left: SizeUtil.getDoubleByDeviceHorizontal(400),
+                    top: SizeUtil.getDoubleByDeviceVertical(560),
                     child: IgnorePointer(
                         ignoring: lockScreen,
                         child: Container(
@@ -171,7 +157,6 @@ class _MenuScreenState extends State<MenuScreen> {
                             child: DarkableImage(
                                 url: 'assets/pics/reverse_blue.png',
                                 width: SizeUtil.getDoubleByDeviceHorizontal(
-                                    size.width,
                                     Constant.changeAnimalButtonSize),
                                 fit: BoxFit.fitWidth),
                             onPressed: () {
@@ -182,35 +167,5 @@ class _MenuScreenState extends State<MenuScreen> {
                         ))),
               ])
             ])));
-  }
-}
-
-class Witch extends StatelessWidget {
-  const Witch({
-    Key key,
-    @required this.size,
-    @required this.image,
-  }) : super(key: key);
-
-  final Size size;
-  final String image;
-
-  @override
-  Widget build(BuildContext context) {
-    AudioPlayerService audioPlayerService =
-        Provider.of<AudioPlayerService>(context);
-
-    return FlatButton(
-      child: new Image.asset(
-        image,
-        height:
-            SizeUtil.getDoubleByDeviceVertical(size.height, Constant.witchSize),
-        width: SizeUtil.getDoubleByDeviceHorizontal(
-            size.width, Constant.witchSize),
-      ),
-      onPressed: () {
-        audioPlayerService.tellStandartWitchText();
-      },
-    );
   }
 }

@@ -1,8 +1,8 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/screens/animal_selection/animal_button_list.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
+import 'package:magic_pot/shared_widgets/witch.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,6 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
         audioPlayerService.tellIntroduction();
       });
     }
-    Size size = MediaQuery.of(context).size;
     bool lockScreen = audioPlayerService.lockScreen;
     bool witchTalking = audioPlayerService.witchTalking;
 
@@ -42,61 +41,40 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
               Center(
                 child: DarkableImage(
                   url: 'assets/pics/animal_selection.png',
-                  width: size.width,
-                  height: size.height,
+                  width: SizeUtil.width,
+                  height: SizeUtil.height,
                   fit: BoxFit.fill,
                 ),
               ),
               Stack(children: <Widget>[
                 Positioned(
-                  bottom: SizeUtil.getDoubleByDeviceVertical(size.height, 20),
+                  bottom: SizeUtil.getDoubleByDeviceVertical(20),
                   left: 0,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         AnimalButtonList(
                             animalsize: SizeUtil.getDoubleByDeviceHorizontal(
-                                size.width, Constant.animalSize))
+                                Constant.animalSize))
                       ]),
                 ),
-                // BASIC WITCH
+// BASIC WITCH
                 Positioned(
                     bottom: 0,
-                    left: SizeUtil.getDoubleByDeviceHorizontal(size.width, 800),
-                    child: FlatButton(
-                      child: Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.rotationY(math.pi),
-                          child: new Image.asset(
-                            Constant.standartWitchIconPath,
-                            height: SizeUtil.getDoubleByDeviceVertical(
-                                size.height, Constant.witchSize),
-                            width: SizeUtil.getDoubleByDeviceHorizontal(
-                                size.width, Constant.witchSize),
-                          )),
-                      onPressed: () {
-                        audioPlayerService.playWitchText();
-                      },
-                    )),
+                    left: SizeUtil.getDoubleByDeviceHorizontal(800),
+                    child: Witch(
+                        rotate: true,
+                        talking: false,
+                        size: Constant.witchSize)),
                 // WITCH
                 witchTalking
                     ? Positioned(
-                        bottom: 0,
-                        left: 800,
-                        child: FlatButton(
-                          child: Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.rotationY(math.pi),
-                            child: new Image.asset(
-                              Constant.talkingWitchIconPath,
-                              height: SizeUtil.getDoubleByDeviceVertical(
-                                  size.height, Constant.witchSize),
-                              width: SizeUtil.getDoubleByDeviceHorizontal(
-                                  size.width, Constant.witchSize),
-                            ),
-                          ),
-                          onPressed: () {},
-                        ))
+                        bottom: SizeUtil.getDoubleByDeviceVertical(0),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(800),
+                        child: Witch(
+                            rotate: true,
+                            talking: true,
+                            size: Constant.witchSize))
                     : Container(),
               ])
             ])));

@@ -10,6 +10,8 @@ import 'package:magic_pot/screens/menu/menu_screen.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/play_button.dart';
+import 'package:magic_pot/shared_widgets/selected_animal.dart';
+import 'package:magic_pot/shared_widgets/witch.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
@@ -56,10 +58,8 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
       locked = false;
     }
 
-    Size size = MediaQuery.of(context).size;
     var lockScreen = Provider.of<AudioPlayerService>(context).lockScreen;
     bool witchTalking = Provider.of<AudioPlayerService>(context).witchTalking;
-    var animal = Provider.of<UserStateService>(context).currentAnimal;
 
     return Consumer<AudioPlayerService>(
       builder: (context, cart, child) {
@@ -70,26 +70,28 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                   Center(
                     child: DarkableImage(
                       url: 'assets/pics/animal_selection.png',
-                      width: size.width,
-                      height: size.height,
+                      width: SizeUtil.width,
+                      height: SizeUtil.height,
                       fit: BoxFit.fill,
                     ),
                   ),
                   // PLAY
                   Stack(children: <Widget>[
                     Positioned(
-                        top: Constant.playButtonDistanceBottom,
-                        right: Constant.playButtonDistanceRight,
+                        top: SizeUtil.getDoubleByDeviceVertical(
+                            Constant.playButtonDistanceBottom),
+                        right: SizeUtil.getDoubleByDeviceHorizontal(
+                            Constant.playButtonDistanceRight),
                         child: PlayButton(
                           size: SizeUtil.getDoubleByDeviceVertical(
-                              size.height, Constant.playButtonSize),
+                              Constant.playButtonSize),
                           pushedName: playLink,
                           active: !(lockScreen || locked),
                         )),
                     // ARCHIEVEMENTS
                     Positioned(
-                        bottom: 60,
-                        left: 120,
+                        bottom: SizeUtil.getDoubleByDeviceVertical(60),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(120),
                         child: (finalArchievements.length > 0)
                             ? Transform(
                                 alignment: Alignment.center,
@@ -97,117 +99,97 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                                 child: Image.asset(
                                   finalArchievements[0].picAftereUrl,
                                   height: 250,
-                                  width: 250,
+                                  width:
+                                      SizeUtil.getDoubleByDeviceHorizontal(250),
                                 ),
                               )
                             : EmptyPlaceholder()),
                     Positioned(
-                        bottom: 70,
-                        left: 590,
+                        bottom: SizeUtil.getDoubleByDeviceVertical(70),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(590),
                         child: (finalArchievements.length > 1)
                             ? Transform(
                                 alignment: Alignment.center,
                                 transform: Matrix4.rotationY(math.pi),
                                 child: Image.asset(
                                   finalArchievements[1].picAftereUrl,
-                                  height: 250,
-                                  width: 250,
+                                  height:
+                                      SizeUtil.getDoubleByDeviceVertical(250),
+                                  width:
+                                      SizeUtil.getDoubleByDeviceHorizontal(250),
                                 ),
                               )
                             : EmptyPlaceholder()),
                     Positioned(
-                        bottom: 300,
-                        left: 805,
+                        bottom: SizeUtil.getDoubleByDeviceVertical(300),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(805),
                         child: (finalArchievements.length > 2)
                             ? Image.asset(
                                 finalArchievements[2].picAftereUrl,
-                                height: 200,
-                                width: 200,
+                                height: SizeUtil.getDoubleByDeviceVertical(200),
+                                width:
+                                    SizeUtil.getDoubleByDeviceHorizontal(200),
                               )
                             : EmptyPlaceholder()),
+
                     // BASIC WITCH
                     Positioned(
                         bottom: 0,
-                        left: 800,
-                        child: FlatButton(
-                          child: Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationY(math.pi),
-                              child: new Image.asset(
-                                Constant.standartWitchIconPath,
-                                height: 500,
-                                width: 500,
-                              )),
-                          onPressed: () {
-                            audioPlayerService.playWitchText();
-                          },
-                        )),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(800),
+                        child: Witch(
+                            rotate: true,
+                            talking: false,
+                            size: Constant.witchSize)),
                     // WITCH
                     witchTalking
                         ? Positioned(
                             bottom: 0,
-                            left: 800,
-                            child: FlatButton(
-                              child: Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.rotationY(math.pi),
-                                child: new Image.asset(
-                                  Constant.talkingWitchIconPath,
-                                  height: 500,
-                                  width: 500,
-                                ),
-                              ),
-                              onPressed: () {},
-                            ))
+                            left: SizeUtil.getDoubleByDeviceHorizontal(800),
+                            child: Witch(
+                                rotate: true,
+                                talking: true,
+                                size: Constant.witchSize))
                         : Container(),
                     // ANIMAL
                     Positioned(
-                        left: 500,
-                        top: 550,
+                        left: SizeUtil.getDoubleByDeviceHorizontal(500),
+                        top: SizeUtil.getDoubleByDeviceVertical(550),
                         child: IgnorePointer(
-                            ignoring: lockScreen,
-                            child: Container(
-                              child: RawMaterialButton(
-                                child: (animal == null)
-                                    ? EmptyPlaceholder()
-                                    : DarkableImage(
-                                        url: animal.picture,
-                                        width: 180,
-                                        height: 180,
-                                        fit: BoxFit.fitWidth),
-                                onPressed: () {
-                                  audioPlayerService.makeAnimalSound(
-                                    animal.soundfile,
-                                  );
-                                },
-                              ),
-                            ))),
+                          ignoring: lockScreen,
+                          child: Positioned(
+                              left: SizeUtil.getDoubleByDeviceHorizontal(500),
+                              top: SizeUtil.getDoubleByDeviceVertical(475),
+                              child: IgnorePointer(
+                                  ignoring: lockScreen,
+                                  child: SelectedAnimal(
+                                      size: Constant.finishedAnimalSize))),
+                        )),
                     // FIREWORKS
                     Positioned(
-                        top: 150,
-                        left: 300,
-                        height: 200,
-                        width: 500,
+                        top: SizeUtil.getDoubleByDeviceVertical(150),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(300),
+                        height: SizeUtil.getDoubleByDeviceVertical(200),
+                        width: SizeUtil.getDoubleByDeviceHorizontal(500),
                         child: Container(
                             child: FlareActor(
                           "assets/animation/firework_pink.flr",
                           animation: "explode",
                         ))),
                     Positioned(
-                        top: 500,
-                        left: 300,
-                        height: 150,
-                        width: 200,
+                        top: SizeUtil.getDoubleByDeviceVertical(500),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(300),
+                        height: SizeUtil.getDoubleByDeviceVertical(150),
+                        width: SizeUtil.getDoubleByDeviceHorizontal(200),
                         child: Container(
                             child: FlareActor(
                           "assets/animation/firework_pink.flr",
                           animation: "explode",
                         ))),
                     Positioned(
-                        top: 450,
-                        left: 700,
-                        height: 200,
-                        width: 200,
+                        top: SizeUtil.getDoubleByDeviceVertical(450),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(700),
+                        height: SizeUtil.getDoubleByDeviceVertical(200),
+                        width: SizeUtil.getDoubleByDeviceHorizontal(200),
                         child: Container(
                             child: FlareActor(
                           "assets/animation/firework_pink.flr",

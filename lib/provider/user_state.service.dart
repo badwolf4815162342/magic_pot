@@ -30,8 +30,7 @@ class UserStateService extends ChangeNotifier {
   _setCurrentAnimal() async {
     if (_currentAnimal == null) {
       _animals = await DBApi.db.getAllAnimals();
-      _currentAnimal =
-          _animals.firstWhere((o) => (o.isCurrent), orElse: () => null);
+      _currentAnimal = _animals.firstWhere((o) => (o.isCurrent), orElse: () => null);
       notifyListeners();
     }
     return _currentAnimal;
@@ -57,17 +56,10 @@ class UserStateService extends ChangeNotifier {
 
   /// Change Animal
   void changeAnimal(Animal animal) {
-    log.d('ControllingProvider:' +
-        'Animal ' +
-        animal.name +
-        'Sound ' +
-        animal.soundfile);
-    log.d(
-        'ControllingProvider:' + 'Anima-length ' + _animals.length.toString());
+    log.d('ControllingProvider:' + 'Animal ' + animal.name + 'Sound ' + animal.soundfile);
+    log.d('ControllingProvider:' + 'Anima-length ' + _animals.length.toString());
     var oldAnimal = _currentAnimal;
-    log.d('ControllingProvider:' +
-        'Anima-length (after add) ' +
-        _animals.length.toString());
+    log.d('ControllingProvider:' + 'Anima-length (after add) ' + _animals.length.toString());
     _currentAnimal = animal;
 
     Future.delayed(const Duration(seconds: 2), () {
@@ -110,10 +102,7 @@ class UserStateService extends ChangeNotifier {
       _currentLevelCounter = 1;
       _currentLevel = await getLevelFromId();
     } else {
-      log.i('ControllingProvider: HIghest Level = ' +
-          level.number.toString() +
-          ' ' +
-          level.difficulty.toString());
+      log.i('ControllingProvider: HIghest Level = ' + level.number.toString() + ' ' + level.difficulty.toString());
       setLevel(level);
     }
   }
@@ -134,8 +123,7 @@ class UserStateService extends ChangeNotifier {
       setAllArchieved();
     }
 
-    log.i('ControllingProvider:' +
-        'New Level: $_currentLevelCounter.wav (levelUp)');
+    log.i('ControllingProvider:' + 'New Level: $_currentLevelCounter.wav (levelUp)');
 
     // This line tells [Model] that it should rebuild the widgets that
     // depend on it.
@@ -150,16 +138,14 @@ class UserStateService extends ChangeNotifier {
     _currentLevel = level;
     _currentLevelCounter = level.id;
 
-    log.i('ControllingProvider:' +
-        'Change level to ${LevelHelper.printLevelInfo(level)} (setLevel)');
+    log.i('ControllingProvider:' + 'Change level to ${LevelHelper.printLevelInfo(level)} (setLevel)');
   }
 
   void resetAll() {}
 
   Future<Level> getLevelFromId() async {
     Level level = await DBApi.db.getLevelById(_currentLevelCounter);
-    log.i('ControllingProvider:' +
-        'Start Level with ${LevelHelper.printLevelInfo(level)} (levelUp)');
+    log.i('ControllingProvider:' + 'Start Level with ${LevelHelper.printLevelInfo(level)} (levelUp)');
     return level;
   }
 }

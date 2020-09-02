@@ -16,6 +16,7 @@ class Constant {
   static double xButtonSize = 70;
   static double achievementButtonSize = 100;
   static double menuAnimalSize = 170;
+  static double finishedAnimalSize = 180;
 
   static double transformationAnimalHeight = 500;
   static double transformationAnimalWidth = 600;

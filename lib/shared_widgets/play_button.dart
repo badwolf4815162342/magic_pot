@@ -7,11 +7,7 @@ import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
 
 class PlayButton extends StatelessWidget {
-  PlayButton(
-      {@required this.pushedName,
-      @required this.size,
-      @required this.active,
-      this.animationDone = false});
+  PlayButton({@required this.pushedName, @required this.size, @required this.active, this.animationDone = false});
   final String pushedName;
   final bool active;
   final bool animationDone;
@@ -30,8 +26,7 @@ class PlayButton extends StatelessWidget {
             ),
             onPressed: () {
               if (animationDone) {
-                Provider.of<UserStateService>(context, listen: false)
-                    .setLevelAnimatedFalse();
+                Provider.of<UserStateService>(context, listen: false).setLevelAnimatedFalse();
               }
               Navigator.pushNamed(context, pushedName);
             },
@@ -44,8 +39,7 @@ class PlayButton extends StatelessWidget {
             ),
             onPressed: () {
               if (animationDone) {
-                Provider.of<UserStateService>(context, listen: false)
-                    .setLevelAnimatedFalse();
+                Provider.of<UserStateService>(context, listen: false).setLevelAnimatedFalse();
               }
               Navigator.pushNamed(context, pushedName);
             },

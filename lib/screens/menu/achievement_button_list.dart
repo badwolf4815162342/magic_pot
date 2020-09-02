@@ -9,8 +9,7 @@ class AchievementButtonList extends StatefulWidget {
   final double animalwidth;
   final double animalheight;
 
-  const AchievementButtonList({Key key, this.animalwidth, this.animalheight})
-      : super(key: key);
+  const AchievementButtonList({Key key, this.animalwidth, this.animalheight}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -35,8 +34,7 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
 
   _setArchievements() async {
     listEasy = await DBApi.db.getLevelByDifficultyAndArchieved(Difficulty.EASY);
-    listMiddle =
-        await DBApi.db.getLevelByDifficultyAndArchieved(Difficulty.MIDDLE);
+    listMiddle = await DBApi.db.getLevelByDifficultyAndArchieved(Difficulty.MIDDLE);
     listHard = await DBApi.db.getLevelByDifficultyAndArchieved(Difficulty.HARD);
     setState(() {});
   }
@@ -92,9 +90,7 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildButtonsWithNamesEasy().isEmpty
-              ? [EmptyPlaceholder()]
-              : _buildButtonsWithNamesEasy(),
+          children: _buildButtonsWithNamesEasy().isEmpty ? [EmptyPlaceholder()] : _buildButtonsWithNamesEasy(),
         ),
       ),
       Container(
@@ -107,9 +103,7 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildButtonsWithNamesMiddle().isEmpty
-              ? [EmptyPlaceholder()]
-              : _buildButtonsWithNamesMiddle(),
+          children: _buildButtonsWithNamesMiddle().isEmpty ? [EmptyPlaceholder()] : _buildButtonsWithNamesMiddle(),
         ),
       ),
       Container(
@@ -122,9 +116,7 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildButtonsWithNamesHard().isEmpty
-              ? [EmptyPlaceholder()]
-              : _buildButtonsWithNamesHard(),
+          children: _buildButtonsWithNamesHard().isEmpty ? [EmptyPlaceholder()] : _buildButtonsWithNamesHard(),
         ),
       ),
     ]);

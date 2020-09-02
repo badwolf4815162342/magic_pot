@@ -11,8 +11,7 @@ class IngredientDraggable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AudioPlayerService audioPlayerService =
-        Provider.of<AudioPlayerService>(context);
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
     var lockScreen = audioPlayerService.lockScreen;
 
     return Column(children: [

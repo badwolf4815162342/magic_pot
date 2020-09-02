@@ -5,22 +5,19 @@ class BlinkWidget extends StatefulWidget {
   final int interval;
   List<Widget> children;
 
-  BlinkWidget({@required this.children, this.interval = 500, Key key})
-      : super(key: key);
+  BlinkWidget({@required this.children, this.interval = 500, Key key}) : super(key: key);
 
   @override
   _BlinkWidgetState createState() => _BlinkWidgetState();
 }
 
-class _BlinkWidgetState extends State<BlinkWidget>
-    with SingleTickerProviderStateMixin {
+class _BlinkWidgetState extends State<BlinkWidget> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   int _currentWidget = 0;
 
   initState() {
     super.initState();
-    _controller = new AnimationController(
-        duration: Duration(milliseconds: widget.interval), vsync: this);
+    _controller = new AnimationController(duration: Duration(milliseconds: widget.interval), vsync: this);
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {

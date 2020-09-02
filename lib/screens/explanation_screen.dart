@@ -34,8 +34,6 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     audioPlayerService = Provider.of<AudioPlayerService>(context);
 
     if (madeInitSound == false) {
@@ -88,14 +86,13 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                       right: Constant.playButtonDistanceRight,
                       child: PlayButton(
                         size: SizeUtil.getDoubleByDeviceVertical(
-                            size.height, Constant.playButtonSize),
+                            Constant.playButtonSize),
                         pushedName: playLink,
                         active: !(lockScreen || locked),
                       )),
                   Positioned(
-                      top: SizeUtil.getDoubleByDeviceVertical(size.height, 230),
-                      left:
-                          SizeUtil.getDoubleByDeviceHorizontal(size.width, 60),
+                      top: SizeUtil.getDoubleByDeviceVertical(230),
+                      left: SizeUtil.getDoubleByDeviceHorizontal(60),
                       child: Stack(
                         children: <Widget>[
                           OpacityAnimatedWidget.tween(
@@ -107,10 +104,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                                 ? DarkableImage(
                                     url: currentLevel.picAftereUrl,
                                     width: SizeUtil.getDoubleByDeviceHorizontal(
-                                        size.width,
                                         Constant.transformationAnimalWidth),
                                     height: SizeUtil.getDoubleByDeviceVertical(
-                                        size.height,
                                         Constant.transformationAnimalHeight),
                                   )
                                 : EmptyPlaceholder(),
@@ -124,10 +119,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                                 ? DarkableImage(
                                     url: currentLevel.picBeforeUrl,
                                     width: SizeUtil.getDoubleByDeviceHorizontal(
-                                        size.width,
                                         Constant.transformationAnimalWidth),
                                     height: SizeUtil.getDoubleByDeviceVertical(
-                                        size.height,
                                         Constant.transformationAnimalHeight),
                                   )
                                 : EmptyPlaceholder(),

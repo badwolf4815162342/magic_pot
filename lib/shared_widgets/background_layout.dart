@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
-import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
-import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/exit_button.dart';
+import 'package:magic_pot/shared_widgets/selected_animal.dart';
+import 'package:magic_pot/shared_widgets/witch.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
@@ -25,10 +25,8 @@ class BackgroundLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     audioPlayerService = Provider.of<AudioPlayerService>(context);
 
-    var animal = Provider.of<UserStateService>(context).currentAnimal;
     var lockScreen = audioPlayerService.lockScreen;
     var witchTalking = audioPlayerService.witchTalking;
-    Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         IgnorePointer(
@@ -36,8 +34,8 @@ class BackgroundLayout extends StatelessWidget {
             child: Center(
               child: DarkableImage(
                 url: picUrl,
-                width: size.width,
-                height: size.height,
+                width: SizeUtil.width,
+                height: SizeUtil.height,
                 fit: BoxFit.fill,
               ),
             )),
@@ -50,10 +48,8 @@ class BackgroundLayout extends StatelessWidget {
                   children: <Widget>[
                     // X BUTTON
                     Positioned(
-                        right: SizeUtil.getDoubleByDeviceHorizontal(
-                            size.width, 270),
-                        bottom: SizeUtil.getDoubleByDeviceVertical(
-                            size.height, 580),
+                        right: SizeUtil.getDoubleByDeviceHorizontal(270),
+                        bottom: SizeUtil.getDoubleByDeviceVertical(580),
                         child: Container(
                           child: ExitButton(
                             closeApp: closeApp,
@@ -61,78 +57,36 @@ class BackgroundLayout extends StatelessWidget {
                         )),
                     // BASIC WITCH
                     Positioned(
-                        right: SizeUtil.getDoubleByDeviceHorizontal(
-                            size.width, -10),
-                        top: SizeUtil.getDoubleByDeviceVertical(
-                            size.height, 100),
-                        child: IgnorePointer(
-                            ignoring: lockScreen,
-                            child: FlatButton(
-                              child: new Image.asset(
-                                Constant.standartWitchIconPath,
-                                height: SizeUtil.getDoubleByDeviceVertical(
-                                    size.height,
-                                    Constant.backgroundLayoutWitchSize),
-                                width: SizeUtil.getDoubleByDeviceHorizontal(
-                                    size.width,
-                                    Constant.backgroundLayoutWitchSize),
-                              ),
-                              onPressed: () {
-                                audioPlayerService.playWitchText();
-                              },
-                            ))),
+                        right: SizeUtil.getDoubleByDeviceHorizontal(-10),
+                        top: SizeUtil.getDoubleByDeviceVertical(100),
+                        child: Witch(
+                            standartWitchText: false,
+                            rotate: false,
+                            talking: false,
+                            size: Constant.backgroundLayoutWitchSize)),
                     // WITCH
                     witchTalking
                         ? Positioned(
-                            right: SizeUtil.getDoubleByDeviceHorizontal(
-                                size.width, -10),
-                            top: SizeUtil.getDoubleByDeviceVertical(
-                                size.height, 100),
-                            child: FlatButton(
-                              child: new Image.asset(
-                                Constant.talkingWitchIconPath,
-                                height: SizeUtil.getDoubleByDeviceVertical(
-                                    size.height,
-                                    Constant.backgroundLayoutWitchSize),
-                                width: SizeUtil.getDoubleByDeviceHorizontal(
-                                    size.width,
-                                    Constant.backgroundLayoutWitchSize),
-                              ),
-                              onPressed: () {},
-                            ))
+                            right: SizeUtil.getDoubleByDeviceHorizontal(-10),
+                            top: SizeUtil.getDoubleByDeviceVertical(100),
+                            child: Witch(
+                                rotate: false,
+                                talking: true,
+                                size: Constant.backgroundLayoutWitchSize))
                         : Container(),
+
                     // ANIMAL
                     Positioned(
-                        left: SizeUtil.getDoubleByDeviceHorizontal(
-                            size.width, 140),
-                        top: SizeUtil.getDoubleByDeviceVertical(
-                            size.height, 560),
+                        left: SizeUtil.getDoubleByDeviceHorizontal(140),
+                        top: SizeUtil.getDoubleByDeviceVertical(560),
                         child: IgnorePointer(
                             ignoring: lockScreen,
-                            child: Container(
-                              child: RawMaterialButton(
-                                child: (animal == null)
-                                    ? EmptyPlaceholder()
-                                    : DarkableImage(
-                                        url: animal.picture,
-                                        height:
-                                            SizeUtil.getDoubleByDeviceVertical(
-                                                size.height,
-                                                Constant
-                                                    .backgroundLayoutAnimalSize),
-                                      ),
-                                onPressed: () {
-                                  audioPlayerService
-                                      .makeAnimalSound(animal.soundfile);
-                                },
-                              ),
-                            ))),
+                            child: SelectedAnimal(
+                                size: Constant.backgroundLayoutAnimalSize))),
                     // CHANGE ANIMAL BUTTON
                     Positioned(
-                        right: SizeUtil.getDoubleByDeviceHorizontal(
-                            size.width, 270),
-                        top: SizeUtil.getDoubleByDeviceVertical(
-                            size.height, 580),
+                        right: SizeUtil.getDoubleByDeviceHorizontal(270),
+                        top: SizeUtil.getDoubleByDeviceVertical(580),
                         child: IgnorePointer(
                             ignoring: lockScreen,
                             child: Container(
@@ -142,7 +96,6 @@ class BackgroundLayout extends StatelessWidget {
                                 child: DarkableImage(
                                   url: 'assets/pics/reverse_blue.png',
                                   width: SizeUtil.getDoubleByDeviceHorizontal(
-                                      size.width,
                                       Constant.changeAnimalButtonSize),
                                 ),
                                 onPressed: () {

@@ -3,8 +3,7 @@ import 'dart:convert';
 List<Ingredient> employeeFromJson(String str) =>
     List<Ingredient>.from(json.decode(str).map((x) => Ingredient.fromJson(x)));
 
-String employeeToJson(List<Ingredient> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String employeeToJson(List<Ingredient> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Ingredient {
   final int id;

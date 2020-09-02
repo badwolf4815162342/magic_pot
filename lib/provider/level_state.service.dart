@@ -12,51 +12,61 @@ import '../util/logger.util.dart';
 class LevelStateService extends ChangeNotifier {
   final log = getLogger();
 
-  List<Ingredient> currentObjects = new List<Ingredient>();
-  List<IngredientDraggable> currentIngredientDraggables =
-      new List<IngredientDraggable>();
-  Ingredient acceptedObject;
+  List<Ingredient> _currentObjects = new List<Ingredient>();
+  List<IngredientDraggable> _currentIngredientDraggables = new List<IngredientDraggable>();
+  Ingredient _acceptedObject;
 
-  int counter = 0;
-  int rightcounter = 0;
-  int wrongcounter = 0;
-  bool lastright = false;
+  int _counter;
+  int _rightcounter;
+  int _wrongcounter;
+  bool _lastright;
 
   // MagicPot
-  bool shaking = false;
-  String potImage = Constant.standartPotImagePath;
-  int millismovement = 1000;
-  double angleMovement = 180;
+  bool _shaking;
+  String _potImage;
+  int _millismovement;
+  double _angleMovement;
 
   Level currentLevel;
-  double fontSize;
-  bool readyForNextLevel;
+  double _fontSize;
+  // bool _readyForNextLevel;
+
+  Ingredient get acceptedObject => _acceptedObject;
+  List<IngredientDraggable> get currentIngredientDraggables => _currentIngredientDraggables;
+
+  bool get shaking => _shaking;
+  String get potImage => _potImage;
+  int get millismovement => _millismovement;
+  double get angleMovement => _angleMovement;
+
+  int get counter => _counter;
+  int get rightcounter => _rightcounter;
+  int get wrongcounter => _wrongcounter;
 
   LevelStateService(Level currentLevel, double fontsize) {
     this.currentLevel = currentLevel;
-    this.fontSize = fontsize;
+    this._fontSize = fontsize;
     initLevelStateService();
   }
 
   initLevelStateService() {
-    counter = 0;
-    rightcounter = 0;
-    wrongcounter = 0;
-    lastright = false;
-    shaking = false;
-    potImage = Constant.standartPotImagePath;
-    millismovement = 1000;
-    angleMovement = 180;
+    _counter = 0;
+    _rightcounter = 0;
+    _wrongcounter = 0;
+    _lastright = false;
+    _shaking = false;
+    _potImage = Constant.standartPotImagePath;
+    _millismovement = 1000;
+    _angleMovement = 180;
   }
 
   resetLevelData() async {
-    currentObjects = await LevelHelperUtil.getIngredients(null, currentLevel);
-    currentIngredientDraggables =
-        LevelHelperUtil.getIngredientDraggables(currentObjects, this.fontSize);
+    _currentObjects = await LevelHelperUtil.getIngredients(null, currentLevel);
+    _currentIngredientDraggables = LevelHelperUtil.getIngredientDraggables(_currentObjects, this._fontSize);
 
     var random = new Random();
-    acceptedObject = currentObjects[random.nextInt(currentObjects.length)];
-    log.i('LevelScreen:' + "Acc ${acceptedObject.name}");
+    _acceptedObject = _currentObjects[random.nextInt(_currentObjects.length)];
+    log.i('LevelScreen:' + "Acc ${_acceptedObject.name}");
 
     log.d('LevelScreen: on except over');
     notifyListeners();
@@ -65,54 +75,54 @@ class LevelStateService extends ChangeNotifier {
   printLevelStateInfo() {
     final log = getLogger();
     log.i('LevelScreen:' +
-        '_printLevelStateInfo Ingredient number $counter/${currentLevel.numberOfMinObjects} done $rightcounter/${currentLevel.numberOfRightObjectsInARow} right objects in a row.');
+        '_printLevelStateInfo Ingredient number $_counter/${currentLevel.numberOfMinObjects} done $_rightcounter/${currentLevel.numberOfRightObjectsInARow} right objects in a row.');
   }
 
   success() {
     final log = getLogger();
-    counter++;
-    if (lastright) {
-      rightcounter++;
+    _counter++;
+    if (_lastright) {
+      _rightcounter++;
     } else {
-      rightcounter = 1;
+      _rightcounter = 1;
     }
-    lastright = true;
-    log.i('LevelScreen:' + 'Levelcounter=  New counter $counter');
+    _lastright = true;
+    log.i('LevelScreen:' + 'Levelcounter=  New counter $_counter');
     notifyListeners();
   }
 
   failure() {
-    wrongcounter++;
-    if (wrongcounter == currentLevel.getMaxFaults()) {
+    _wrongcounter++;
+    if (_wrongcounter == currentLevel.getMaxFaults()) {
       resetLevelData();
       printLevelStateInfo();
     } else {
-      lastright = false;
+      _lastright = false;
     }
     notifyListeners();
   }
 
   void setPotAnimationFailure() {
-    potImage = 'assets/pics/pot_black2.png';
-    millismovement = 500;
-    angleMovement = 5;
-    this.shaking = true;
+    _potImage = 'assets/pics/pot_black2.png';
+    _millismovement = 500;
+    _angleMovement = 5;
+    _shaking = true;
     notifyListeners();
   }
 
   void setPotAnimationSuccess() {
-    potImage = 'assets/pics/pot_pink2.png';
-    millismovement = 1000;
-    angleMovement = 180;
-    this.shaking = true;
+    _potImage = 'assets/pics/pot_pink2.png';
+    _millismovement = 1000;
+    _angleMovement = 180;
+    _shaking = true;
     notifyListeners();
   }
 
   void stopPotAnimation() {
     Future.delayed(const Duration(milliseconds: 3000), () {
       // Here you can write your code for open new view
-      this.shaking = false;
-      potImage = 'assets/pics/pot_green2.png';
+      _shaking = false;
+      _potImage = 'assets/pics/pot_green2.png';
       notifyListeners();
     });
   }

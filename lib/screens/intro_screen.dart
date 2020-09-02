@@ -26,7 +26,10 @@ class IntroScreen extends StatelessWidget {
         Provider.of<AudioPlayerService>(context);
     final UserStateService userStateService =
         Provider.of<UserStateService>(context);
-    Size size = MediaQuery.of(context).size;
+
+    // set initial device sizes
+    SizeUtil.width = MediaQuery.of(context).size.width;
+    SizeUtil.height = MediaQuery.of(context).size.height;
 
     if (areProvidersReady(userStateService, audioPlayerService)) {
       Animal animal = userStateService.currentAnimal;
@@ -37,8 +40,8 @@ class IntroScreen extends StatelessWidget {
           Center(
             child: new Image.asset(
               'assets/pics/intro_screen.jpg',
-              width: size.width,
-              height: size.height,
+              width: SizeUtil.width,
+              height: SizeUtil.height,
               fit: BoxFit.fill,
             ),
           ),
@@ -59,9 +62,9 @@ class IntroScreen extends StatelessWidget {
                     child: new Image.asset(
                       'assets/pics/play_blue.png',
                       width: SizeUtil.getDoubleByDeviceVertical(
-                          size.height, Constant.playButtonSize),
+                          Constant.playButtonSize),
                       height: SizeUtil.getDoubleByDeviceHorizontal(
-                          size.width, Constant.playButtonSize),
+                          Constant.playButtonSize),
                     ),
                     onPressed: () {
                       if (animal == null) {
@@ -83,8 +86,8 @@ class IntroScreen extends StatelessWidget {
       return Center(
         child: new Image.asset(
           'assets/pics/intro_screen.jpg',
-          width: size.width,
-          height: size.height,
+          width: SizeUtil.width,
+          height: SizeUtil.height,
           fit: BoxFit.fill,
         ),
       );

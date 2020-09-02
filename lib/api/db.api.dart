@@ -33,12 +33,10 @@ class DBApi {
     String rawStr = await rootBundle.loadString('assets/db/create_tables');
     List<String> initScript = rawStr.split("\n");
 
-    String rawStrInsert =
-        await rootBundle.loadString('assets/db/insert_objects');
+    String rawStrInsert = await rootBundle.loadString('assets/db/insert_objects');
     List<String> insertScript = rawStrInsert.split("\n");
 
-    return await openDatabase(path, version: 1, onOpen: (db) {},
-        onCreate: (Database db, int version) async {
+    return await openDatabase(path, version: 1, onOpen: (db) {}, onCreate: (Database db, int version) async {
       initScript.forEach((script) async => await db.execute(script));
       insertScript.forEach((script) async => await db.execute(script));
     });
@@ -48,8 +46,7 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM Ingredients");
 
-    List<Ingredient> list =
-        res.isNotEmpty ? res.map((c) => Ingredient.fromJson(c)).toList() : [];
+    List<Ingredient> list = res.isNotEmpty ? res.map((c) => Ingredient.fromJson(c)).toList() : [];
 
     List<Ingredient> currentObjects = List<Ingredient>();
     var random = new Random();
@@ -72,11 +69,9 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> filteredList =
-        list.where((level) => (level.id == currentLevelCounter)).toList();
+    List<Level> filteredList = list.where((level) => (level.id == currentLevelCounter)).toList();
 
     if (filteredList.length == 1) {
       return filteredList[0];
@@ -85,17 +80,13 @@ class DBApi {
     }
   }
 
-  Future<List<Level>> getLevelByDifficultyAndArchieved(
-      Difficulty difficult) async {
+  Future<List<Level>> getLevelByDifficultyAndArchieved(Difficulty difficult) async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> filteredList = list
-        .where((level) => (level.difficulty == difficult && level.achievement))
-        .toList();
+    List<Level> filteredList = list.where((level) => (level.difficulty == difficult && level.achievement)).toList();
 
     return filteredList;
   }
@@ -104,11 +95,9 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> filteredList =
-        list.where((level) => (level.achievement)).toList();
+    List<Level> filteredList = list.where((level) => (level.achievement)).toList();
 
     return filteredList;
   }
@@ -117,11 +106,9 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> filteredList =
-        list.where((level) => (level.finalLevel && level.achievement)).toList();
+    List<Level> filteredList = list.where((level) => (level.finalLevel && level.achievement)).toList();
 
     return filteredList;
   }
@@ -130,12 +117,9 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> allArchieved = list
-        .where((level) => (level.achievement && !level.finalLevel))
-        .toList();
+    List<Level> allArchieved = list.where((level) => (level.achievement && !level.finalLevel)).toList();
 
     allArchieved.sort((a, b) => a.id.compareTo(b.id));
     return allArchieved.last;
@@ -145,8 +129,7 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM Animals");
 
-    List<Animal> list =
-        res.isNotEmpty ? res.map((c) => Animal.fromJson(c)).toList() : [];
+    List<Animal> list = res.isNotEmpty ? res.map((c) => Animal.fromJson(c)).toList() : [];
 
     return list;
   }
@@ -155,17 +138,14 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM Animals");
 
-    List<Animal> list =
-        res.isNotEmpty ? res.map((c) => Animal.fromJson(c)).toList() : [];
+    List<Animal> list = res.isNotEmpty ? res.map((c) => Animal.fromJson(c)).toList() : [];
 
-    List<Animal> filteredList =
-        list.where((animal) => (!animal.isCurrent)).toList();
+    List<Animal> filteredList = list.where((animal) => (!animal.isCurrent)).toList();
 
     return filteredList;
   }
 
-  Future<int> updateCurrentAnimal(
-      Animal currentAnimal, List<Animal> animals) async {
+  Future<int> updateCurrentAnimal(Animal currentAnimal, List<Animal> animals) async {
     final db = await database;
     currentAnimal.isCurrent = true;
     int success = 1;
@@ -212,21 +192,17 @@ class DBApi {
 
   Future<void> updateLevelNotAnimated() async {
     final db = await database;
-    await db.rawQuery(
-        "UPDATE Levels SET animated = '1' WHERE animated IS '0' AND achievement IS '1'");
+    await db.rawQuery("UPDATE Levels SET animated = '1' WHERE animated IS '0' AND achievement IS '1'");
   }
 
   Future<bool> newArchievements() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> allArchieved = list
-        .where((level) =>
-            (level.achievement && !level.finalLevel && !level.animated))
-        .toList();
+    List<Level> allArchieved =
+        list.where((level) => (level.achievement && !level.finalLevel && !level.animated)).toList();
 
     if (allArchieved.isEmpty) {
       return false;
@@ -239,11 +215,9 @@ class DBApi {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
-    List<Level> list =
-        res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
+    List<Level> list = res.isNotEmpty ? res.map((c) => Level.fromJson(c)).toList() : [];
 
-    List<Level> allNotArchievedLevels =
-        list.where((level) => (!level.achievement)).toList();
+    List<Level> allNotArchievedLevels = list.where((level) => (!level.achievement)).toList();
 
     if (allNotArchievedLevels.isEmpty) {
       return true;

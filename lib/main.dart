@@ -11,6 +11,7 @@ import 'package:magic_pot/screens/level_finished_screen.dart';
 import 'package:magic_pot/screens/level/level_screen.dart';
 import 'package:magic_pot/screens/menu/menu_screen.dart';
 import 'package:magic_pot/screens/animal_selection/select_first_animal_screen.dart';
+import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 import 'util/logger.util.dart';
 
@@ -66,8 +67,7 @@ class IntroPage extends StatelessWidget {
 
         return new PageRouteBuilder<dynamic>(
             settings: routeSettings,
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) {
+            pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
               switch (routeSettings.name) {
                 case MenuScreen.routeTag:
                   return MenuScreen();
@@ -86,12 +86,9 @@ class IntroPage extends StatelessWidget {
               }
             },
             transitionDuration: const Duration(milliseconds: 2000),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child) {
-              return effectMap[PageTransitionType.rippleMiddle](
-                  Curves.linear, animation, secondaryAnimation, child);
+            transitionsBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation, Widget child) {
+              return effectMap[PageTransitionType.rippleMiddle](Curves.linear, animation, secondaryAnimation, child);
             });
       },
     );
@@ -102,6 +99,10 @@ class StartPageDetector extends StatelessWidget {
   static const String routeTag = 'menuPageRoute';
   @override
   Widget build(BuildContext context) {
+    // get initial device sizes
+    SizeUtil.width = MediaQuery.of(context).size.width;
+    SizeUtil.height = MediaQuery.of(context).size.height;
+
     final log = getLogger();
     Animal animal = Provider.of<UserStateService>(context).currentAnimal;
     log.i('MenuPage:' + 'Animal=' + animal.toString());

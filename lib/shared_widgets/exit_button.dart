@@ -26,18 +26,14 @@ class _ExitButtonState extends State<ExitButton> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     audioPlayerService = Provider.of<AudioPlayerService>(context);
     userStateService = Provider.of<UserStateService>(context);
 
     return RawMaterialButton(
       child: DarkableImage(
         url: 'assets/pics/x_pink.png',
-        width: SizeUtil.getDoubleByDeviceHorizontal(
-            size.width, Constant.xButtonSize),
-        height: SizeUtil.getDoubleByDeviceHorizontal(
-            size.width, Constant.xButtonSize),
+        width: SizeUtil.getDoubleByDeviceHorizontal(Constant.xButtonSize),
+        height: SizeUtil.getDoubleByDeviceHorizontal(Constant.xButtonSize),
       ),
       onPressed: () {
         audioPlayerService.stopAllSound();

@@ -26,10 +26,7 @@ class _AnimalSelectionScreen extends State<AnimalSelectionScreen> {
     }
     return Scaffold(
         body: BackgroundLayout(
-      scene: Stack(children: <Widget>[
-        Positioned(
-            bottom: 10, right: 120, child: AnimalButtonList(animalsize: 150))
-      ]),
+      scene: Stack(children: <Widget>[Positioned(bottom: 10, right: 120, child: AnimalButtonList(animalsize: 150))]),
       picUrl: 'assets/pics/animal_change.png',
       animalSelectionBack: true,
     ));
