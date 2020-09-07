@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
+// Blinking animation for the play button
 class BlinkWidget extends StatefulWidget {
-  final int interval;
-  List<Widget> children;
-
   BlinkWidget({@required this.children, this.interval = 500, Key key}) : super(key: key);
+
+  final int interval;
+  final List<Widget> children;
 
   @override
   _BlinkWidgetState createState() => _BlinkWidgetState();

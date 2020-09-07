@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:provider/provider.dart';
 
-// This class shows that buttons are uncklickable when the witch is talking
+// This class makes visible that buttons are uncklickable when the witch is talking
 class DarkableImage extends StatelessWidget {
   DarkableImage({@required this.url, this.height, this.width, this.fit});
   final String url;
   final double height;
   final double width;
   final BoxFit fit;
-  AudioPlayerService audioPlayerService;
 
   @override
   Widget build(BuildContext context) {
-    audioPlayerService = Provider.of<AudioPlayerService>(context);
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
     var witchTalking = audioPlayerService.witchTalking;
     var stayBright = audioPlayerService.stayBright;
 
@@ -47,11 +46,6 @@ class DarkableImage extends StatelessWidget {
                 Colors.transparent,
                 BlendMode.multiply,
               ),
-        child: Image.asset(url,
-            height: height,
-            width: width,
-            // color: lockScreen ? Constant.darkenColor : null,
-            // colorBlendMode: lockScreen ? BlendMode.saturation : null,
-            fit: BoxFit.fill));
+        child: Image.asset(url, height: height, width: width, fit: BoxFit.fill));
   }
 }

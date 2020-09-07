@@ -21,17 +21,14 @@ class Witch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AudioPlayerService audioPlayerService =
-        Provider.of<AudioPlayerService>(context);
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
 
     return FlatButton(
       child: Transform(
           alignment: Alignment.center,
           transform: Matrix4.rotationY(rotate ? math.pi : 0),
           child: new Image.asset(
-            talking
-                ? Constant.talkingWitchIconPath
-                : Constant.standartWitchIconPath,
+            talking ? Constant.talkingWitchIconPath : Constant.standartWitchIconPath,
             height: SizeUtil.getDoubleByDeviceVertical(size),
             width: SizeUtil.getDoubleByDeviceHorizontal(size),
           )),

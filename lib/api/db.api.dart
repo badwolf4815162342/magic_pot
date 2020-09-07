@@ -42,6 +42,7 @@ class DBApi {
     });
   }
 
+// get Random ingredients for LevelSteps
   Future<List<Ingredient>> getXRandomObjects(int numberOfObjects) async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM Ingredients");
@@ -91,7 +92,8 @@ class DBApi {
     return filteredList;
   }
 
-  Future<List<Level>> getLevelByArchieved() async {
+// Get all levels that are already achieved
+  Future<List<Level>> getLevelByAchieved() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
@@ -102,7 +104,8 @@ class DBApi {
     return filteredList;
   }
 
-  Future<List<Level>> getFinalArchievedLevels() async {
+// Get all levels that are already achieved and are the last of a transformation
+  Future<List<Level>> getFinalAchievedLevels() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
 
@@ -113,6 +116,7 @@ class DBApi {
     return filteredList;
   }
 
+// Get currently achieved level with highest difficulty
   Future<Level> getHighestLevel() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM LEVELS");
@@ -145,6 +149,7 @@ class DBApi {
     return filteredList;
   }
 
+// save selected animal and declare others as unselected
   Future<int> updateCurrentAnimal(Animal currentAnimal, List<Animal> animals) async {
     final db = await database;
     currentAnimal.isCurrent = true;
@@ -190,6 +195,7 @@ class DBApi {
     );
   }
 
+// save if animation of new achievement was already shown
   Future<void> updateLevelNotAnimated() async {
     final db = await database;
     await db.rawQuery("UPDATE Levels SET animated = '1' WHERE animated IS '0' AND achievement IS '1'");

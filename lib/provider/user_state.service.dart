@@ -5,6 +5,7 @@ import 'package:magic_pot/models/level.dart';
 
 import '../util/logger.util.dart';
 
+// (Singleton) holds states used in the whole game like currentLevel or currentAnimal
 class UserStateService extends ChangeNotifier {
   final log = getLogger();
 

@@ -13,12 +13,12 @@ class AnimalButton extends StatelessWidget {
   AnimalButton({@required this.animal, @required this.size});
   final Animal animal;
   final double size;
-  var _firstPress = true;
-  AudioPlayerService audioPlayerService;
 
   @override
   Widget build(BuildContext context) {
-    audioPlayerService = Provider.of<AudioPlayerService>(context, listen: false);
+    // TODO(viviane): check if this works
+    var _firstPress = true;
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context, listen: false);
     var currentAnimal = Provider.of<UserStateService>(context, listen: false).currentAnimal;
     return RawMaterialButton(
       child: Padding(

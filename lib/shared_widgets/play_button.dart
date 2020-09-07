@@ -3,9 +3,9 @@ import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/shared_widgets/blink_widget.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
-import 'package:magic_pot/util/constant.util.dart';
 import 'package:provider/provider.dart';
 
+// Play button to go to next scrren (blinking when sounds are over)
 class PlayButton extends StatelessWidget {
   PlayButton({@required this.pushedName, @required this.size, @required this.active, this.animationDone = false});
   final String pushedName;

@@ -9,6 +9,7 @@ import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
+// Red exit button to go back to menu or when in menu close the app
 class ExitButton extends StatefulWidget {
   final bool closeApp;
 
@@ -36,6 +37,7 @@ class _ExitButtonState extends State<ExitButton> {
         height: SizeUtil.getDoubleByDeviceHorizontal(Constant.xButtonSize),
       ),
       onPressed: () {
+        // TODO(viviane): Should selecting x during the level stop all sound and be clickable even when the witch is talking?
         audioPlayerService.stopAllSound();
         _showAlertDialog(audioPlayerService, userStateService);
         audioPlayerService.quitButtonText(widget.closeApp);
@@ -43,8 +45,7 @@ class _ExitButtonState extends State<ExitButton> {
     );
   }
 
-  void _showAlertDialog(AudioPlayerService audioPlayerService,
-      UserStateService userStateService) {
+  void _showAlertDialog(AudioPlayerService audioPlayerService, UserStateService userStateService) {
     var lockScreen = audioPlayerService.lockScreen;
     showDialog(
       context: context,
@@ -65,17 +66,18 @@ class _ExitButtonState extends State<ExitButton> {
                   onPressed: () {
                     if (!lockScreen) {
                       if (widget.closeApp) {
+                        // To be safe, save currently selected animal
                         userStateService.saveCurrentAnimal();
                         Navigator.of(context).pop();
+                        // TODO(viviane): Should selecting x to close whole app stop the sound (or should it be only cklickabale when explanation is finished)
                         audioPlayerService.stopAllSound();
                         SystemNavigator.pop();
                       } else {
                         Navigator.of(context).pop();
-                        // reset all
                         Navigator.pushNamed(context, MenuScreen.routeTag);
+                        // TODO(viviane): Should selecting the witch to go back to menu stop the sound (or should it be only cklickabale when explanation is finished)
                         audioPlayerService.resetAudioPlayerToMenu();
-                        Provider.of<UserStateService>(context)
-                            .resetPlayPositon();
+                        Provider.of<UserStateService>(context).resetPlayPositon();
                       }
                     }
                   },

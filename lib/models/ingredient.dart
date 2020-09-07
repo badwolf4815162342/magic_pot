@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+// The ingredients to put in the potions
 List<Ingredient> employeeFromJson(String str) =>
     List<Ingredient>.from(json.decode(str).map((x) => Ingredient.fromJson(x)));
 

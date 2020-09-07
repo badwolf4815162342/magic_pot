@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../util/logger.util.dart';
 
+// Screen between the levels/potions to show the transformation steps of the animal
 class ExplanationScreen extends StatefulWidget {
   static const String routeTag = '/explanation';
 
@@ -38,11 +39,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
 
     if (madeInitSound == false) {
       madeInitSound = true;
-      currentLevel =
-          Provider.of<UserStateService>(context, listen: false).currentLevel;
+      currentLevel = Provider.of<UserStateService>(context, listen: false).currentLevel;
       Future.delayed(const Duration(milliseconds: 2000), () {
-        // SchedulerBinding.instance.addPostFrameCallback((_) {
-
         if (currentLevel.number != 1) {
           audioPlayerService.transitionSound();
           transformation = true;
@@ -68,8 +66,7 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
     if (currentLevel == null) {
       log.e('ExplanationScreen:' + 'CurrentLevel= null');
     } else {
-      log.i('ExplanationScreen:' +
-          'CurrentLevel=  ${LevelHelper.printLevelInfo(currentLevel)}');
+      log.i('ExplanationScreen:' + 'CurrentLevel=  ${LevelHelper.printLevelInfo(currentLevel)}');
       if (currentLevel.finalLevel) {
         playLink = LevelFinishedScreen.routeTag;
       }
@@ -85,8 +82,7 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                       bottom: Constant.playButtonDistanceBottom,
                       right: Constant.playButtonDistanceRight,
                       child: PlayButton(
-                        size: SizeUtil.getDoubleByDeviceVertical(
-                            Constant.playButtonSize),
+                        size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
                         pushedName: playLink,
                         active: !(lockScreen || locked),
                       )),
@@ -95,6 +91,7 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                       left: SizeUtil.getDoubleByDeviceHorizontal(60),
                       child: Stack(
                         children: <Widget>[
+                          // Transformation animation
                           OpacityAnimatedWidget.tween(
                             duration: Duration(milliseconds: 5000),
                             opacityEnabled: 1, //define start value
@@ -103,10 +100,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             child: (currentLevel != null)
                                 ? DarkableImage(
                                     url: currentLevel.picAftereUrl,
-                                    width: SizeUtil.getDoubleByDeviceHorizontal(
-                                        Constant.transformationAnimalWidth),
-                                    height: SizeUtil.getDoubleByDeviceVertical(
-                                        Constant.transformationAnimalHeight),
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(Constant.transformationAnimalWidth),
+                                    height: SizeUtil.getDoubleByDeviceVertical(Constant.transformationAnimalHeight),
                                   )
                                 : EmptyPlaceholder(),
                           ),
@@ -118,10 +113,8 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
                             child: (currentLevel != null)
                                 ? DarkableImage(
                                     url: currentLevel.picBeforeUrl,
-                                    width: SizeUtil.getDoubleByDeviceHorizontal(
-                                        Constant.transformationAnimalWidth),
-                                    height: SizeUtil.getDoubleByDeviceVertical(
-                                        Constant.transformationAnimalHeight),
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(Constant.transformationAnimalWidth),
+                                    height: SizeUtil.getDoubleByDeviceVertical(Constant.transformationAnimalHeight),
                                   )
                                 : EmptyPlaceholder(),
                           ),

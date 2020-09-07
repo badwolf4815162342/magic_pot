@@ -8,6 +8,7 @@ import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/logger.util.dart';
 import 'package:provider/provider.dart';
 
+// One level image in the cupboard on the menu screen to play this exact level again
 class AchievementButton extends StatelessWidget {
   final log = getLogger();
 
@@ -17,13 +18,13 @@ class AchievementButton extends StatelessWidget {
   final double animalwidth;
   final double animalheight;
 
+// animate that this was a new achievement
   final bool animate;
-  AudioPlayerService audioPlayerService;
-  UserStateService userStateService;
 
   void _showAlertDialog(BuildContext context) {
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
     var lockScreen = audioPlayerService.lockScreen;
-    // TODO(viviane): Solve locked bug
+    // TODO(viviane): Solve locked bug ???
     log.e('Screenlocked? $lockScreen');
     showDialog(
       context: context,
@@ -45,6 +46,7 @@ class AchievementButton extends StatelessWidget {
                   ),
                   onPressed: () {
                     // Go to that expanation screen with level
+                    // TODO(viviane): Should selecting the achievement image to  go to the level stop the sound
                     audioPlayerService.stopAllSound();
                     Provider.of<UserStateService>(context, listen: false).setLevel(level);
                     Navigator.pushNamed(context, ExplanationScreen.routeTag);
@@ -58,8 +60,8 @@ class AchievementButton extends StatelessWidget {
                     height: 100,
                   ),
                   onPressed: () {
+                    // TODO(viviane): Should selecting x to not got to the level stop the sound
                     audioPlayerService.stopAllSound();
-
                     Navigator.of(context).pop();
                   },
                 ),
@@ -75,9 +77,7 @@ class AchievementButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    userStateService = Provider.of<UserStateService>(context);
-    audioPlayerService = Provider.of<AudioPlayerService>(context);
-
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
     return TranslationAnimatedWidget(
         enabled: animate, //update this boolean to forward/reverse the animation
         values: [

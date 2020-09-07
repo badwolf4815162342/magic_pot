@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/screens/level/ingredient_draggable.dart';
 
+// List of IngredientDraggables in the cupboard
 class IngredientDraggableList extends StatefulWidget {
   final List<IngredientDraggable> currentDraggables;
 

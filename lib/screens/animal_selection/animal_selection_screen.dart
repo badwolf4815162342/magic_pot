@@ -5,6 +5,7 @@ import 'package:magic_pot/screens/animal_selection/animal_button_list.dart';
 import 'package:magic_pot/shared_widgets/background_layout.dart';
 import 'package:provider/provider.dart';
 
+// Screen to change currently selected helping animal
 class AnimalSelectionScreen extends StatefulWidget {
   static const String routeTag = 'animalSelectionScreenRoute';
   @override

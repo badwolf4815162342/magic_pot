@@ -9,7 +9,7 @@ import 'package:magic_pot/util/constant.util.dart';
 
 import '../util/logger.util.dart';
 
-// Singleton class two hold the states _lockScreen, _witchIcon and _witchIcon over the whole application
+// Singleton class two hold the states lockScreen, witchTalking and stayBright (objects should not be darkened (DarknableImage) when sound is played) over the whole application
 class AudioPlayerService extends ChangeNotifier {
   final log = getLogger();
 
@@ -77,7 +77,7 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   Future<void> tellLevelFinished() async {
-    List<Level> levels = await DBApi.db.getLevelByArchieved();
+    List<Level> levels = await DBApi.db.getLevelByAchieved();
     // Diffrent text when all archievements are archieved
     if (levels.length == 15) {
       makeSound('audio/witch_end_3.wav');
@@ -192,12 +192,10 @@ class AudioPlayerService extends ChangeNotifier {
   }
 
   // LOCKING SCREEN
-
   void verlockScreen(String fileName, bool witch) {
     if (fileName.contains('long')) {
       log.d('transformation');
     }
-    // TODO:  feuerwerk?????
     if (!fileName.contains('witch') && !fileName.contains('long')) {
       _stayBright = true;
     }
@@ -214,6 +212,7 @@ class AudioPlayerService extends ChangeNotifier {
   void unlockScreen(String fileName, bool witch) {
     _unlockedWith.remove(fileName);
     _lockScreen = false;
+    // longer audiofiles should make the screen dark (show that no interaction is possible), shorter files (do not contain witch or long) let the rest stay bright (even if uncklickable)
     if (!fileName.contains('witch') && !fileName.contains('long')) {
       _stayBright = false;
     }
@@ -226,16 +225,8 @@ class AudioPlayerService extends ChangeNotifier {
     if (_playerQueue.length > 0) {
       log.i('ControllingProvider:' + 'more in queue ' + _playerQueue.toString() + ' (unlockScreen)');
       String sound = _playerQueue.removeLast();
-      // _savedTexsts = null;
       makeSound(sound);
     }
-    /* wait for two secs **
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      if (_unlockedWith.length > 0 && ) {
-        _lockScreen = false;
-      }
-      log.e('ControllingProvider:' + '-------------------------remove???(unlockScreen)');
-    });*/
   }
 
   // RESET ALL SOUND ACTION
@@ -255,7 +246,7 @@ class AudioPlayerService extends ChangeNotifier {
       makeSound('audio/effect_pring.wav');
     }
     Future.delayed(const Duration(milliseconds: 1500), () async {
-      List<Level> levels = await DBApi.db.getLevelByArchieved();
+      List<Level> levels = await DBApi.db.getLevelByAchieved();
       if (levels.length == 1) {
         makeSound('audio/witch_menu_explanation_first.wav');
       } else if (levels.length >= 15) {

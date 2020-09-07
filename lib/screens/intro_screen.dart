@@ -9,11 +9,11 @@ import 'package:magic_pot/screens/animal_selection/select_first_animal_screen.da
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
+// First screen with Learnig4Kids Logo and Play button to start
 class IntroScreen extends StatelessWidget {
   final log = getLogger();
 
-  bool areProvidersReady(UserStateService _userStateService,
-      AudioPlayerService _audioPlayerService) {
+  bool areProvidersReady(UserStateService _userStateService, AudioPlayerService _audioPlayerService) {
     return _userStateService != null &&
         _userStateService.isIntializing == false &&
         _audioPlayerService != null &&
@@ -22,10 +22,8 @@ class IntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AudioPlayerService audioPlayerService =
-        Provider.of<AudioPlayerService>(context);
-    final UserStateService userStateService =
-        Provider.of<UserStateService>(context);
+    final AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
+    final UserStateService userStateService = Provider.of<UserStateService>(context);
 
     // set initial device sizes
     SizeUtil.width = MediaQuery.of(context).size.width;
@@ -61,16 +59,15 @@ class IntroScreen extends StatelessWidget {
                   child: RawMaterialButton(
                     child: new Image.asset(
                       'assets/pics/play_blue.png',
-                      width: SizeUtil.getDoubleByDeviceVertical(
-                          Constant.playButtonSize),
-                      height: SizeUtil.getDoubleByDeviceHorizontal(
-                          Constant.playButtonSize),
+                      width: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
+                      height: SizeUtil.getDoubleByDeviceHorizontal(Constant.playButtonSize),
                     ),
                     onPressed: () {
+                      // decide to select initial animal when first opneing the app
                       if (animal == null) {
-                        Navigator.pushNamed(
-                            context, SelectFirstAnimalScreen.routeTag);
+                        Navigator.pushNamed(context, SelectFirstAnimalScreen.routeTag);
                       } else {
+                        // or go to menu when you already selected an animal last time
                         userStateService.setPlayAtNewestPosition();
                         Navigator.pushNamed(context, MenuScreen.routeTag);
                       }

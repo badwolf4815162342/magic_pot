@@ -7,6 +7,7 @@ import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
+// Screen to select initial animal
 class SelectFirstAnimalScreen extends StatefulWidget {
   static const String routeTag = 'selectFirstAnimalScreenRoute';
 
@@ -27,7 +28,6 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
     if (_checkConfiguration() && madeInitSound == false) {
       Future.delayed(Duration.zero, () {
         madeInitSound = true;
-        // userStateService.setlockScreen(true);
         audioPlayerService.tellIntroduction();
       });
     }
@@ -50,31 +50,21 @@ class _SelectFirstAnimalScreenState extends State<SelectFirstAnimalScreen> {
                 Positioned(
                   bottom: SizeUtil.getDoubleByDeviceVertical(20),
                   left: 0,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        AnimalButtonList(
-                            animalsize: SizeUtil.getDoubleByDeviceHorizontal(
-                                Constant.animalSize))
-                      ]),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+                    AnimalButtonList(animalsize: SizeUtil.getDoubleByDeviceHorizontal(Constant.animalSize))
+                  ]),
                 ),
-// BASIC WITCH
+                // BASIC WITCH
                 Positioned(
                     bottom: 0,
                     left: SizeUtil.getDoubleByDeviceHorizontal(800),
-                    child: Witch(
-                        rotate: true,
-                        talking: false,
-                        size: Constant.witchSize)),
+                    child: Witch(rotate: true, talking: false, size: Constant.witchSize)),
                 // WITCH
                 witchTalking
                     ? Positioned(
                         bottom: SizeUtil.getDoubleByDeviceVertical(0),
                         left: SizeUtil.getDoubleByDeviceHorizontal(800),
-                        child: Witch(
-                            rotate: true,
-                            talking: true,
-                            size: Constant.witchSize))
+                        child: Witch(rotate: true, talking: true, size: Constant.witchSize))
                     : Container(),
               ])
             ])));

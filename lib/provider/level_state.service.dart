@@ -9,6 +9,7 @@ import 'package:magic_pot/util/level_helper.util.dart';
 
 import '../util/logger.util.dart';
 
+// Holds states duringone level (will be created new for each potion)
 class LevelStateService extends ChangeNotifier {
   final log = getLogger();
 
@@ -29,7 +30,6 @@ class LevelStateService extends ChangeNotifier {
 
   Level currentLevel;
   double _fontSize;
-  // bool _readyForNextLevel;
 
   Ingredient get acceptedObject => _acceptedObject;
   List<IngredientDraggable> get currentIngredientDraggables => _currentIngredientDraggables;

@@ -2,17 +2,22 @@ import 'package:magic_pot/models/ingredient.dart';
 
 import '../util/logger.util.dart';
 
+// Each level represents one potion to mix (4 potions result in one complete animal transformation). In total there are 3 animal transormations
 class Level {
   int id;
   int number;
   int numberOfMinObjects;
+  // Number of correct objects in a row to get to the next level (potion)
   int numberOfRightObjectsInARow;
   Difficulty difficulty;
   WordLevel wordlevel;
   int numberOfObjectsToChooseFrom;
   String soundfile;
+  // transformation image of the animal before this level is finished
   String picBeforeUrl;
+  // transformation image of the animal after this level is finished
   String picAftereUrl;
+  // Variable that shows wether its the last trnsformation or not (this is called the 5th/10th/15th level and does not contain a potion mixing process, just the last transformation step of each animal)
   bool finalLevel;
   bool achievement;
   bool animated;
@@ -80,6 +85,7 @@ class Level {
     }
   }
 
+// After the maximum an false ingredients in a row the ingredient selection is changed to not find the correct ingredient by trial and error
   int getMaxFaults() {
     if (this.numberOfObjectsToChooseFrom <= 2) {
       return 1;

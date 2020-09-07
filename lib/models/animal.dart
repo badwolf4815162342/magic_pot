@@ -1,3 +1,4 @@
+// The helping animal the player can choose to play
 class Animal {
   int id;
   String name;

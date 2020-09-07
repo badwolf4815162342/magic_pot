@@ -16,6 +16,8 @@ import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
+// TODO:  feuerwerk?????
+// This screen shows that the animal is completly transformed and can now live in the woods. The witch praises the player and fireworks are shown
 class LevelFinishedScreen extends StatefulWidget {
   static const String routeTag = '/levelfinished';
 
@@ -36,16 +38,14 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
 
   void initState() {
     super.initState();
-    audioPlayerService =
-        Provider.of<AudioPlayerService>(context, listen: false);
-    currentLevel =
-        Provider.of<UserStateService>(context, listen: false).currentLevel;
+    audioPlayerService = Provider.of<AudioPlayerService>(context, listen: false);
+    currentLevel = Provider.of<UserStateService>(context, listen: false).currentLevel;
 
     _setArchievements();
   }
 
   _setArchievements() async {
-    finalArchievements = await DBApi.db.getFinalArchievedLevels();
+    finalArchievements = await DBApi.db.getFinalAchievedLevels();
     setState(() {});
   }
 
@@ -78,17 +78,15 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                   // PLAY
                   Stack(children: <Widget>[
                     Positioned(
-                        top: SizeUtil.getDoubleByDeviceVertical(
-                            Constant.playButtonDistanceBottom),
-                        right: SizeUtil.getDoubleByDeviceHorizontal(
-                            Constant.playButtonDistanceRight),
+                        top: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonDistanceBottom),
+                        right: SizeUtil.getDoubleByDeviceHorizontal(Constant.playButtonDistanceRight),
                         child: PlayButton(
-                          size: SizeUtil.getDoubleByDeviceVertical(
-                              Constant.playButtonSize),
+                          size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
                           pushedName: playLink,
                           active: !(lockScreen || locked),
                         )),
                     // ARCHIEVEMENTS
+                    // ELEPHANT
                     Positioned(
                         bottom: SizeUtil.getDoubleByDeviceVertical(60),
                         left: SizeUtil.getDoubleByDeviceHorizontal(120),
@@ -99,11 +97,11 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                                 child: Image.asset(
                                   finalArchievements[0].picAftereUrl,
                                   height: 250,
-                                  width:
-                                      SizeUtil.getDoubleByDeviceHorizontal(250),
+                                  width: SizeUtil.getDoubleByDeviceHorizontal(250),
                                 ),
                               )
                             : EmptyPlaceholder()),
+                    // GIRAFF
                     Positioned(
                         bottom: SizeUtil.getDoubleByDeviceVertical(70),
                         left: SizeUtil.getDoubleByDeviceHorizontal(590),
@@ -113,13 +111,12 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                                 transform: Matrix4.rotationY(math.pi),
                                 child: Image.asset(
                                   finalArchievements[1].picAftereUrl,
-                                  height:
-                                      SizeUtil.getDoubleByDeviceVertical(250),
-                                  width:
-                                      SizeUtil.getDoubleByDeviceHorizontal(250),
+                                  height: SizeUtil.getDoubleByDeviceVertical(250),
+                                  width: SizeUtil.getDoubleByDeviceHorizontal(250),
                                 ),
                               )
                             : EmptyPlaceholder()),
+                    // BIRD
                     Positioned(
                         bottom: SizeUtil.getDoubleByDeviceVertical(300),
                         left: SizeUtil.getDoubleByDeviceHorizontal(805),
@@ -127,8 +124,7 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                             ? Image.asset(
                                 finalArchievements[2].picAftereUrl,
                                 height: SizeUtil.getDoubleByDeviceVertical(200),
-                                width:
-                                    SizeUtil.getDoubleByDeviceHorizontal(200),
+                                width: SizeUtil.getDoubleByDeviceHorizontal(200),
                               )
                             : EmptyPlaceholder()),
 
@@ -136,19 +132,13 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                     Positioned(
                         bottom: 0,
                         left: SizeUtil.getDoubleByDeviceHorizontal(800),
-                        child: Witch(
-                            rotate: true,
-                            talking: false,
-                            size: Constant.witchSize)),
+                        child: Witch(rotate: true, talking: false, size: Constant.witchSize)),
                     // WITCH
                     witchTalking
                         ? Positioned(
                             bottom: 0,
                             left: SizeUtil.getDoubleByDeviceHorizontal(800),
-                            child: Witch(
-                                rotate: true,
-                                talking: true,
-                                size: Constant.witchSize))
+                            child: Witch(rotate: true, talking: true, size: Constant.witchSize))
                         : Container(),
                     // ANIMAL
                     Positioned(
@@ -160,9 +150,7 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
                               left: SizeUtil.getDoubleByDeviceHorizontal(500),
                               top: SizeUtil.getDoubleByDeviceVertical(475),
                               child: IgnorePointer(
-                                  ignoring: lockScreen,
-                                  child: SelectedAnimal(
-                                      size: Constant.finishedAnimalSize))),
+                                  ignoring: lockScreen, child: SelectedAnimal(size: Constant.finishedAnimalSize))),
                         )),
                     // FIREWORKS
                     Positioned(

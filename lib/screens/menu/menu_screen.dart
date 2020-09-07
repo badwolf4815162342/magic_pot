@@ -1,13 +1,11 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/api/db.api.dart';
-import 'package:magic_pot/models/animal.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:magic_pot/screens/menu/achievement_button_list.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
-import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 import 'package:magic_pot/shared_widgets/exit_button.dart';
 import 'package:magic_pot/shared_widgets/play_button.dart';
 import 'package:magic_pot/shared_widgets/selected_animal.dart';
@@ -16,6 +14,7 @@ import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
+// Menu screen with talking witch, selected animal, x button to close the app, play button to play the next level and achievements in the cupboard to play old levels again
 class MenuScreen extends StatefulWidget {
   static const String routeTag = 'menuScreenRoute';
 
@@ -58,8 +57,6 @@ class _MenuScreenState extends State<MenuScreen> {
     var allArchieved = Provider.of<UserStateService>(context).allArchieved;
 
     var witchTalking = audioPlayerService.witchTalking;
-    var animal = Provider.of<UserStateService>(context).currentAnimal;
-
     return Scaffold(
         body: IgnorePointer(
             ignoring: lockScreen,
@@ -80,8 +77,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: IgnorePointer(
                         ignoring: lockScreen,
                         child: Container(
-                          width: SizeUtil.getDoubleByDeviceHorizontal(
-                              Constant.xButtonSize),
+                          width: SizeUtil.getDoubleByDeviceHorizontal(Constant.xButtonSize),
                           child: ExitButton(
                             closeApp: true,
                           ),
@@ -91,8 +87,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     bottom: Constant.playButtonDistanceBottom,
                     right: Constant.playButtonDistanceRight,
                     child: PlayButton(
-                      size: SizeUtil.getDoubleByDeviceVertical(
-                          Constant.playButtonSize),
+                      size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
                       pushedName: ExplanationScreen.routeTag,
                       active: (!lockScreen && !allArchieved),
                       animationDone: true,
@@ -103,18 +98,15 @@ class _MenuScreenState extends State<MenuScreen> {
                   left: SizeUtil.getDoubleByDeviceHorizontal(740),
                   child: Center(
                       child: AchievementButtonList(
-                          animalwidth: SizeUtil.getDoubleByDeviceHorizontal(
-                              Constant.achievementButtonSize),
-                          animalheight: SizeUtil.getDoubleByDeviceHorizontal(
-                              (Constant.achievementButtonSize - 6)))),
+                          animalwidth: SizeUtil.getDoubleByDeviceHorizontal(Constant.achievementButtonSize),
+                          animalheight: SizeUtil.getDoubleByDeviceHorizontal((Constant.achievementButtonSize - 6)))),
                 ),
                 // Stars
                 Positioned(
                     top: SizeUtil.getDoubleByDeviceVertical(240),
                     left: SizeUtil.getDoubleByDeviceHorizontal(555),
                     height: 350,
-                    width: SizeUtil.getDoubleByDeviceHorizontal(
-                        Constant.starGifSize),
+                    width: SizeUtil.getDoubleByDeviceHorizontal(Constant.starGifSize),
                     child: Container(
                         child: FlareActor(
                       "assets/animation/stars.flr",
@@ -124,28 +116,19 @@ class _MenuScreenState extends State<MenuScreen> {
                 Positioned(
                     bottom: SizeUtil.getDoubleByDeviceVertical(95),
                     right: SizeUtil.getDoubleByDeviceHorizontal(875),
-                    child: Witch(
-                        standartWitchText: true,
-                        rotate: false,
-                        talking: false,
-                        size: Constant.witchSize)),
+                    child: Witch(standartWitchText: true, rotate: false, talking: false, size: Constant.witchSize)),
                 // WITCH
                 witchTalking
                     ? Positioned(
                         bottom: SizeUtil.getDoubleByDeviceVertical(95),
                         right: SizeUtil.getDoubleByDeviceHorizontal(875),
-                        child: Witch(
-                            rotate: false,
-                            talking: true,
-                            size: Constant.witchSize))
+                        child: Witch(rotate: false, talking: true, size: Constant.witchSize))
                     : Container(),
                 // ANIMAL
                 Positioned(
                     left: SizeUtil.getDoubleByDeviceHorizontal(500),
                     top: SizeUtil.getDoubleByDeviceVertical(475),
-                    child: IgnorePointer(
-                        ignoring: lockScreen,
-                        child: SelectedAnimal(size: Constant.menuAnimalSize))),
+                    child: IgnorePointer(ignoring: lockScreen, child: SelectedAnimal(size: Constant.menuAnimalSize))),
                 // CHANGE ANIMAL BUTTON
                 Positioned(
                     left: SizeUtil.getDoubleByDeviceHorizontal(400),
@@ -156,12 +139,10 @@ class _MenuScreenState extends State<MenuScreen> {
                           child: RawMaterialButton(
                             child: DarkableImage(
                                 url: 'assets/pics/reverse_blue.png',
-                                width: SizeUtil.getDoubleByDeviceHorizontal(
-                                    Constant.changeAnimalButtonSize),
+                                width: SizeUtil.getDoubleByDeviceHorizontal(Constant.changeAnimalButtonSize),
                                 fit: BoxFit.fitWidth),
                             onPressed: () {
-                              Navigator.pushNamed(
-                                  context, "animalSelectionScreenRoute");
+                              Navigator.pushNamed(context, "animalSelectionScreenRoute");
                             },
                           ),
                         ))),

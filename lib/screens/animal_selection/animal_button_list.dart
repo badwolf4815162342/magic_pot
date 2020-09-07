@@ -5,6 +5,7 @@ import 'package:magic_pot/screens/animal_selection/animal_button.dart';
 
 import '../../util/logger.util.dart';
 
+// All AnimalButtons side by side for animal selection
 class AnimalButtonList extends StatefulWidget {
   final double animalsize;
 

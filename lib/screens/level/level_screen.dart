@@ -1,5 +1,3 @@
-import 'package:animated_widgets/widgets/rotation_animated.dart';
-import 'package:animated_widgets/widgets/shake_animated_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_pot/models/level.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
@@ -7,13 +5,14 @@ import 'package:magic_pot/provider/level_state.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/explanation_screen.dart';
 import 'package:magic_pot/screens/level/ingredient_draggable_list.dart';
+import 'package:magic_pot/screens/level/magic_pot.dart';
 import 'package:magic_pot/shared_widgets/background_layout.dart';
-import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/size.util.dart';
 import 'package:provider/provider.dart';
 
 import '../../util/logger.util.dart';
 
+// Screen for one level (one potions that needs x correct ingedients in a row) with the MagicPot as DragTarget
 class LevelScreen extends StatefulWidget {
   static const String routeTag = '/levelscreen';
   final log = getLogger();
@@ -38,23 +37,21 @@ class _LevelScreenState extends State<LevelScreen> {
     madeInitSound = false;
   }
 
+// Explain what the next accepted object will be
   _tellAccetedObject() {
-    // In main class
     Future.delayed(const Duration(milliseconds: 3000), () {
-      audioPlayerService.updateWitchText(
-          'audio/witch_${_levelStateService.acceptedObject.name}.wav');
+      audioPlayerService.updateWitchText('audio/witch_${_levelStateService.acceptedObject.name}.wav');
       audioPlayerService.explainAcceptedObject(
         'audio/witch_${_levelStateService.acceptedObject.name}.wav',
       );
     });
   }
 
+// check if enaugh correct ingredients in a row where inserted into the potion
   _checkForLevelFinished() {
-    log.i('LevelScreen:' +
-        'Levelcounter=  New counter ${_levelStateService.counter}');
+    log.i('LevelScreen:' + 'Levelcounter=  New counter ${_levelStateService.counter}');
     if (_levelStateService.counter >= currentLevel.numberOfMinObjects &&
-        _levelStateService.rightcounter >=
-            currentLevel.numberOfRightObjectsInARow) {
+        _levelStateService.rightcounter >= currentLevel.numberOfRightObjectsInARow) {
       Provider.of<UserStateService>(context, listen: false).levelUp();
       Future.delayed(const Duration(milliseconds: 2000), () {
         setState(() {
@@ -62,11 +59,13 @@ class _LevelScreenState extends State<LevelScreen> {
         });
       });
     } else {
+      // if not show next ingredient selection
       _levelStateService.resetLevelData();
       _tellAccetedObject();
     }
   }
 
+// check if to many incorrect objects were put in the potion in a row and motivate the player
   _checkForResetIngredient() {
     if (_levelStateService.wrongcounter == currentLevel.getMaxFaults()) {
       audioPlayerService.resetIngredient();
@@ -75,35 +74,13 @@ class _LevelScreenState extends State<LevelScreen> {
     }
   }
 
-/*   _resetLevelData() async {
-    final log = getLogger();
-    log.i('LevelScreen:' + "reset level (_resetLevelData)");
-
-    var random = new Random();
-    acceptedObject = currentObjects[random.nextInt(currentObjects.length)];
-
-    log.i('LevelScreen:' + "Acc ${acceptedObject.name}");
-
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      setState(() {
-        audioPlayerService.explainAcceptedObject(
-          'audio/witch_${acceptedObject.name}.wav',
-        );
-      });
-    });
-    log.d('LevelScreen: on except over');
-  } */
-
   _onAccept(data) {
-    log.d('LevelScreen: Data: ' +
-        data +
-        ' Accepted obj ' +
-        _levelStateService.acceptedObject.toString());
+    log.d('LevelScreen: Data: ' + data + ' Accepted obj ' + _levelStateService.acceptedObject.toString());
+    // CORRECT
     if (data == _levelStateService.acceptedObject.name) {
       _levelStateService.setPotAnimationSuccess();
       if (_levelStateService.counter >= (currentLevel.numberOfMinObjects - 1) &&
-          _levelStateService.rightcounter >=
-              (currentLevel.numberOfRightObjectsInARow - 1)) {
+          _levelStateService.rightcounter >= (currentLevel.numberOfRightObjectsInARow - 1)) {
         // if enaugh right objects found praise and don't say normal text (next level text will be told)
         audioPlayerService.praise(false);
       } else {
@@ -112,6 +89,7 @@ class _LevelScreenState extends State<LevelScreen> {
       _levelStateService.success();
       _checkForLevelFinished();
       _levelStateService.printLevelStateInfo();
+      // INCORRECT
     } else {
       _levelStateService.setPotAnimationFailure();
       _levelStateService.failure();
@@ -123,19 +101,15 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    currentLevel =
-        Provider.of<UserStateService>(context, listen: false).currentLevel;
+    currentLevel = Provider.of<UserStateService>(context, listen: false).currentLevel;
     audioPlayerService = Provider.of<AudioPlayerService>(context);
 
     if (madeInitSound == false) {
-      _levelStateService = LevelStateService(
-          currentLevel, SizeUtil.getDoubleByDeviceHorizontal(100));
+      _levelStateService = LevelStateService(currentLevel, SizeUtil.getDoubleByDeviceHorizontal(100));
       madeInitSound = true;
       Future.delayed(const Duration(milliseconds: 500), () {
-        // TODO(viviane): check if audioplayer works there
         _levelStateService.resetLevelData();
         _tellAccetedObject();
-        //_resetLevelData();
       });
     }
 
@@ -144,7 +118,6 @@ class _LevelScreenState extends State<LevelScreen> {
         body: BackgroundLayout(
             scene: LayoutBuilder(
               builder: (context, constraints) {
-                //var ingredientDraggables = IngredientDraggables;
                 return ChangeNotifierProvider.value(
                     value: _levelStateService,
                     child: Consumer<LevelStateService>(
@@ -153,18 +126,14 @@ class _LevelScreenState extends State<LevelScreen> {
                               children: <Widget>[
                                 Row(children: [
                                   SizedBox(
-                                    width: SizeUtil.getDoubleByDeviceHorizontal(
-                                        80),
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(80),
                                   ),
                                   Column(children: [
                                     SizedBox(
-                                      height:
-                                          SizeUtil.getDoubleByDeviceVertical(
-                                              450),
+                                      height: SizeUtil.getDoubleByDeviceVertical(450),
                                     ),
                                     MagicPot(
-                                      size: SizeUtil.getDoubleByDeviceVertical(
-                                          300),
+                                      size: SizeUtil.getDoubleByDeviceVertical(300),
                                       levelStateService: levelStateService,
                                       callback: (data) {
                                         _onAccept(data);
@@ -174,18 +143,11 @@ class _LevelScreenState extends State<LevelScreen> {
                                 ]),
                                 Row(children: [
                                   SizedBox(
-                                      height:
-                                          SizeUtil.getDoubleByDeviceVertical(
-                                              10),
-                                      width:
-                                          SizeUtil.getDoubleByDeviceHorizontal(
-                                              580)),
+                                      height: SizeUtil.getDoubleByDeviceVertical(10),
+                                      width: SizeUtil.getDoubleByDeviceHorizontal(580)),
                                   IngredientDraggableList(
-                                      height:
-                                          SizeUtil.getDoubleByDeviceVertical(
-                                              570),
-                                      currentDraggables: levelStateService
-                                          .currentIngredientDraggables)
+                                      height: SizeUtil.getDoubleByDeviceVertical(570),
+                                      currentDraggables: levelStateService.currentIngredientDraggables)
                                 ])
                               ],
                             )));
@@ -198,45 +160,5 @@ class _LevelScreenState extends State<LevelScreen> {
   void dispose() {
     super.dispose();
     _levelStateService.dispose();
-  }
-}
-
-class MagicPot extends StatelessWidget {
-  const MagicPot({
-    Key key,
-    @required this.levelStateService,
-    @required this.callback,
-    @required this.size,
-  }) : super(key: key);
-
-  final Function callback;
-  final LevelStateService levelStateService;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShakeAnimatedWidget(
-      enabled: levelStateService.shaking,
-      duration: Duration(milliseconds: levelStateService.millismovement),
-      shakeAngle: Rotation.deg(z: levelStateService.angleMovement),
-      curve: Curves.linear,
-      child: DragTarget(
-        builder: (context, List<String> strings, unacceptedObjectList) {
-          return Center(
-            child: DarkableImage(
-              url: levelStateService.potImage,
-              width: size,
-              height: size,
-            ),
-          );
-        },
-        onWillAccept: (data) {
-          return true;
-        },
-        onAccept: (data) {
-          callback(data);
-        },
-      ),
-    );
   }
 }

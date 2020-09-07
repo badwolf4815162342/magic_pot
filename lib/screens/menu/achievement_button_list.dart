@@ -5,6 +5,7 @@ import 'package:magic_pot/shared_widgets/empty_placeholder.dart';
 
 import 'achievement_button.dart';
 
+// The achieved levels in the cupboard on the menu screen sorted by difficulty
 class AchievementButtonList extends StatefulWidget {
   final double animalwidth;
   final double animalheight;
@@ -41,7 +42,6 @@ class _AchievementButtonListState extends State<AchievementButtonList> {
 
   List<Widget> _buildButtonsWithNamesEasy() {
     buttonsListEasy = new List<AchievementButton>();
-
     for (int i = 0; i < listEasy.length; i++) {
       buttonsListEasy.add(new AchievementButton(
         level: listEasy[i],

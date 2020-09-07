@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'empty_placeholder.dart';
 
+// Widget that displays selected animal for example on backgroundlayout and menuscreen and make Animal Sound by press
 class SelectedAnimal extends StatelessWidget {
   const SelectedAnimal({
     Key key,
@@ -17,17 +18,14 @@ class SelectedAnimal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AudioPlayerService audioPlayerService =
-        Provider.of<AudioPlayerService>(context);
+    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
     var animal = Provider.of<UserStateService>(context).currentAnimal;
 
     return Container(
       child: RawMaterialButton(
         child: (animal == null)
             ? EmptyPlaceholder()
-            : DarkableImage(
-                url: animal.picture,
-                height: SizeUtil.getDoubleByDeviceVertical(size)),
+            : DarkableImage(url: animal.picture, height: SizeUtil.getDoubleByDeviceVertical(size)),
         onPressed: () {
           audioPlayerService.makeAnimalSound(animal.soundfile);
         },
