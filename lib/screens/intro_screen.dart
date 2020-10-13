@@ -53,6 +53,21 @@ class IntroScreen extends StatelessWidget {
             builder: (context, constraints) => Stack(
               fit: StackFit.expand,
               children: <Widget>[
+                // CHANGE ANIMAL BUTTON
+                Positioned(
+                    left: SizeUtil.getDoubleByDeviceHorizontal(400),
+                    top: SizeUtil.getDoubleByDeviceVertical(560),
+                    child: Container(
+                      child: RawMaterialButton(
+                        child: Image.asset('assets/pics/reverse_blue.png',
+                            height: SizeUtil.getDoubleByDeviceHorizontal(Constant.changeAnimalButtonSize),
+                            width: SizeUtil.getDoubleByDeviceHorizontal(Constant.changeAnimalButtonSize),
+                            fit: BoxFit.fitWidth),
+                        onPressed: () {
+                          //TODO(viviane): RESET EVERYTHING!!!
+                        },
+                      ),
+                    )),
                 Positioned(
                   bottom: Constant.playButtonDistanceBottom,
                   right: Constant.playButtonDistanceRight,

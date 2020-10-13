@@ -1,3 +1,8 @@
+Dies Datei wird von der App nicht verwendet und enthäöt alle Objekte für die es kein passendes emoji gabel
+Äquivalent dazu wird auch der ordner abdelete nicht benutzt, enthält aber .wav audio datein
+von nicht genutzten objectken
+
+
     //_objects.add(new Object(13, 'sieb', WordLevel.ONE, 'Sieb'));
     //_objects.add(new Object(14, 'hof', WordLevel.ONE, 'Hof'));
     
@@ -23,28 +28,6 @@
     // messer 🔪
     // Zange 🔧
 // wiege 🧺
-
-
-INSERT INTO Objects (name ,level ,picture) VALUES ('otter', 'FOUR', '')
-
-
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (1,  '1', '1','2','EASY',  'ONE','2','audio/witch_level_1_explanation.wav','assets/pics/mouse.png',         'assets/pics/mouse.png', 0, 1)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (2,  '2', '1','2','EASY',  'ONE','3','audio/witch_level_2_explanation.wav','assets/pics/mouse.png',         'assets/pics/elephantouse-2.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (3,  '3', '1','2','EASY',  'ONE','3','audio/witch_level_3_explanation.wav','assets/pics/elephantouse-2.png','assets/pics/elephantouse-3.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (4,  '4', '1','2','EASY',  'ONE','3','audio/witch_level_4_explanation.wav','assets/pics/elephantouse-3.png','assets/pics/elephantouse-4.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (5,  '5', '1','2','EASY',  'ONE','3','audio/witch_level_5_explanation.wav',               'assets/pics/elephantouse-4.png','assets/pics/elephant.png', 1, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (6,  '1', '1','2','MIDDLE','ONE','2','audio/witch_level_6_explanation.wav','assets/pics/turtle.png',        'assets/pics/turtle.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (7,  '2', '1','2','MIDDLE','ONE','3','audio/witch_level_7_explanation.wav','assets/pics/turtle.png',        'assets/pics/turtleraffe-2.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (8,  '3', '1','2','MIDDLE','ONE','3','audio/witch_level_8_explanation.wav','assets/pics/turtleraffe-2.png', 'assets/pics/turtleraffe-3.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (9,  '4', '1','2','MIDDLE','ONE','3','audio/witch_level_9_explanation.wav','assets/pics/turtleraffe-3.png', 'assets/pics/turtleraffe-4.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (10, '5', '1','2','MIDDLE','ONE','3','audio/witch_level_10_explanation.wav',               'assets/pics/turtleraffe-4.png', 'assets/pics/giraffe.png', 1, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (11, '1', '1','2','HARD',  'ONE','2','audio/witch_level_11_explanation.wav','assets/pics/deer.png',          'assets/pics/deer.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (12, '2', '1','2','HARD',  'ONE','3','audio/witch_level_12_explanation.wav','assets/pics/deer.png',          'assets/pics/deerd-2.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (13, '3', '1','2','HARD',  'ONE','3','audio/witch_level_13_explanation.wav','assets/pics/deerd-2.png',       'assets/pics/deerd-3.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (14, '4', '1','2','HARD',  'ONE','3','audio/witch_level_14_explanation.wav','assets/pics/deerd-3.png',       'assets/pics/deerd-4.png', 0, 0)
-INSERT INTO Levels (id, number, number_of_min_objects, number_of_right_objects_in_a_row, difficulty, wordlevel, number_of_objects_to_choose_from, soundfile, pic_before_url, pic_after_url, final_level, archievement) VALUES  (15, '5', '1','2','HARD',  'ONE','3','audio/witch_level_15_explanation.wav',               'assets/pics/deerd-4.png',       'assets/pics/bird.png', 1, 0)
-
-
 
 
 
