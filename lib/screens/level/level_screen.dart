@@ -38,9 +38,14 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
 // Explain what the next accepted object will be
-  _tellAccetedObject() {
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      audioPlayerService.updateWitchText('audio/witch_${_levelStateService.acceptedObject.name}.wav');
+  _tellAccetedObject(bool init) {
+    num milliseconds = 3000;
+    if (init) {
+      milliseconds = 1000;
+    }
+    Future.delayed(Duration(milliseconds: milliseconds), () {
+      audioPlayerService.updateWitchText(
+          'audio/witch_${_levelStateService.acceptedObject.name}.wav');
       audioPlayerService.explainAcceptedObject(
         'audio/witch_${_levelStateService.acceptedObject.name}.wav',
       );
@@ -49,9 +54,11 @@ class _LevelScreenState extends State<LevelScreen> {
 
 // check if enaugh correct ingredients in a row where inserted into the potion
   _checkForLevelFinished() {
-    log.i('LevelScreen:' + 'Levelcounter=  New counter ${_levelStateService.counter}');
+    log.i('LevelScreen:' +
+        'Levelcounter=  New counter ${_levelStateService.counter}');
     if (_levelStateService.counter >= currentLevel.numberOfMinObjects &&
-        _levelStateService.rightcounter >= currentLevel.numberOfRightObjectsInARow) {
+        _levelStateService.rightcounter >=
+            currentLevel.numberOfRightObjectsInARow) {
       Provider.of<UserStateService>(context, listen: false).levelUp();
       Future.delayed(const Duration(milliseconds: 2000), () {
         setState(() {
@@ -61,7 +68,7 @@ class _LevelScreenState extends State<LevelScreen> {
     } else {
       // if not show next ingredient selection
       _levelStateService.resetLevelData();
-      _tellAccetedObject();
+      _tellAccetedObject(false);
     }
   }
 
@@ -69,18 +76,25 @@ class _LevelScreenState extends State<LevelScreen> {
   _checkForResetIngredient() {
     if (_levelStateService.wrongcounter == currentLevel.getMaxFaults()) {
       audioPlayerService.resetIngredient();
+      _levelStateService.wrongcounter = 0;
+      _levelStateService.resetLevelData();
+      _tellAccetedObject(false);
     } else {
       audioPlayerService.motivation();
     }
   }
 
   _onAccept(data) {
-    log.d('LevelScreen: Data: ' + data + ' Accepted obj ' + _levelStateService.acceptedObject.toString());
+    log.d('LevelScreen: Data: ' +
+        data +
+        ' Accepted obj ' +
+        _levelStateService.acceptedObject.toString());
     // CORRECT
     if (data == _levelStateService.acceptedObject.name) {
       _levelStateService.setPotAnimationSuccess();
       if (_levelStateService.counter >= (currentLevel.numberOfMinObjects - 1) &&
-          _levelStateService.rightcounter >= (currentLevel.numberOfRightObjectsInARow - 1)) {
+          _levelStateService.rightcounter >=
+              (currentLevel.numberOfRightObjectsInARow - 1)) {
         // if enaugh right objects found praise and don't say normal text (next level text will be told)
         audioPlayerService.praise(false);
       } else {
@@ -101,15 +115,17 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    currentLevel = Provider.of<UserStateService>(context, listen: false).currentLevel;
+    currentLevel =
+        Provider.of<UserStateService>(context, listen: false).currentLevel;
     audioPlayerService = Provider.of<AudioPlayerService>(context);
 
     if (madeInitSound == false) {
-      _levelStateService = LevelStateService(currentLevel, SizeUtil.getDoubleByDeviceHorizontal(100));
+      _levelStateService = LevelStateService(
+          currentLevel, SizeUtil.getDoubleByDeviceHorizontal(100));
       madeInitSound = true;
       Future.delayed(const Duration(milliseconds: 500), () {
         _levelStateService.resetLevelData();
-        _tellAccetedObject();
+        _tellAccetedObject(true);
       });
     }
 
@@ -126,14 +142,18 @@ class _LevelScreenState extends State<LevelScreen> {
                               children: <Widget>[
                                 Row(children: [
                                   SizedBox(
-                                    width: SizeUtil.getDoubleByDeviceHorizontal(80),
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(
+                                        80),
                                   ),
                                   Column(children: [
                                     SizedBox(
-                                      height: SizeUtil.getDoubleByDeviceVertical(450),
+                                      height:
+                                          SizeUtil.getDoubleByDeviceVertical(
+                                              450),
                                     ),
                                     MagicPot(
-                                      size: SizeUtil.getDoubleByDeviceVertical(300),
+                                      size: SizeUtil.getDoubleByDeviceVertical(
+                                          300),
                                       levelStateService: levelStateService,
                                       callback: (data) {
                                         _onAccept(data);
@@ -143,11 +163,18 @@ class _LevelScreenState extends State<LevelScreen> {
                                 ]),
                                 Row(children: [
                                   SizedBox(
-                                      height: SizeUtil.getDoubleByDeviceVertical(10),
-                                      width: SizeUtil.getDoubleByDeviceHorizontal(580)),
+                                      height:
+                                          SizeUtil.getDoubleByDeviceVertical(
+                                              10),
+                                      width:
+                                          SizeUtil.getDoubleByDeviceHorizontal(
+                                              580)),
                                   IngredientDraggableList(
-                                      height: SizeUtil.getDoubleByDeviceVertical(570),
-                                      currentDraggables: levelStateService.currentIngredientDraggables)
+                                      height:
+                                          SizeUtil.getDoubleByDeviceVertical(
+                                              570),
+                                      currentDraggables: levelStateService
+                                          .currentIngredientDraggables)
                                 ])
                               ],
                             )));

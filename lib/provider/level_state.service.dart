@@ -14,7 +14,8 @@ class LevelStateService extends ChangeNotifier {
   final log = getLogger();
 
   List<Ingredient> _currentObjects = new List<Ingredient>();
-  List<IngredientDraggable> _currentIngredientDraggables = new List<IngredientDraggable>();
+  List<IngredientDraggable> _currentIngredientDraggables =
+      new List<IngredientDraggable>();
   Ingredient _acceptedObject;
 
   int _counter;
@@ -32,7 +33,8 @@ class LevelStateService extends ChangeNotifier {
   double _fontSize;
 
   Ingredient get acceptedObject => _acceptedObject;
-  List<IngredientDraggable> get currentIngredientDraggables => _currentIngredientDraggables;
+  List<IngredientDraggable> get currentIngredientDraggables =>
+      _currentIngredientDraggables;
 
   bool get shaking => _shaking;
   String get potImage => _potImage;
@@ -42,6 +44,9 @@ class LevelStateService extends ChangeNotifier {
   int get counter => _counter;
   int get rightcounter => _rightcounter;
   int get wrongcounter => _wrongcounter;
+  set wrongcounter(num wrongcounter) {
+    _wrongcounter = wrongcounter;
+  }
 
   LevelStateService(Level currentLevel, double fontsize) {
     this.currentLevel = currentLevel;
@@ -62,7 +67,8 @@ class LevelStateService extends ChangeNotifier {
 
   resetLevelData() async {
     _currentObjects = await LevelHelperUtil.getIngredients(null, currentLevel);
-    _currentIngredientDraggables = LevelHelperUtil.getIngredientDraggables(_currentObjects, this._fontSize);
+    _currentIngredientDraggables = LevelHelperUtil.getIngredientDraggables(
+        _currentObjects, this._fontSize);
 
     var random = new Random();
     _acceptedObject = _currentObjects[random.nextInt(_currentObjects.length)];

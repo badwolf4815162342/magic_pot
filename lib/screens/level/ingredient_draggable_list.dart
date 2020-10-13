@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/screens/level/ingredient_draggable.dart';
 
@@ -5,7 +6,8 @@ import 'package:magic_pot/screens/level/ingredient_draggable.dart';
 class IngredientDraggableList extends StatefulWidget {
   final List<IngredientDraggable> currentDraggables;
 
-  const IngredientDraggableList({Key key, this.currentDraggables, this.height}) : super(key: key);
+  const IngredientDraggableList({Key key, this.currentDraggables, this.height})
+      : super(key: key);
 
   final double height;
 

@@ -12,7 +12,8 @@ class IngredientDraggable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
+    AudioPlayerService audioPlayerService =
+        Provider.of<AudioPlayerService>(context);
     var lockScreen = audioPlayerService.lockScreen;
     var stayBright = audioPlayerService.lockScreen;
 
@@ -57,13 +58,15 @@ class IngredientDraggable extends StatelessWidget {
                 fontSize: fontSize,
               ),
             )),
-        feedback: Text(
-          "${ingredient.picture}",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: fontSize * 1.2,
-          ),
-        ),
+        feedback: Material(
+            type: MaterialType.transparency,
+            child: Text(
+              "${ingredient.picture}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: fontSize * 1.2,
+              ),
+            )),
         childWhenDragging: Text(
           "${ingredient.picture}",
           textAlign: TextAlign.center,

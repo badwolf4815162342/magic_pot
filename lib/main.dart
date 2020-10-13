@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:magic_pot/util/logger.util.dart';
 import 'package:magic_pot/models/animal.dart';
@@ -16,7 +17,10 @@ import 'package:provider/provider.dart';
 import 'util/logger.util.dart';
 
 void main() async {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight).then((_) {
+    runApp(new MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -46,13 +50,21 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class IntroPage extends StatelessWidget {
+class IntroPage extends StatefulWidget {
   const IntroPage({
     Key key,
   }) : super(key: key);
 
   @override
+  _IntroPageState createState() => _IntroPageState();
+}
+
+class _IntroPageState extends State<IntroPage> with WidgetsBindingObserver {
+  AudioPlayerService audioPlayerService;
+
+  @override
   Widget build(BuildContext context) {
+    audioPlayerService = Provider.of<AudioPlayerService>(context);
     final log = getLogger();
 
     return MaterialApp(
@@ -92,6 +104,32 @@ class IntroPage extends StatelessWidget {
             });
       },
     );
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    final log = getLogger();
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        audioPlayerService.stopAllSound();
+        log.i('appLifeCycleState inactive');
+        break;
+      case AppLifecycleState.resumed:
+        log.i('appLifeCycleState resumed');
+        break;
+      case AppLifecycleState.paused:
+        audioPlayerService.stopAllSound();
+        log.i('appLifeCycleState paused');
+        break;
+      case AppLifecycleState.detached:
+        audioPlayerService.stopAllSound();
+        log.i('appLifeCycleState detached');
+        break;
+      default:
+        break;
+    }
   }
 }
 

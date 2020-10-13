@@ -45,7 +45,8 @@ class _ExitButtonState extends State<ExitButton> {
     );
   }
 
-  void _showAlertDialog(AudioPlayerService audioPlayerService, UserStateService userStateService) {
+  void _showAlertDialog(AudioPlayerService audioPlayerService,
+      UserStateService userStateService) {
     var lockScreen = audioPlayerService.lockScreen;
     showDialog(
       context: context,
@@ -77,7 +78,8 @@ class _ExitButtonState extends State<ExitButton> {
                         Navigator.pushNamed(context, MenuScreen.routeTag);
                         // TODO(viviane): Should selecting the witch to go back to menu stop the sound (or should it be only cklickabale when explanation is finished)
                         audioPlayerService.resetAudioPlayerToMenu();
-                        Provider.of<UserStateService>(context).resetPlayPositon();
+                        Provider.of<UserStateService>(context)
+                            .resetPlayPositon();
                       }
                     }
                   },

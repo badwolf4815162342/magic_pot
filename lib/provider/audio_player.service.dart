@@ -164,7 +164,9 @@ class AudioPlayerService extends ChangeNotifier {
       log.e('AudioPlayerService:' + 'Player-Queue contains audio/intro.wav');
     }
     if (_lockScreen && !_playerQueue.contains(fileName)) {
-      log.e('AudioPlayerService: Put ' + fileName + ' filename in playerqueeu (makesound)');
+      log.e('AudioPlayerService: Put ' +
+          fileName +
+          ' filename in playerqueeu (makesound)');
       _playerQueue.add(fileName);
       return;
     }
@@ -183,7 +185,10 @@ class AudioPlayerService extends ChangeNotifier {
       log.d('ControllingProvider: Oncompletion ' + fileName);
       // Do not unlock twice
       if (!_unlockedWith.contains(fileName)) {
-        log.e('ControllingProvider:' + 'Already unlocked with ' + fileName + ' - not in unlockedWith(unlockScreen)');
+        log.e('ControllingProvider:' +
+            'Already unlocked with ' +
+            fileName +
+            ' - not in unlockedWith(unlockScreen)');
         audioCache.clear(fileName);
       } else {
         unlockScreen(fileName, witch);
@@ -219,11 +224,17 @@ class AudioPlayerService extends ChangeNotifier {
     if (witch) {
       _witchTalking = false;
     }
-    log.i('ControllingProvider:' + 'unlocking screen with ' + fileName + ' (unlockScreen)');
+    log.i('ControllingProvider:' +
+        'unlocking screen with ' +
+        fileName +
+        ' (unlockScreen)');
     notifyListeners();
     audioCache.clear(fileName);
     if (_playerQueue.length > 0) {
-      log.i('ControllingProvider:' + 'more in queue ' + _playerQueue.toString() + ' (unlockScreen)');
+      log.i('ControllingProvider:' +
+          'more in queue ' +
+          _playerQueue.toString() +
+          ' (unlockScreen)');
       String sound = _playerQueue.removeLast();
       makeSound(sound);
     }
@@ -241,11 +252,13 @@ class AudioPlayerService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> menuSound(bool newArchievements) async {
+  Future<void> menuSound() async {
+    bool newArchievements = await DBApi.db.newArchievements();
+
     if (newArchievements) {
       makeSound('audio/effect_pring.wav');
     }
-    Future.delayed(const Duration(milliseconds: 1500), () async {
+    Future.delayed(const Duration(milliseconds: 2000), () async {
       List<Level> levels = await DBApi.db.getLevelByAchieved();
       if (levels.length == 1) {
         makeSound('audio/witch_menu_explanation_first.wav');

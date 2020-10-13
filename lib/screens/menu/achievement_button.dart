@@ -9,11 +9,12 @@ import 'package:magic_pot/util/logger.util.dart';
 import 'package:provider/provider.dart';
 
 // One level image in the cupboard on the menu screen to play this exact level again
-class AchievementButton extends StatelessWidget {
-  final log = getLogger();
-
+class AchievementButton extends StatefulWidget {
   AchievementButton(
-      {@required this.level, @required this.animalwidth, @required this.animalheight, @required this.animate});
+      {@required this.level,
+      @required this.animalwidth,
+      @required this.animalheight,
+      @required this.animate});
   final Level level;
   final double animalwidth;
   final double animalheight;
@@ -21,8 +22,48 @@ class AchievementButton extends StatelessWidget {
 // animate that this was a new achievement
   final bool animate;
 
-  void _showAlertDialog(BuildContext context) {
-    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
+  @override
+  _AchievementButtonState createState() => _AchievementButtonState();
+}
+
+class _AchievementButtonState extends State<AchievementButton> {
+  final log = getLogger();
+
+  @override
+  Widget build(BuildContext context) {
+    AudioPlayerService audioPlayerService =
+        Provider.of<AudioPlayerService>(context);
+    return TranslationAnimatedWidget(
+        enabled: widget
+            .animate, //update this boolean to forward/reverse the animation
+        values: [
+          Offset(0, 0), // disabled value value
+          Offset(0, 100), //intermediate value
+          Offset(0, 0) //enabled value
+        ],
+        child: RawMaterialButton(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              DarkableImage(
+                url: widget.level.picAftereUrl,
+                width: widget.animalwidth,
+                height: widget.animalheight,
+              ),
+            ],
+          ),
+          onPressed: () {
+            log.d('ArchievementButton: Tapped');
+            if (!widget.level.finalLevel) {
+              audioPlayerService
+                  .archievementButtonText(widget.level.finalLevel);
+              _showAlertDialog(audioPlayerService);
+            }
+          },
+        ));
+  }
+
+  void _showAlertDialog(AudioPlayerService audioPlayerService) {
     var lockScreen = audioPlayerService.lockScreen;
     // TODO(viviane): Solve locked bug ???
     log.e('Screenlocked? $lockScreen');
@@ -36,11 +77,11 @@ class AchievementButton extends StatelessWidget {
               backgroundColor: Color(0x472d4a),
               actions: <Widget>[
                 RawMaterialButton(
-                  constraints: BoxConstraints(minHeight: 200, minWidth: 200),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.only(top: 100),
+                  //constraints: BoxConstraints(minHeight: 200, minWidth: 200),
+                  //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  //padding: EdgeInsets.only(top: 100),
                   child: DarkableImage(
-                    url: level.picAftereUrl,
+                    url: widget.level.picAftereUrl,
                     width: 200,
                     height: 200,
                   ),
@@ -48,9 +89,11 @@ class AchievementButton extends StatelessWidget {
                     // Go to that expanation screen with level
                     // TODO(viviane): Should selecting the achievement image to  go to the level stop the sound
                     audioPlayerService.stopAllSound();
-                    Provider.of<UserStateService>(context, listen: false).setLevel(level);
+                    Provider.of<UserStateService>(context, listen: false)
+                        .setLevel(widget.level);
                     Navigator.pushNamed(context, ExplanationScreen.routeTag);
-                    Provider.of<UserStateService>(context, listen: false).setLevelAnimatedFalse();
+                    Provider.of<UserStateService>(context, listen: false)
+                        .setLevelAnimatedFalse();
                   },
                 ),
                 RawMaterialButton(
@@ -73,36 +116,5 @@ class AchievementButton extends StatelessWidget {
             ));
       },
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    AudioPlayerService audioPlayerService = Provider.of<AudioPlayerService>(context);
-    return TranslationAnimatedWidget(
-        enabled: animate, //update this boolean to forward/reverse the animation
-        values: [
-          Offset(0, 0), // disabled value value
-          Offset(0, 100), //intermediate value
-          Offset(0, 0) //enabled value
-        ],
-        child: RawMaterialButton(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              DarkableImage(
-                url: level.picAftereUrl,
-                width: animalwidth,
-                height: animalheight,
-              ),
-            ],
-          ),
-          onPressed: () {
-            log.d('ArchievementButton: Tapped');
-            audioPlayerService.archievementButtonText(level.finalLevel);
-            if (!level.finalLevel) {
-              _showAlertDialog(context);
-            }
-          },
-        ));
   }
 }
