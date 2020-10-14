@@ -13,6 +13,7 @@ class UserStateService extends ChangeNotifier {
     return _singleton;
   }
 
+  // ignore: unused_element
   UserStateService._internal({init()});
 
   bool _isInitializing = true;
@@ -142,7 +143,14 @@ class UserStateService extends ChangeNotifier {
     log.i('ControllingProvider:' + 'Change level to ${LevelHelper.printLevelInfo(level)} (setLevel)');
   }
 
-  void resetAll() {}
+  void resetAll() async {
+    int success = await DBApi.db.resetDB();
+    if (success == 1) {
+      log.i('ControllingProvider:' + 'Resetted DB');
+    } else {
+      log.e('ControllingProvider:' + 'ERROR resetting db');
+    }
+  }
 
   Future<Level> getLevelFromId() async {
     Level level = await DBApi.db.getLevelById(_currentLevelCounter);

@@ -18,7 +18,7 @@ import 'util/logger.util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]).then((_) {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then((_) {
     runApp(new MyApp());
   });
 }

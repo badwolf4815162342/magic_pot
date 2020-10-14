@@ -35,7 +35,6 @@ class _ImpressumButtonState extends State<ImpressumButton> {
         height: SizeUtil.getDoubleByDeviceHorizontal(Constant.xButtonSize),
       ),
       onPressed: () {
-        // TODO(viviane): Should selecting x during the level stop all sound and be clickable even when the witch is talking?
         audioPlayerService.stopAllSound();
         _showAlertDialog(audioPlayerService, userStateService);
       },
@@ -50,74 +49,14 @@ class _ImpressumButtonState extends State<ImpressumButton> {
       builder: (BuildContext context) {
         return AlertDialog(
           buttonPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
-          title: Text('Impressum'),
+          title: Text('Impressum - Learning4Kids'),
+          backgroundColor: Colors.deepPurple[100],
           content: Builder(
             builder: (context) {
               // Get available height and width of the build area of this widget. Make a choice depending on the size.
               var height = MediaQuery.of(context).size.height;
               var width = MediaQuery.of(context).size.width;
-              return Container(
-                  color: Color(0xA48395),
-                  height: height - 400,
-                  width: width - 400,
-                  child: Column(
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          text: 'Learning4Kids ERC Starting Grant: 801980 (gefördert durch die EU)',
-                          style: DefaultTextStyle.of(context).style,
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Kontakt bei technischen Fragen - LMU IT HelpDesk L4K',
-                          style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            TextSpan(
-                                text:
-                                    'Ludwig-Maximilians-Universität München Fakultät für Psychologie und Pädagogik; Informationstechnologie',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text:
-                                    'Telefon: +49-(0)89-2180-6927E-Mail: support.l4k@lmu.deWebsite: www.psy.lmu.de/ffp/forschung/ag-niklas/learning-4kids/index.html'),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text:
-                              'Kontakt ProjektleiterProf. Dr. Frank NiklasLudwig-Maximilians-Universität MünchenDepartment PsychologieLeopoldstr.13, 80802 MünchenTelefon: +49-(0)89-2180-5166E-Mail: niklas@psy.lmu.de',
-                          style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            TextSpan(text: 'bold', style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: ' world!'),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text:
-                              'Grafiken, Inhalte und Umsetzung der AppJan Essig, Dipl. Designer (FH)Storchensteinstrasse 84 DD-68259 MannheimE-Mail:info@janessig.comWebsite: www.janessig.com',
-                          style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            TextSpan(text: 'bold', style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: ' world!'),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text:
-                              'NutzungsbedingungenGrafiken, Illustrationen, Spiele und Dateien dieser App unterliegen dem Urheberrecht und anderen Gesetzen zum Schutz des geistigen Eigentums. Ihre Weitergabe, Veränderung, gewerbliche Nutzung oder Verwendung in anderen Medien ist nicht gestattet. Alle Rechte vorbehalten.HaftungshinweisTrotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschliesslich deren Betreiber verantwortlich. Angabe gemäss § 6 und § 7 Anbieterkennzeichnung des TDG.',
-                          style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            TextSpan(text: 'bold', style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: ' world!'),
-                          ],
-                        ),
-                      )
-                    ],
-                  ));
+              return Image.asset('assets/pics/impressum_pic.png', height: height, width: width, fit: BoxFit.fitHeight);
             },
           ),
           actions: <Widget>[
@@ -130,9 +69,6 @@ class _ImpressumButtonState extends State<ImpressumButton> {
               onPressed: () {
                 if (!lockScreen) {
                   Navigator.of(context).pop();
-                  // TODO(viviane): Should selecting the witch to go back to menu stop the sound (or should it be only cklickabale when explanation is finished)
-                  audioPlayerService.resetAudioPlayerToMenu();
-                  Provider.of<UserStateService>(context).resetPlayPositon();
                 }
               },
             ),

@@ -25,6 +25,16 @@ class DBApi {
     return _database;
   }
 
+  Future<int> resetDB() async {
+    final db = await database;
+    await db.rawQuery("UPDATE Levels SET achievement = '0' WHERE id IS NOT 1");
+    List<Level> archievements = await getLevelByAchieved();
+    if (archievements.length == 1) {
+      return 1;
+    }
+    return 0;
+  }
+
   // Create the database and the Series table
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
