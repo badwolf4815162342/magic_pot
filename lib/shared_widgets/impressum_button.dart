@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
-import 'package:magic_pot/screens/menu/menu_screen.dart';
 import 'package:magic_pot/shared_widgets/darkable_image.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/size.util.dart';

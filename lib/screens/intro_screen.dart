@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:magic_pot/shared_widgets/reset_button.dart';
+import 'package:magic_pot/shared_widgets/impressum_button.dart';
 import 'package:magic_pot/util/constant.util.dart';
 import 'package:magic_pot/util/logger.util.dart';
 import 'package:magic_pot/models/animal.dart';
@@ -33,63 +33,63 @@ class IntroScreen extends StatelessWidget {
     if (areProvidersReady(userStateService, audioPlayerService)) {
       Animal animal = userStateService.currentAnimal;
       log.i('MenuPage:' + 'Animal=' + animal.toString());
-      return Scaffold(
-          body: Stack(
-        children: <Widget>[
-          Center(
-            child: new Image.asset(
-              'assets/pics/intro_screen.jpg',
-              width: SizeUtil.width,
-              height: SizeUtil.height,
-              fit: BoxFit.fill,
-            ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[],
-            ),
-          ),
-          LayoutBuilder(
-            builder: (context, constraints) => Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                // RESET  BUTTON
-                (animal == null)
-                    ? Container()
-                    : Positioned(
+      return new WillPopScope(
+          onWillPop: () async => false,
+          child: Scaffold(
+              body: Stack(
+            children: <Widget>[
+              Center(
+                child: new Image.asset(
+                  'assets/pics/intro_screen.jpg',
+                  width: SizeUtil.width,
+                  height: SizeUtil.height,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[],
+                ),
+              ),
+              LayoutBuilder(
+                builder: (context, constraints) => Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    // IMPRESSUM  BUTTON
+                    Positioned(
                         top: Constant.playButtonDistanceBottom,
                         left: Constant.playButtonDistanceRight,
                         child: Container(
                           width: SizeUtil.getDoubleByDeviceHorizontal(Constant.xButtonSize),
-                          child: ResetButton(),
+                          child: ImpressumButton(),
                         )),
-                Positioned(
-                  bottom: Constant.playButtonDistanceBottom,
-                  right: Constant.playButtonDistanceRight,
-                  child: RawMaterialButton(
-                    child: new Image.asset(
-                      'assets/pics/play_blue.png',
-                      width: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
-                      height: SizeUtil.getDoubleByDeviceHorizontal(Constant.playButtonSize),
+                    Positioned(
+                      bottom: Constant.playButtonDistanceBottom,
+                      right: Constant.playButtonDistanceRight,
+                      child: RawMaterialButton(
+                        child: new Image.asset(
+                          'assets/pics/play_blue.png',
+                          width: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
+                          height: SizeUtil.getDoubleByDeviceHorizontal(Constant.playButtonSize),
+                        ),
+                        onPressed: () {
+                          // decide to select initial animal when first opneing the app
+                          if (animal == null) {
+                            Navigator.pushNamed(context, SelectFirstAnimalScreen.routeTag);
+                          } else {
+                            // or go to menu when you already selected an animal last time
+                            userStateService.setPlayAtNewestPosition();
+                            Navigator.pushNamed(context, MenuScreen.routeTag);
+                          }
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      // decide to select initial animal when first opneing the app
-                      if (animal == null) {
-                        Navigator.pushNamed(context, SelectFirstAnimalScreen.routeTag);
-                      } else {
-                        // or go to menu when you already selected an animal last time
-                        userStateService.setPlayAtNewestPosition();
-                        Navigator.pushNamed(context, MenuScreen.routeTag);
-                      }
-                    },
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
-      ));
+              )
+            ],
+          )));
     } else {
       return Center(
         child: new Image.asset(

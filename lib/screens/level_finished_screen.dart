@@ -63,128 +63,130 @@ class _LevelFinishedScreen extends State<LevelFinishedScreen> {
 
     return Consumer<AudioPlayerService>(
       builder: (context, cart, child) {
-        return Scaffold(
-            body: IgnorePointer(
-                ignoring: lockScreen,
-                child: Stack(children: <Widget>[
-                  Center(
-                    child: DarkableImage(
-                      url: 'assets/pics/animal_selection.png',
-                      width: SizeUtil.width,
-                      height: SizeUtil.height,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  // PLAY
-                  Stack(children: <Widget>[
-                    Positioned(
-                        top: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonDistanceBottom),
-                        right: SizeUtil.getDoubleByDeviceHorizontal(Constant.playButtonDistanceRight),
-                        child: PlayButton(
-                          size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
-                          pushedName: playLink,
-                          active: !(lockScreen || locked),
-                        )),
-                    // ARCHIEVEMENTS
-                    // ELEPHANT
-                    Positioned(
-                        bottom: SizeUtil.getDoubleByDeviceVertical(60),
-                        left: SizeUtil.getDoubleByDeviceHorizontal(120),
-                        child: (finalArchievements.length > 0)
-                            ? Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.rotationY(math.pi),
-                                child: Image.asset(
-                                  finalArchievements[0].picAftereUrl,
-                                  height: 250,
-                                  width: SizeUtil.getDoubleByDeviceHorizontal(250),
-                                ),
-                              )
-                            : EmptyPlaceholder()),
-                    // GIRAFF
-                    Positioned(
-                        bottom: SizeUtil.getDoubleByDeviceVertical(70),
-                        left: SizeUtil.getDoubleByDeviceHorizontal(590),
-                        child: (finalArchievements.length > 1)
-                            ? Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.rotationY(math.pi),
-                                child: Image.asset(
-                                  finalArchievements[1].picAftereUrl,
-                                  height: SizeUtil.getDoubleByDeviceVertical(250),
-                                  width: SizeUtil.getDoubleByDeviceHorizontal(250),
-                                ),
-                              )
-                            : EmptyPlaceholder()),
-                    // BIRD
-                    Positioned(
-                        bottom: SizeUtil.getDoubleByDeviceVertical(300),
-                        left: SizeUtil.getDoubleByDeviceHorizontal(805),
-                        child: (finalArchievements.length > 2)
-                            ? Image.asset(
-                                finalArchievements[2].picAftereUrl,
-                                height: SizeUtil.getDoubleByDeviceVertical(200),
-                                width: SizeUtil.getDoubleByDeviceHorizontal(200),
-                              )
-                            : EmptyPlaceholder()),
+        return new WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
+                body: IgnorePointer(
+                    ignoring: lockScreen,
+                    child: Stack(children: <Widget>[
+                      Center(
+                        child: DarkableImage(
+                          url: 'assets/pics/animal_selection.png',
+                          width: SizeUtil.width,
+                          height: SizeUtil.height,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      // PLAY
+                      Stack(children: <Widget>[
+                        Positioned(
+                            top: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonDistanceBottom),
+                            right: SizeUtil.getDoubleByDeviceHorizontal(Constant.playButtonDistanceRight),
+                            child: PlayButton(
+                              size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
+                              pushedName: playLink,
+                              active: !(lockScreen || locked),
+                            )),
+                        // ARCHIEVEMENTS
+                        // ELEPHANT
+                        Positioned(
+                            bottom: SizeUtil.getDoubleByDeviceVertical(60),
+                            left: SizeUtil.getDoubleByDeviceHorizontal(120),
+                            child: (finalArchievements.length > 0)
+                                ? Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.rotationY(math.pi),
+                                    child: Image.asset(
+                                      finalArchievements[0].picAftereUrl,
+                                      height: 250,
+                                      width: SizeUtil.getDoubleByDeviceHorizontal(250),
+                                    ),
+                                  )
+                                : EmptyPlaceholder()),
+                        // GIRAFF
+                        Positioned(
+                            bottom: SizeUtil.getDoubleByDeviceVertical(70),
+                            left: SizeUtil.getDoubleByDeviceHorizontal(590),
+                            child: (finalArchievements.length > 1)
+                                ? Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.rotationY(math.pi),
+                                    child: Image.asset(
+                                      finalArchievements[1].picAftereUrl,
+                                      height: SizeUtil.getDoubleByDeviceVertical(250),
+                                      width: SizeUtil.getDoubleByDeviceHorizontal(250),
+                                    ),
+                                  )
+                                : EmptyPlaceholder()),
+                        // BIRD
+                        Positioned(
+                            bottom: SizeUtil.getDoubleByDeviceVertical(300),
+                            left: SizeUtil.getDoubleByDeviceHorizontal(805),
+                            child: (finalArchievements.length > 2)
+                                ? Image.asset(
+                                    finalArchievements[2].picAftereUrl,
+                                    height: SizeUtil.getDoubleByDeviceVertical(200),
+                                    width: SizeUtil.getDoubleByDeviceHorizontal(200),
+                                  )
+                                : EmptyPlaceholder()),
 
-                    // BASIC WITCH
-                    Positioned(
-                        bottom: 0,
-                        left: SizeUtil.getDoubleByDeviceHorizontal(800),
-                        child: Witch(rotate: true, talking: false, size: Constant.witchSize)),
-                    // WITCH
-                    witchTalking
-                        ? Positioned(
+                        // BASIC WITCH
+                        Positioned(
                             bottom: 0,
                             left: SizeUtil.getDoubleByDeviceHorizontal(800),
-                            child: Witch(rotate: true, talking: true, size: Constant.witchSize))
-                        : Container(),
-                    // ANIMAL
-                    Positioned(
-                        left: SizeUtil.getDoubleByDeviceHorizontal(500),
-                        top: SizeUtil.getDoubleByDeviceVertical(550),
-                        child: IgnorePointer(
-                          ignoring: lockScreen,
-                          child: Positioned(
-                              left: SizeUtil.getDoubleByDeviceHorizontal(500),
-                              top: SizeUtil.getDoubleByDeviceVertical(475),
-                              child: IgnorePointer(
-                                  ignoring: lockScreen, child: SelectedAnimal(size: Constant.finishedAnimalSize))),
-                        )),
-                    // FIREWORKS
-                    Positioned(
-                        top: SizeUtil.getDoubleByDeviceVertical(150),
-                        left: SizeUtil.getDoubleByDeviceHorizontal(300),
-                        height: SizeUtil.getDoubleByDeviceVertical(200),
-                        width: SizeUtil.getDoubleByDeviceHorizontal(500),
-                        child: Container(
-                            child: FlareActor(
-                          "assets/animation/firework_pink.flr",
-                          animation: "explode",
-                        ))),
-                    Positioned(
-                        top: SizeUtil.getDoubleByDeviceVertical(500),
-                        left: SizeUtil.getDoubleByDeviceHorizontal(300),
-                        height: SizeUtil.getDoubleByDeviceVertical(150),
-                        width: SizeUtil.getDoubleByDeviceHorizontal(200),
-                        child: Container(
-                            child: FlareActor(
-                          "assets/animation/firework_pink.flr",
-                          animation: "explode",
-                        ))),
-                    Positioned(
-                        top: SizeUtil.getDoubleByDeviceVertical(450),
-                        left: SizeUtil.getDoubleByDeviceHorizontal(700),
-                        height: SizeUtil.getDoubleByDeviceVertical(200),
-                        width: SizeUtil.getDoubleByDeviceHorizontal(200),
-                        child: Container(
-                            child: FlareActor(
-                          "assets/animation/firework_pink.flr",
-                          animation: "explode",
-                        ))),
-                  ])
-                ])));
+                            child: Witch(rotate: true, talking: false, size: Constant.witchSize)),
+                        // WITCH
+                        witchTalking
+                            ? Positioned(
+                                bottom: 0,
+                                left: SizeUtil.getDoubleByDeviceHorizontal(800),
+                                child: Witch(rotate: true, talking: true, size: Constant.witchSize))
+                            : Container(),
+                        // ANIMAL
+                        Positioned(
+                            left: SizeUtil.getDoubleByDeviceHorizontal(500),
+                            top: SizeUtil.getDoubleByDeviceVertical(550),
+                            child: IgnorePointer(
+                              ignoring: lockScreen,
+                              child: Positioned(
+                                  left: SizeUtil.getDoubleByDeviceHorizontal(500),
+                                  top: SizeUtil.getDoubleByDeviceVertical(475),
+                                  child: IgnorePointer(
+                                      ignoring: lockScreen, child: SelectedAnimal(size: Constant.finishedAnimalSize))),
+                            )),
+                        // FIREWORKS
+                        Positioned(
+                            top: SizeUtil.getDoubleByDeviceVertical(150),
+                            left: SizeUtil.getDoubleByDeviceHorizontal(300),
+                            height: SizeUtil.getDoubleByDeviceVertical(200),
+                            width: SizeUtil.getDoubleByDeviceHorizontal(500),
+                            child: Container(
+                                child: FlareActor(
+                              "assets/animation/firework_pink.flr",
+                              animation: "explode",
+                            ))),
+                        Positioned(
+                            top: SizeUtil.getDoubleByDeviceVertical(500),
+                            left: SizeUtil.getDoubleByDeviceHorizontal(300),
+                            height: SizeUtil.getDoubleByDeviceVertical(150),
+                            width: SizeUtil.getDoubleByDeviceHorizontal(200),
+                            child: Container(
+                                child: FlareActor(
+                              "assets/animation/firework_pink.flr",
+                              animation: "explode",
+                            ))),
+                        Positioned(
+                            top: SizeUtil.getDoubleByDeviceVertical(450),
+                            left: SizeUtil.getDoubleByDeviceHorizontal(700),
+                            height: SizeUtil.getDoubleByDeviceVertical(200),
+                            width: SizeUtil.getDoubleByDeviceHorizontal(200),
+                            child: Container(
+                                child: FlareActor(
+                              "assets/animation/firework_pink.flr",
+                              animation: "explode",
+                            ))),
+                      ])
+                    ]))));
       },
     );
   }

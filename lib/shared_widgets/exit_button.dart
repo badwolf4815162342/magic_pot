@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:magic_pot/models/ingredient.dart';
 import 'package:magic_pot/provider/audio_player.service.dart';
 import 'package:magic_pot/provider/user_state.service.dart';
 import 'package:magic_pot/screens/menu/menu_screen.dart';
@@ -45,8 +46,7 @@ class _ExitButtonState extends State<ExitButton> {
     );
   }
 
-  void _showAlertDialog(AudioPlayerService audioPlayerService,
-      UserStateService userStateService) {
+  void _showAlertDialog(AudioPlayerService audioPlayerService, UserStateService userStateService) {
     var lockScreen = audioPlayerService.lockScreen;
     showDialog(
       context: context,
@@ -78,8 +78,7 @@ class _ExitButtonState extends State<ExitButton> {
                         Navigator.pushNamed(context, MenuScreen.routeTag);
                         // TODO(viviane): Should selecting the witch to go back to menu stop the sound (or should it be only cklickabale when explanation is finished)
                         audioPlayerService.resetAudioPlayerToMenu();
-                        Provider.of<UserStateService>(context)
-                            .resetPlayPositon();
+                        Provider.of<UserStateService>(context).resetPlayPositon();
                       }
                     }
                   },
@@ -93,6 +92,9 @@ class _ExitButtonState extends State<ExitButton> {
                   onPressed: () {
                     audioPlayerService.stopAllSound();
                     if (!lockScreen) {
+                      if (!widget.closeApp) {
+                        audioPlayerService.resetLastSound();
+                      }
                       Navigator.of(context).pop();
                     }
                   },

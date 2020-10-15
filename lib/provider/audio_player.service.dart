@@ -17,6 +17,7 @@ class AudioPlayerService extends ChangeNotifier {
     return _singleton;
   }
 
+  // ignore: unused_element
   AudioPlayerService._internal({init()});
 
   static final AudioPlayerService _singleton = AudioPlayerService._internal();
@@ -35,6 +36,7 @@ class AudioPlayerService extends ChangeNotifier {
 
   // STATES
   static String _witchText = Constant.standartWitchTextPath;
+  static String _lastSound = Constant.standartWitchTextPath;
 
   bool _witchTalking = false;
   bool _lockScreen = false;
@@ -56,8 +58,16 @@ class AudioPlayerService extends ChangeNotifier {
     notifyListeners();
   }
 
+// In case of a bug we reactivate the last working sound
+  void resetLastSound() {
+    if (_lastSound == null) {}
+    _witchText = _lastSound;
+    playWitchText();
+  }
+
   void updateWitchText(String newWitchText) {
     _witchText = newWitchText;
+    _lastSound = newWitchText;
   }
 
   Future<void> explainCurrentLevel(Level currentLevel) async {

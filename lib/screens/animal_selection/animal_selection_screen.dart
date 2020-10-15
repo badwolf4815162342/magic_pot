@@ -25,11 +25,14 @@ class _AnimalSelectionScreen extends State<AnimalSelectionScreen> {
       madeInitSound = true;
       audioPlayerService.tellChooseAnimal();
     }
-    return Scaffold(
-        body: BackgroundLayout(
-      scene: Stack(children: <Widget>[Positioned(bottom: 10, right: 120, child: AnimalButtonList(animalsize: 150))]),
-      picUrl: 'assets/pics/animal_change.png',
-      animalSelectionBack: true,
-    ));
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+            body: BackgroundLayout(
+          scene:
+              Stack(children: <Widget>[Positioned(bottom: 10, right: 120, child: AnimalButtonList(animalsize: 150))]),
+          picUrl: 'assets/pics/animal_change.png',
+          animalSelectionBack: true,
+        )));
   }
 }

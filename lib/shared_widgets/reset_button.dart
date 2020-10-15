@@ -20,7 +20,6 @@ class ResetButton extends StatefulWidget {
 class _ResetButtonState extends State<ResetButton> {
   AudioPlayerService audioPlayerService;
   UserStateService userStateService;
-  final GlobalKey<FormState> _keyDialogForm = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class _ResetButtonState extends State<ResetButton> {
             title: Text('Alle bisher erreichten Tränke zurücksetzen?'),
             content: Column(children: <Widget>[
               Text(
-                  'Hier sollte ein Erwachsener folgende Frage beantworten, num alles auf den Anfangszustand zurück zu setzen: 342 geteilt durch 18 ist gleich was?'),
+                  'Hier sollte ein Erwachsener folgende Frage beantworten, um alles auf den Anfangszustand zurück zu setzen: 14 + 5 ist gleich was?'),
               TextField(
                 controller: _textFieldController,
                 decoration: InputDecoration(hintText: "Ergebnis ..."),

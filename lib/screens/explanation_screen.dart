@@ -72,57 +72,59 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
       }
     }
 
-    return Scaffold(
-        body: BackgroundLayout(
-            scene: LayoutBuilder(
-              builder: (context, constraints) => Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Positioned(
-                      bottom: Constant.playButtonDistanceBottom,
-                      right: Constant.playButtonDistanceRight,
-                      child: PlayButton(
-                        size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
-                        pushedName: playLink,
-                        active: !(lockScreen || locked),
-                      )),
-                  Positioned(
-                      top: SizeUtil.getDoubleByDeviceVertical(230),
-                      left: SizeUtil.getDoubleByDeviceHorizontal(60),
-                      child: Stack(
-                        children: <Widget>[
-                          // Transformation animation
-                          OpacityAnimatedWidget.tween(
-                            duration: Duration(milliseconds: 5000),
-                            opacityEnabled: 1, //define start value
-                            opacityDisabled: 0, //and end value
-                            enabled: transformation, //bind with the boolean
-                            child: (currentLevel != null)
-                                ? DarkableImage(
-                                    url: currentLevel.picAftereUrl,
-                                    width: SizeUtil.getDoubleByDeviceHorizontal(Constant.transformationAnimalWidth),
-                                    height: SizeUtil.getDoubleByDeviceVertical(Constant.transformationAnimalHeight),
-                                  )
-                                : EmptyPlaceholder(),
-                          ),
-                          OpacityAnimatedWidget.tween(
-                            duration: Duration(milliseconds: 5000),
-                            opacityEnabled: 0, //define start value
-                            opacityDisabled: 1, //and end value
-                            enabled: transformation, //bind with the boolean
-                            child: (currentLevel != null)
-                                ? DarkableImage(
-                                    url: currentLevel.picBeforeUrl,
-                                    width: SizeUtil.getDoubleByDeviceHorizontal(Constant.transformationAnimalWidth),
-                                    height: SizeUtil.getDoubleByDeviceVertical(Constant.transformationAnimalHeight),
-                                  )
-                                : EmptyPlaceholder(),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-            picUrl: 'assets/pics/level_finished_screen.png'));
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+            body: BackgroundLayout(
+                scene: LayoutBuilder(
+                  builder: (context, constraints) => Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      Positioned(
+                          bottom: Constant.playButtonDistanceBottom,
+                          right: Constant.playButtonDistanceRight,
+                          child: PlayButton(
+                            size: SizeUtil.getDoubleByDeviceVertical(Constant.playButtonSize),
+                            pushedName: playLink,
+                            active: !(lockScreen || locked),
+                          )),
+                      Positioned(
+                          top: SizeUtil.getDoubleByDeviceVertical(230),
+                          left: SizeUtil.getDoubleByDeviceHorizontal(60),
+                          child: Stack(
+                            children: <Widget>[
+                              // Transformation animation
+                              OpacityAnimatedWidget.tween(
+                                duration: Duration(milliseconds: 5000),
+                                opacityEnabled: 1, //define start value
+                                opacityDisabled: 0, //and end value
+                                enabled: transformation, //bind with the boolean
+                                child: (currentLevel != null)
+                                    ? DarkableImage(
+                                        url: currentLevel.picAftereUrl,
+                                        width: SizeUtil.getDoubleByDeviceHorizontal(Constant.transformationAnimalWidth),
+                                        height: SizeUtil.getDoubleByDeviceVertical(Constant.transformationAnimalHeight),
+                                      )
+                                    : EmptyPlaceholder(),
+                              ),
+                              OpacityAnimatedWidget.tween(
+                                duration: Duration(milliseconds: 5000),
+                                opacityEnabled: 0, //define start value
+                                opacityDisabled: 1, //and end value
+                                enabled: transformation, //bind with the boolean
+                                child: (currentLevel != null)
+                                    ? DarkableImage(
+                                        url: currentLevel.picBeforeUrl,
+                                        width: SizeUtil.getDoubleByDeviceHorizontal(Constant.transformationAnimalWidth),
+                                        height: SizeUtil.getDoubleByDeviceVertical(Constant.transformationAnimalHeight),
+                                      )
+                                    : EmptyPlaceholder(),
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
+                ),
+                picUrl: 'assets/pics/level_finished_screen.png')));
   }
 }
